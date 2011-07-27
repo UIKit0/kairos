@@ -53,9 +53,6 @@ case class ImapService() extends Logger {
   private val isFirstTime: Boolean = false
   
   
-  // Demo
-  val demoRegex = "(?i)smartmobili|vrichomme|richomme|sur|cases|vincent|ignacio"
-  val demoReplacement = "********"
   
   /**
    * Authentication
@@ -504,11 +501,9 @@ case class ImapService() extends Logger {
       // Note the capitalization of the ID in IMAP API
       val id = m.getMessageID
       val from: List[Address] = m.getFrom.toList
-      // The following two lines are commented for demoing purposes
-      // val fromName = from.map(f => f.asInstanceOf[InternetAddress].getPersonal).mkString(", ")
-      // val fromEmail = from.map(f => f.asInstanceOf[InternetAddress].getAddress).mkString(", ")
-      val fromName = "Demo From"
-      val fromEmail = "demo_from@foobar.com"
+
+      val fromName = from.map(f => f.asInstanceOf[InternetAddress].getPersonal).mkString(", ")
+      val fromEmail = from.map(f => f.asInstanceOf[InternetAddress].getAddress).mkString(", ")
       
       val subject = SMMailUtil.decodeSubject(m)
       val util = new HNUtil
@@ -637,19 +632,12 @@ case class ImapService() extends Logger {
 
          val m = msg.asInstanceOf[IMAPMessage]
 
-         // The following lines are commented for demoing purposes
-         // val from: String = Option(InternetAddress.toString(m.getFrom)) getOrElse "Address not specified"
+         val from: String = Option(InternetAddress.toString(m.getFrom)) getOrElse "Address not specified"
          // FIXME analyze the reply to case
-         // val replyTo: String = Option(InternetAddress.toString(m.getReplyTo)) getOrElse "Address not specified"
-         // val to: String = Option(InternetAddress.toString(m.getRecipients(Message.RecipientType.TO))) getOrElse "Address not specified"
-         // val cc: String = Option(InternetAddress.toString(m.getRecipients(Message.RecipientType.CC))) getOrElse "Address not specified"
-         // val bcc: String = Option(InternetAddress.toString(m.getRecipients(Message.RecipientType.BCC))) getOrElse "Address not specified"
-
-         val from: String ="demo_from@foobar.com"
-         val replyTo: String = "demo_to@foobar.com"
-         val to: String = "demo_to@foobar.com"
-         val cc: String = "demo_cc@foobar.com"
-         val bcc: String = "demo_bcc@foobar.com"
+         val replyTo: String = Option(InternetAddress.toString(m.getReplyTo)) getOrElse "Address not specified"
+         val to: String = Option(InternetAddress.toString(m.getRecipients(Message.RecipientType.TO))) getOrElse "Address not specified"
+         val cc: String = Option(InternetAddress.toString(m.getRecipients(Message.RecipientType.CC))) getOrElse "Address not specified"
+         val bcc: String = Option(InternetAddress.toString(m.getRecipients(Message.RecipientType.BCC))) getOrElse "Address not specified"
          
 
          val subject: String = Option(SMMailUtil.decodeSubject(m)) getOrElse "<No subject>"
@@ -664,8 +652,8 @@ case class ImapService() extends Logger {
 
          val attachment: List[String] = mailUtil.attachmentListForMessage(m)
          println(attachment)
-
-         new SMMailContent(from, subject, date, replyTo, to, cc, bcc, body.replaceAll(demoRegex, demoReplacement), isSeen, attachment)
+         
+         new SMMailContent(from, subject, date, replyTo, to, cc, bcc, body, isSeen, attachment)
      } 
 
      // Disconnect
