@@ -4,13 +4,13 @@ This project assumes you have installed a local Cappuccino distribution. It also
 
 Quick Install
 -------------
-Kairos use the Simple Build Tool to manage the Scala/Lift/Cardano project. This guide assume you are located in the `kairos` root directory (this file is in `kairos/misc/sbt`).
+Kairos use the Simple Build Tool to manage the Scala/Lift/Cardano project. This guide assume you are located in the `kairos` root directory (this Readme file is in `kairos/misc/sbt`).
 
 Install the Cappuccino frameworks:
 
 `capp gen -f --force src/main/webapp/`
 
-To install Cardano framework untar `kairos/misc/cardano/cardano.tar.gz` into a temporary folder. Then, copy Cardano and Debug folders inside the Frameworks located under webapp:
+To install Cardano framework untar `kairos/misc/cardano/cardano.tar.gz` into a temporary folder, here `/Development/tmp`. Then, copy Cardano and Debug folders inside the Frameworks located under webapp:
 
 `mkdir -p /Development/tmp/`
 
@@ -22,7 +22,7 @@ Copy the client side part to Frameworks
 
 `cp -R /Development/tmp/cardano/Debug/Cardano/ src/main/webapp/Frameworks/Debug`
 
-Copy the server side
+Copy the server side part of the framework, i.e., the `jar` file named `cardano-core_sss-xxx.jar` (where `sss` refers to the Scala version and `xxx` to this framework version) into the `lib` folder –here we create it as it does not exist:
 
 `mkdir lib`
  
