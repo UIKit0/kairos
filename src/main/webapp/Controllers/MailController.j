@@ -110,7 +110,6 @@ SMSubjectTableColumnWidthParallelView = 440;
                selector:@selector(prepareMailWindow:)
                    name:HNUserAuthenticationDidChangeNotification
                  object:nil];
-
 	
 	[emailsHeaderView setDelegate:self];
 	[[emailsHeaderView enclosingScrollView] setVerticalLineScroll:SMEmailTableViewRowHeightTraditionalView];
@@ -313,11 +312,23 @@ SMSubjectTableColumnWidthParallelView = 440;
         // Build the whole message
         [webView loadHTMLString:[[CPString alloc] initWithFormat:@"<html><head></head><body style='font-family: Helvetica, Verdana; font-size: 12px;'>%@%@</body></html>", [mailContent body], attachment]];
         [loadingLabel setObjectValue:@"Mail Content Loaded."];
+        
+        // Issue #4
+        // Maybe related to loadHTMLString subtleties,
+        // it should be avoided with the next CPWebView
+        // subclass implementation
+        window.setTimeout(function() { 
+            [self reload]; 
+        }, 0); 
 
     } else {
         [loadingLabel setObjectValue:@"Error fetching the email."];
     }
 
+}
+
+- (void)reload {
+    [webView reload:self];
 }
 
 - (CPString)sectionForAttachment:(CPArray)attachments {
@@ -555,7 +566,6 @@ SMSubjectTableColumnWidthParallelView = 440;
     [imapServer synchronizeAll:@""
                       delegate:nil
                          error:nil];
-
 }
 
 #pragma mark -
