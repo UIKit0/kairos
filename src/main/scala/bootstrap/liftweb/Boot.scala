@@ -23,8 +23,9 @@ import util.{ NamedPF }
 import net.liftweb.http.js.jquery.JQuery14Artifacts
 
 import net.liftweb.mapper.{MapperRules,DefaultConnectionIdentifier, DBLogEntry,DB,Schemifier,StandardDBVendor}
-import com.smartmobili.model._
 
+import com.smartmobili.model._
+import com.smartmobili.lib.ObjJServer
 
 class Boot {
   def boot {
@@ -115,24 +116,4 @@ class Boot {
 		Props.get("db.url").openOr("jdbc:h2:database/kairos_mail_dev;AUTO_SERVER=TRUE"), 
 		Props.get("db.user"),
 		Props.get("db.pass"))
-}
-
-object ObjJServer {
-  def serve(req: Req)(): Box[LiftResponse] =
-  for {
-    url <- LiftRules.getResource(req.path.wholePath.mkString("/", "/", ""))
-    urlConn <- tryo(url.openConnection)
-    lastModified = ResourceServer.calcLastModified(url)
-  } yield {
-    req.testFor304(lastModified, "Expires" -> toInternetDate(millis + 30.days)) openOr {
-      val stream = url.openStream
-      StreamingResponse(stream, () => stream.close, urlConn.getContentLength,
-                        (if (lastModified == 0L) Nil else
-                         List(("Last-Modified", toInternetDate(lastModified)))) :::
-                        List(("Expires", toInternetDate(millis + 30.days)),
-                             ("Content-Type","application/text")), Nil,
-                        200)
-    }
-  }
-
 }
