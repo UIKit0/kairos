@@ -28,7 +28,7 @@ class Message extends LongKeyedMapper[Message] with CreatedUpdated with IdPK {
 	
 	object isSeen extends MappedBoolean(this)
 	
-	object folder extends LongMappedMapper(this, Mailbox)
+	object folder extends MappedLongForeignKey(this, Mailbox)
 }
 
 object Message extends Message with LongKeyedMetaMapper[Message] {
