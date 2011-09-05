@@ -17,7 +17,7 @@ class CardanoProject(info: ProjectInfo) extends DefaultWebProject(info) with Ecl
 
   val scalatoolsSnapshot = ScalaToolsSnapshots
 
-  val liftVersion = "2.3"
+  val liftVersion = "2.4-M3"
   val cappuccinoVersion = "0.9"
 
 	// IMAP idle (not used; evaluation purposes)
