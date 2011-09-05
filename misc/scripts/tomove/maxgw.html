@@ -1,0 +1,56 @@
+MaxGW is a project aiming at simplifing compilation and installation 
+of open 
+sources packages compiled with toolchains from <a href="http://mingw-w64.sourceforge.net/" target="_self">mingw-w64</a>  project (32 
+bits and 64 bits).<br />
+Please note that it's not recommended to mix packages from original MinGW project with MaxGW ones because of a difference in exception 
+model(MaxGW use sjlj and MinGW dwarf2).<br />
+<br />
+<br />
+<u><b>Installer:</b></u> <a href="Downloads/MaxGW/MaxGW-0.3-setup.exe" target="_self">MaxGW-0.3-setup.exe</a> <br />
+<br />
+<b><u>Installation on Windows Vista/7<br />
+<br />
+</u></b>When installing on Windows Vista/7, you need to change permissions of the installation folder.<br />
+<ul>
+	<li>Open an explorer and select installation folder (C:\Developer\MaxGW by default)</li>
+	<li>Right-click on it</li>
+	<li>Select Properties and then Security tab</li>
+	<li>Give to Everybody all permissions (see below)</li>
+</ul>
+<br />
+<img src="images/stories/maxgw_permissions.png" alt="maxgw_permissions.png" style="margin: 5px; width: 377px; height: 487px" title="maxgw_permissions.png" width="377" align="middle" height="487" /><br />
+<b><u><br />
+<br />
+Available packages</u></b>:<br />
+<br />
+List of 32bits package is available <u><a href="Downloads/MaxGW" target="_blank">HERE</a></u>  <br />
+<a href="Downloads/MaxGW/MaxGW-0.1-setup.exe" target="_self"><br />
+</a> 
+<br />
+<u><b>How to install a package</b></u>:<br />
+<br />
+mingw-get install PACKAGE<br />
+<br />
+<br />
+<u><b>How to choose toolchain flavor (32/64 bit)</b></u> :<br />
+<br />
+By default when launching MaxGW shell you are running the 32 bits 
+toolchain.<br />
+If you want to switch to another flavor you need to install package 
+<b>gcc-full-cross-x86-64</b><br />
+then you need to update MINGWFLAVOR environment variable and inform 
+system to update its path.<br />
+<br />
+For instance to switch to 64 bit toolchain :<br />
+<br />
+$&gt; export MSYSTEM=MINGW64<br />
+$&gt; source /etc/profile<br />
+<br />
+<br />
+<br />
+<u><b>TODO</b></u>:<br />
+<br />
+- mingw32-make seems broken in some circumstances (ex: gdb-7.0.1)<br />
+- Implement symbolic link (compatible with cygwin)<br />
+- Handle broken logic with dir separator (\ and /)<br />
+- Provide a 64 bit version with native toolchain.
