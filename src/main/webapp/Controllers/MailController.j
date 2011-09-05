@@ -320,11 +320,14 @@ SMSubjectTableColumnWidthParallelView = 440;
         window.setTimeout(function() { 
             [self reload]; 
         }, 0); 
-
     } else {
         [loadingLabel setObjectValue:@"Error fetching the email."];
     }
+    
+}
 
+- (void)reload {
+    [webView reload:self];
 }
 
 - (void)reload {

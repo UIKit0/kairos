@@ -5,6 +5,7 @@ Frameworks/
 # xcodecapp-cocoa #
 ######################
 src/main/webapp/.xCodeSupport/
+src/main/webapp/KairoWorkspace.xcworkspace/
 
 # Scala #
 ######################
