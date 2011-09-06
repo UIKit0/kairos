@@ -4,8 +4,8 @@
  *
  *  Author: Ignacio Cases
  *
- *  Copyright Ignacio Cases 2010. All rights reserved.
- *  Used with permission of the copyright holder.
+ *  Copyright Ignacio Cases 2010. All rights reserved. Portions Copyright 280N Inc.
+ *  Used with permission of the copyright holders.
  */
 
 @import <Foundation/Foundation.j>
@@ -16,7 +16,7 @@
     @outlet CPView      borderView @accessors;
     @outlet CPTextField errorMessageField @accessors;
     @outlet CPView      progressIndicator @accessors;
-    @outlet CPButton    defaultButton;
+    @outlet CPButton    defaultButton @accessors;
     @outlet CPButton    cancelButton;
 }
 

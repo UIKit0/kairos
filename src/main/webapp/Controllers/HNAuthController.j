@@ -97,60 +97,6 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
 
 @end
 
-@implementation HNAuthController (SMKairosSuite)
-
-
-//- (void) awakeFromCib {
-//
-//	
-//	// Put the Images
-//	var image = [[CPImage alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Icons/MailApp.png"] size:CPSizeMake(128, 128)];
-//	[imageView setImage:image];
-//    
-//	image = [[CPImage alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Icons/spinner.gif"] size:CPSizeMake(16, 16)];
-//	[spinner setImage:image];
-//	[spinner setHidden:YES];
-//    
-//	image = [[CPImage alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Icons/Flags/us.png"] size:CPSizeMake(16, 11)];
-//	[flag1 setImage:image];
-//	image = [[CPImage alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Icons/Flags/fr.png"] size:CPSizeMake(16, 11)];
-//	[flag2 setImage:image];
-//	image = [[CPImage alloc] initWithContentsOfFile:[mainBundle pathForResource:@"Icons/Flags/br.png"] size:CPSizeMake(16, 11)];
-//	[flag3 setImage:image];
-//    
-//	[theWindow center];	
-//}
-
-// FIXME: Deprecated
-- (IBAction) login: (id) sender 
-{
-	[sender setEnabled:NO];
-	[spinner setHidden:NO];
-    
-	self.mailController.imap = [[Imap alloc] init];
-	self.mailController.imap.delegate = self;
-	[self.mailController.imap getMailboxes];
-    
-}
-
-// FIXME: Deprecated
--(void) gotMailboxes:(Imap) aImap {
-	[self.mailController.imap getMailHeaders:@"Inbox"];
-	self.mailController.selectedMailBox = @"Inbox";
-    
-	[self showMain];
-}
-
-// FIXME: Deprecated
-- (void) showMain {
-	var cib = [[CPCib alloc] initWithContentsOfURL:[[CPBundle mainBundle] pathForResource:@"Mail.cib"]];
-	[cib instantiateCibWithExternalNameTable:[CPDictionary dictionaryWithObject:self.mailController forKey:CPCibOwner]];
-		
-	[self.theWindow orderOut:self];
-}
-
-@end
-
 @implementation HNAuthController (HNConnection)
 
 

@@ -4,8 +4,8 @@
  *
  *  Author: Ignacio Cases
  *
- *  Copyright Ignacio Cases 2010. All rights reserved.
- *  Used with permission of the copyright holder.
+ *  Copyright Ignacio Cases 2010. All rights reserved. Portions Copyright 280N Inc.
+ *  Used with permission of the copyright holders.
  */
 
 @import <Foundation/Foundation.j>
@@ -19,6 +19,7 @@ var SharedLoginWindow = nil;
     @outlet CPSecureTextField passwordField @accessors;
     @outlet CPTextField       emailLabel @accessors;
     @outlet CPTextField       passwordLabel @accessors;
+    @outlet CPPopUpButton     localePopUp @accessors;
 }
 
 + (id)sharedLoginWindow
@@ -57,9 +58,45 @@ var SharedLoginWindow = nil;
 	[defaultButton setTitle:[[TNLocalizationCenter defaultCenter] localize:@"Login"]];
 }
 
-- (IBAction) relocalizeWindow: (id) sender {
-	[TNLocalizationCenter defaultCenter]._currentLanguage = sender._title;
+- (@action)relocalizeWindow:(id)sender {
+    var languageTag = [[sender selectedItem] tag]; 
+
+    // set the language selected
+    var itemArray = [localePopUp itemArray];
+    for (var i = 0; i < [itemArray count]; i++) {
+        [[localePopUp itemAtIndex:i] setState:CPOffState];
+    }
+    [[localePopUp selectedItem] setState:CPOnState];
+
+    // define the current language
+    var currentLanguage = @"en-us";
+    
+    switch (languageTag) {
+        case 1:
+            currentLanguage = @"en-us";
+            break;
+        case 2:
+            currentLanguage = @"fr-fr";
+            break;
+        case 3:
+            currentLanguage = @"pt-br";
+            break;
+        default:
+            CPLog.info(@"Default locale: English");   
+            currentLanguage = @"en-us";
+            break;
+    }
+	[[TNLocalizationCenter defaultCenter] setCurrentLanguage:currentLanguage];
 	[self localizeWindow];
+}
+
+- (void) localizeWindow {
+	//[theWindow setTitle:[[TNLocalizationCenter defaultCenter] localize:@"Login"]];
+    //	[labelTitle setObjectValue:[[TNLocalizationCenter defaultCenter] localize:@"Mail App"]];
+    //	[labelServer setObjectValue:[[CPString alloc] initWithFormat:[[TNLocalizationCenter defaultCenter] localize:@"%@ Mail Server"], @"Smartmobili"]];
+    [emailLabel setObjectValue:[[CPString alloc] initWithFormat:@"%@:", [[TNLocalizationCenter defaultCenter] localize:@"E-mail"]]];
+    [passwordLabel setObjectValue:[[CPString alloc] initWithFormat:@"%@:", [[TNLocalizationCenter defaultCenter] localize:@"Password"]]];
+    [defaultButton setTitle:[[TNLocalizationCenter defaultCenter] localize:@"Login"]];
 }
 
 - (@action)orderFront:(id)sender
