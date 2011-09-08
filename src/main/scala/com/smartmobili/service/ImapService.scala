@@ -32,7 +32,7 @@ import net.liftweb.mapper.{By, Like}
 import com.smartmobili.snippet._
 import org.hnlab.cardano.core.{HNUtil, CPDate}
 import com.smartmobili.model.{ImapUser, Mailbox=>DBMailbox, Message=>DBMessage}
-import net.liftmodules.imapidle.EmailUtils
+//import net.liftmodules.imapidle.EmailUtils
 
 case class ImapService() extends Logger {
   val log = Logger(classOf[ImapService])

@@ -17,7 +17,7 @@ class CardanoProject(info: ProjectInfo) extends DefaultWebProject(info) with Ecl
 
   val scalatoolsSnapshot = ScalaToolsSnapshots
 
-  val liftVersion = "2.4-M3"
+  val liftVersion = "2.4-M4"
   val cappuccinoVersion = "0.9"
 
 	// IMAP idle (not used; evaluation purposes)
@@ -34,11 +34,11 @@ class CardanoProject(info: ProjectInfo) extends DefaultWebProject(info) with Ecl
   override def libraryDependencies = Set(
     "net.liftweb" %% "lift-webkit" % liftVersion % "compile->default",
     "net.liftweb" %% "lift-testkit" % liftVersion % "compile->default",
-		"net.liftmodules" %% "imap-idle" % (liftVersion+"-0.9"),
+		//"net.liftmodules" %% "imap-idle" % (liftVersion+"-0.9"),
 		"org.hnlab" %% "cardano-core" % "0.1.2",
     "org.mortbay.jetty" % "jetty" % "6.1.22" % "test->default",
     "ch.qos.logback" % "logback-classic" % "0.9.26",
     "junit" % "junit" % "4.5" % "test->default",
-    "org.scala-tools.testing" %% "specs" % "1.6.6" % "test->default"
+    "org.scala-tools.testing" %% "specs" % "1.6.9-SNAPSHOT" % "test->default"
   ) ++ super.libraryDependencies
 }
