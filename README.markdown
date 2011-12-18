@@ -102,5 +102,5 @@ $> sbt
 
 Now open your browser and go to http://localhost:8080
 
-Et voila! You should see the current statys of the project.
+Et voila! You should see the current status of the project.
 
