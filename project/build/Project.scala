@@ -35,7 +35,7 @@ class CardanoProject(info: ProjectInfo) extends DefaultWebProject(info) with Ecl
     "net.liftweb" %% "lift-webkit" % liftVersion % "compile->default",
     "net.liftweb" %% "lift-testkit" % liftVersion % "compile->default",
 		//"net.liftmodules" %% "imap-idle" % (liftVersion+"-0.9"),
-		"org.hnlab" %% "cardano-core" % "0.1.2",
+		//"org.hnlab" %% "cardano-core" % "0.1.2",
     "org.mortbay.jetty" % "jetty" % "6.1.22" % "test->default",
     "ch.qos.logback" % "logback-classic" % "0.9.26",
     "junit" % "junit" % "4.5" % "test->default",
