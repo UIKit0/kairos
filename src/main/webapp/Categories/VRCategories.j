@@ -6,6 +6,6 @@
  *  Copyright 2011 Smartmobili. All rights reserved.
 */
 
-@import "CPStringPlusCustom.j"
+@import "CPString+Custom.j"
 //@import "CPTableView+SelectAll.j"
 

@@ -25,11 +25,11 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
     CPString    username  @accessors;
     CPString    firstName @accessors;
     CPString    password  @accessors;
-    CPString    authenticationToken    @accessors;	
-    
+    CPString    authenticationToken    @accessors;
+
     CPDictionary grantedUsers;
     HNConnection conn;
-    
+
     MailController mailController;
     @outlet CPWindow theWindow;
     @outlet CPImageView imageView;
@@ -42,13 +42,12 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
     @outlet CPButton flag1;
     @outlet CPButton flag2;
     @outlet CPButton flag3;
-
-    
 }
 
 + (HNAuthController)sharedController
 {
-    if (!SharedController) {
+    if (!SharedController)
+    {
         SharedController = [[HNAuthController alloc] init];
     }
     return SharedController;
@@ -56,9 +55,10 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
 
 - (id)init
 {
-    if(self = [super init]) {
+    if (self = [super init])
+    {
         // Create the connection
-        //conn = [HNConnection connectionWithRegisteredName:@"authentication" host:nil delegate:self];                
+        //conn = [HNConnection connectionWithRegisteredName:@"authentication" host:nil delegate:self];
         grantedUsers = [[CPDictionary alloc] init];
     }
     return self;
@@ -102,18 +102,17 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
 
 - (void)findWithUsername:(CPString)user password:(CPString)pass
 {
-	var email = [username lowercaseString];
-	var host = @"mail.smartmobili.com";
-
-    var imapServer = [[HNRemoteService alloc] initForScalaTrait:@"com.smartmobili.service.ImapService"
+    var email = [username lowercaseString],
+        host = @"mail.smartmobili.com",
+        imapServer = [[HNRemoteService alloc] initForScalaTrait:@"com.smartmobili.service.ImapService"
                                                    objjProtocol:nil
                                                        endPoint:nil
                                                        delegate:self];
 
-    [imapServer authenticateUser:user 
-                        password:pass 
+    [imapServer authenticateUser:user
+                        password:pass
                             host:host
-                        delegate:@selector(imapServerAuthenticationDidChange:) 
+                        delegate:@selector(imapServerAuthenticationDidChange:)
                            error:nil];
 }
 
@@ -121,15 +120,20 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
 - (void)imapServerAuthenticationDidChange:(CPString)status
 {
     var msg;
-    
-    if (status == @"SMAuthenticationGranted") {
+
+    if (status == @"SMAuthenticationGranted")
+    {
         [self grantAuthentication];
-    } else if (status == @"SMAuthenticationDenied") {
+    }
+    else if (status == @"SMAuthenticationDenied")
+    {
         msg = [CPDictionary dictionaryWithObject:@"User and password do not match" forKey:@"message"];
-        [self updateErrorMessage:msg];     
-    } else {
+        [self updateErrorMessage:msg];
+    }
+    else
+    {
         msg = [CPDictionary dictionaryWithObject:status forKey:@"message"];
-        [self updateErrorMessage:msg];     
+        [self updateErrorMessage:msg];
     }
 
 }
@@ -148,7 +152,7 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
                                                       userInfo:nil];
 }
 
-- (void)updateErrorMessage:(id)message 
+- (void)updateErrorMessage:(id)message
 {
     [[CPNotificationCenter defaultCenter] postNotificationName:HNUserAuthenticationErrorNotification
                                                         object:message

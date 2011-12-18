@@ -7,6 +7,7 @@
  */
 
 @import <Foundation/Foundation.j>
+@import "../Categories/CPDate+Formatting.j"
 
 @implementation SMMailHeader : CPObject
 {
@@ -22,14 +23,13 @@
 - (id)init
 {
     self = [super init];
-    if (self) 
+    if (self)
 	{
         // Initialization code here.
     }
-    
+
     return self;
 }
-
 
 @end
 
@@ -38,7 +38,7 @@
 - (id)initWithCoder:(CPCoder)aCoder
 {
     self=[super init];
-    
+
     self.messageId = [aCoder decodeStringForKey:@"messageId"];
     self.subject = [aCoder decodeStringForKey:@"subject"];
     self.fromName = [aCoder decodeStringForKey:@"fromName"];
@@ -53,8 +53,8 @@
 {
     [aCoder encodeString:self.messageId forKey:@"messageId"];
     [aCoder encodeString:self.subject forKey:@"subject"];
-    [aCoder encodeString:self.fromName forKey:@"fromName"];	
-    [aCoder encodeString:self.fromEmail forKey:@"fromEmail"];	
+    [aCoder encodeString:self.fromName forKey:@"fromName"];
+    [aCoder encodeString:self.fromEmail forKey:@"fromEmail"];
     [aCoder encodeDate:self.date forKey:@"date"];
     [aCoder encodeBool:self.isSeen forKey:@"isSeen"];
     [aCoder encodeString:self.md5 forKey:@"md5"];

@@ -9,8 +9,13 @@
 
 @import <Foundation/Foundation.j>
 
-@implementation SMEmail : CPObject
+@import "SMRemoteObject.j"
+
+@implementation SMEmail : SMRemoteObject
 {
+    /*! The mailbox the email belongs to. */
+    SMMailbox mailbox @accessors;
+
     CPString from @accessors;
     CPString subject @accessors;
     CPString date @accessors;
@@ -19,22 +24,17 @@
 - (id)init
 {
     self = [super init];
-    if (self) 
-	{
+    if (self)
+    {
         // Initialization code here.
     }
-    
+
     return self;
 }
 
 - (void)dealloc
 {
     [super dealloc];
-}
-
-- (CPString)formattedDate {
-    CPLog.debug(@"%@", date);
-    return date;
 }
 
 @end

@@ -8,7 +8,6 @@
 
 @import <AppKit/AppKit.j>
 @import <Foundation/Foundation.j>
-@import "../Models/Imap.j"
 
 
 
@@ -17,34 +16,34 @@ var CPAlertSaveAsDraft							= 0,
     CPAlertDiscard								= 2;
 
 
-@implementation ComposeController: CPWindowController 
+@implementation ComposeController: CPWindowController
 {
     @outlet CPWindow		theWindow;
 	@outlet CPWebView		webView;
-	
+
 	id						_prevDelegate;
 	Imap					_imap;
 	//CPString				_messageID;
 }
 
-- (void) awakeFromCib 
+- (void) awakeFromCib
 {
-	[theWindow center];	
-	
-	
-	
-	
-	
+	[theWindow center];
+
+
+
+
+
 	[CPApp runModalForWindow:theWindow];
 }
 
 
-- (void) gotMailContent:(Imap) aImap 
+- (void) gotMailContent:(Imap) aImap
 {
-	CPLog.trace(@"ComposeController - gotMailContent");	
+	CPLog.trace(@"ComposeController - gotMailContent");
 	/* we restore the main window as a delaget for the imap object */
 	_imap.delegate = _prevDelegate;
-	
+
 	/* we display email content */
 	[webView loadHTMLString:[[CPString alloc] initWithFormat:@"<html><body style='font-family: Helvetica, Verdana; font-size: 12px;'>%@</body></html>", aImap.mailContent.HTMLBody]];
 }
@@ -63,9 +62,9 @@ var CPAlertSaveAsDraft							= 0,
 }
 
 
--(BOOL)windowShouldClose:(id)window; 
+-(BOOL)windowShouldClose:(id)window;
 {
-	
+
     var confirmBox = [[CPAlert alloc] init];
 	[confirmBox setTitle:nil];
 	[confirmBox setAlertStyle:CPInformationalAlertStyle];
@@ -79,10 +78,10 @@ var CPAlertSaveAsDraft							= 0,
 	return NO;
 }
 
-- (void)confirmEnd:(CPAlert)confirm returnCode:(int)returnCode 
+- (void)confirmEnd:(CPAlert)confirm returnCode:(int)returnCode
 {
-	CPLog.trace(@"confirmEnd - returnCode = %d", returnCode);	
-	if (returnCode == CPAlertDiscard) 
+	CPLog.trace(@"confirmEnd - returnCode = %d", returnCode);
+	if (returnCode == CPAlertDiscard)
 	{
 		[CPApp stopModal];
 		[theWindow close];

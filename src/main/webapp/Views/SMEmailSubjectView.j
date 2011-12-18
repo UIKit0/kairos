@@ -22,13 +22,12 @@
 
 - (void)setObjectValue:(id)anEmail
 {
-    if (!anEmail) {
+    if (!anEmail)
         return;
-    }
-    
+
     [emailFrom setStringValue:[anEmail from]];
     [emailSubject setStringValue:[anEmail subject]];
-    [emailDate setStringValue:[anEmail date]];
+    [emailDate setStringValue:[[anEmail date] formattedDescription]];
 
 //    [emailFrom setValue:[CPColor colorWithHexString:@"929496"] forThemeAttribute:@"text-color"];
 //    [emailFrom setValue:[CPColor whiteColor] forThemeAttribute:@"text-color" inState:CPThemeStateSelectedDataView];
@@ -46,7 +45,7 @@
 {
     var color = [CPColor whiteColor];
     var subjectColor = [CPColor whiteColor];
-    
+
     if (![self hasThemeState:CPThemeStateSelectedDataView]) {
         color = [CPColor colorWithRed:176/255 green:178/255 blue:180/255 alpha:1.0];
         subjectColor = [CPColor blackColor];
@@ -63,20 +62,20 @@
 - (id)initWithCoder:(CPCoder)aCoder
 {
     self = [super initWithCoder:aCoder];
-    
+
     if (self)
     {
         emailFrom = [aCoder decodeObjectForKey:@"emailFrom"];
         emailSubject = [aCoder decodeObjectForKey:@"emailSubject"];
         emailDate = [aCoder decodeObjectForKey:@"emailDate"];
-    }    
+    }
     return self;
 }
 
 - (void)encodeWithCoder:(CPCoder)aCoder
 {
     [super encodeWithCoder:aCoder];
-    
+
     [aCoder encodeObject:emailFrom forKey:@"emailFrom"];
     [aCoder encodeObject:emailSubject forKey:@"emailSubject"];
     [aCoder encodeObject:emailDate forKey:@"emailDate"];

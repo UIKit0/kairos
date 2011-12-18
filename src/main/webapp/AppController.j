@@ -16,17 +16,18 @@ APPLICATION_VERSION_NUMBER = 0.1;
 @import "./Categories/VRCategories.j"
 
 @import "./Controllers/MailController.j"
-@import "./Controllers/LoginController.j"
+@import "./Controllers/MailSourceViewController.j"
 @import "./Controllers/ComposeController.j"
 @import "./Controllers/HNAuthController.j"
 @import "./Controllers/AboutPanelController.j"
 
 @import "./Views/MailboxColumnView.j"
+@import "./Views/SMSplitView.j"
 
 @import "TNLocalizationCenter.j"
 @import "language_registry.js"
 
-@implementation AppController: CPObject 
+@implementation AppController : CPObject
 {
     MailController mailController;
     HNAuthController authenticationController;
@@ -37,43 +38,56 @@ APPLICATION_VERSION_NUMBER = 0.1;
              CPPanel    cachedAboutPanel;
 }
 
-- (void)applicationDidFinishLaunching:(CPNotification)aNotification {
+- (void)applicationWillFinishLaunching:(CPNotification)aNotification
+{
+    // Register user defaults.
+    [[CPUserDefaults standardUserDefaults] registerDefaults:[CPDictionary dictionaryWithJSObject:{
+            @"SMSplitView Vertical Orientation Mail List Detail Split": NO
+        }]];
+}
+
+- (void)applicationDidFinishLaunching:(CPNotification)aNotification
+{
     // This is called when the application is done loading.
 
     // Authentication
     authenticationController = [HNAuthController sharedController];
     // Mail
-	//mailController = [[MailController alloc] init];
-//	var cib = [[CPCib alloc] initWithContentsOfURL:[[CPBundle mainBundle] pathForResource:@"Mail.cib"]];
-//	[cib instantiateCibWithExternalNameTable:[CPDictionary dictionaryWithObject:mailController forKey:CPCibOwner]];
-	
-	// Login
-//	var loginController = [[LoginController alloc] init];
-//	loginController.mailController = mailController;
-//	var cib = [[CPCib alloc] initWithContentsOfURL:[[CPBundle mainBundle] pathForResource:@"Login.cib"]];
-//	[cib instantiateCibWithExternalNameTable:[CPDictionary dictionaryWithObject:loginController forKey:CPCibOwner]];
+    //mailController = [[MailController alloc] init];
+//  var cib = [[CPCib alloc] initWithContentsOfURL:[[CPBundle mainBundle] pathForResource:@"Mail.cib"]];
+//  [cib instantiateCibWithExternalNameTable:[CPDictionary dictionaryWithObject:mailController forKey:CPCibOwner]];
+
+    // Login
+//  var loginController = [[LoginController alloc] init];
+//  loginController.mailController = mailController;
+//  var cib = [[CPCib alloc] initWithContentsOfURL:[[CPBundle mainBundle] pathForResource:@"Login.cib"]];
+//  [cib instantiateCibWithExternalNameTable:[CPDictionary dictionaryWithObject:loginController forKey:CPCibOwner]];
 
     // Register the localization center
     [[TNLocalizationCenter defaultCenter] setLocale:GENERAL_LANGUAGE_REGISTRY forDomain:TNLocalizationCenterGeneralLocaleDomain];
-    
+
     // Menu bar customization
 //    [self customizeMenu];
 }
 
-- (void)awakeFromCib 
+- (void)awakeFromCib
 {
+    // Don't use overlay scrollbars.
+    [CPScrollView setGlobalScrollerStyle:CPScrollerStyleLegacy];
+
     [viewMenu setTag:@"SMViewMenu"];
     [readingPaneMenuItem setTag:@"SMReadingPaneMenu"];
     [rightMenuItem setTag:@"ParallelView"];
-    [belowMenuItem setTag:@"TraditionalView"];    
+    [belowMenuItem setTag:@"TraditionalView"];
 }
 
-- (void)customizeMenu {
+- (void)customizeMenu
+{
     var editmenuItem = [[[CPApplication sharedApplication] mainMenu] itemWithTitle: @"Edit"];
     [[editmenuItem submenu] setAutoenablesItems:YES];
-    
+
     var selectAllMenuItem = [[editmenuItem submenu] itemWithTitle:@"Select All"];
-    
+
     [selectAllMenuItem setTag:@"SelectAll"];
     [selectAllMenuItem setTarget:mailController];
     [self validateMenuItem:selectAllMenuItem];
@@ -82,7 +96,7 @@ APPLICATION_VERSION_NUMBER = 0.1;
 #pragma mark
 #pragma mark Menu Item Validation
 - (BOOL)validateMenuItem:(id)anItem
-{    
+{
     switch ([anItem tag])
     {
         case @"SelectAll" :
@@ -102,14 +116,13 @@ APPLICATION_VERSION_NUMBER = 0.1;
         [cachedAboutPanel orderFront:nil];
         return;
     }
-    
+
     var aboutPanelController = [[AboutPanelController alloc] initWithWindowCibName:@"AboutPanel"],
-    aboutPanel = [aboutPanelController window];
-    
+        aboutPanel = [aboutPanelController window];
+
     [aboutPanel center];
     [aboutPanel orderFront:self];
     cachedAboutPanel = aboutPanel;
 }
-
 
 @end

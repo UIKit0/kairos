@@ -8,52 +8,120 @@
 
 @import <Foundation/Foundation.j>
 
-@implementation SMMailbox : CPObject
+@import "SMRemoteObject.j"
+
+// The order to display mailboxes. Any mailbox name not in this list goes at the end.
+var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
+
+@implementation SMMailbox : SMRemoteObject
 {
-    CPString name @accessors;
-    CPNumber count @accessors;
-    CPNumber unread @accessors;
+    /*! The account the mailbox belongs to. */
+    SMMailAccount   mailAccount @accessors;
+
+    HNRemoteService imapServer @accessors;
+
+    // Headers of email within the box, if loaded.
+    CPArray         mailHeaders @accessors;
+
+    CPString        name @accessors;
+    CPNumber        count @accessors;
+    CPNumber        unread @accessors;
 }
 
 // Designated initializer
-- (id)initWithName:(CPString)aName count:(int)total unread:(int)theUnread {
+- (id)initWithName:(CPString)aName count:(int)total unread:(int)theUnread
+{
     self = [super init];
-    if (self) {
+    if (self)
+    {
+        mailHeaders = [CPArray array];
+
         name = aName;
         count = total;
         unread = theUnread;
+
+        [self _init];
     }
     return self;
 }
 
-- (BOOL)isDefaultFolder
-{    
-    var result;
-    var lcFoldername = [[self name] lowercaseString]; 
-    
-    if ([lcFoldername isEqualToString:@"inbox"]	    ||
-        [lcFoldername isEqualToString:@"sent"]		||
-        [lcFoldername isEqualToString:@"drafts"]	||
-        [lcFoldername isEqualToString:@"junk"]		||
-        [lcFoldername isEqualToString:@"trash"]) {
-        result = YES;
-    }
-    else {
-        result = NO;
-    }
-    return result;
+- (void)_init
+{
+    // FIXME Seems like a waste to have one 'imapServer' instance per mailbox, but every HNRemoteService
+    // can only have one, unchangable delegate.
+    imapServer = [[HNRemoteService alloc] initForScalaTrait:@"com.smartmobili.service.ImapService"
+                                       objjProtocol:nil
+                                           endPoint:nil
+                                           delegate:self];
 }
 
-- (CPString)locale {
-    var localizedName;
-    var locale = [[TNLocalizationCenter defaultCenter] localize:[self name]];
-    
-    if (locale) {
-        localizedName = locale;
-    } else {
-        localizedName = name;
+/*!
+    An integer sort priority which can be used to sort mailboxes into a natural
+    order with MailBoxSortPriorityList boxes on top.
+*/
+- (int)inverseDisplayPriority
+{
+    var result,
+        lcFoldername = [[[self name] lowercaseString] stringByTrimmingWhitespace],
+        index = [MailboxSortPriorityList indexOfObject:lcFoldername];
+    return index != CPNotFound ? index : [MailboxSortPriorityList count] + 1;
+}
+
+- (int)compareInverseDisplayPriority:(id)other
+{
+    var left = [self inverseDisplayPriority],
+        right = [other inverseDisplayPriority];
+    return left - right;
+}
+
+- (BOOL)isSpecial
+{
+    return [self inverseDisplayPriority] < [MailboxSortPriorityList count];
+}
+
+- (void)loadHeaders
+{
+    [self setMailHeaders:[]];
+
+    [imapServer headersForFolder:[self name]
+                        delegate:@selector(imapServersHeadersDidLoad:)
+                           error:nil];
+}
+
+- (void)imapServersHeadersDidLoad:(CPArray)result
+{
+    // Result is an array with SMMailHeader elements
+    [self setMailHeaders:result];
+}
+
+- (void)renameTo:(CPString)aName
+{
+    if (name == aName)
+        return;
+
+    var oldName = name;
+    [self setName:aName];
+
+    if ([self isNew])
+        [self save];
+    else {
+        // TODO Not implemented.
+        //[imapServer renameFolder:oldName
+        //                      to:name
+        //                delegate:@selector(imapServerDidRenameFolder:)
+        //                   error:nil];
     }
-    return localizedName;
+
+    // TODO Actually implement this.
+    [self save];
+}
+
+- (void)save
+{
+    [super save];
+    //[imapServer createFolder:name
+    //                delegate:@selector(imapServerDidCreateFolder:)
+    //                   error:nil];
 }
 
 @end
@@ -62,18 +130,25 @@
 
 - (id)initWithCoder:(CPCoder)aCoder
 {
-    self=[super init];
-    
-    self.name = [aCoder decodeStringForKey:@"name"];
-    self.count = [aCoder decodeNumberForKey:@"count"];
-    self.unread = [aCoder decodeNumberForKey:@"unread"];
+    if (self = [super init])
+    {
+        mailHeaders = [aCoder decodeObjectForKey:@"mailHeaders"];
+
+        self.name = [aCoder decodeStringForKey:@"name"];
+        self.count = [aCoder decodeNumberForKey:@"count"];
+        self.unread = [aCoder decodeNumberForKey:@"unread"];
+
+        [self _init];
+    }
     return self;
 }
 
 - (void)encodeWithCoder:(CPCoder)aCoder
 {
+    [aCoder encodeObject:mailHeaders forKey:@"mailHeaders"];
+
     [aCoder encodeString:self.name forKey:@"name"];
-	[aCoder encodeNumber:self.count forKey:@"count"];
+    [aCoder encodeNumber:self.count forKey:@"count"];
     [aCoder encodeNumber:self.unread forKey:@"unread"];
 }
 @end
