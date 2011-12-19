@@ -18,6 +18,7 @@
 @import "../Models/SMMailHeader.j"
 @import "../Models/SMMailContent.j"
 @import "../Views/SMEmailSubjectView.j"
+@import "../Views/SMPagerView.j"
 @import "../Controllers/HNAuthController.j"
 @import "../Categories/CPDate+Formatting.j"
 
@@ -218,6 +219,7 @@ var IsReadImage,
     mailAccount = aMailAccount;
     [mailAccount setDelegate:self];
     [self addObserver:self forKeyPath:@"selectedMailbox.mailHeaders" options:nil context:nil];
+    [self addObserver:self forKeyPath:@"mailAccount.mailboxes" options:nil context:nil];
 }
 
 - (void)setSelectedMailbox:(SMMailbox)aMailbox
@@ -275,6 +277,10 @@ var IsReadImage,
             // FIXME: The selected mail should be the most recent
             [emailsHeaderView selectRowIndexes:[CPIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
         }
+    }
+    else if (keyPath == @"mailAccount.mailboxes")
+    {
+        [mailSourceController reload];
     }
 }
 
@@ -335,11 +341,11 @@ var IsReadImage,
     switch (displayedViewKey)
     {
         case @"ParallelView":
-            [mailSplitView setVertical:YES];
             [subjectTableColumn setWidth:SMSubjectTableColumnWidthParallelView];
             [emailsHeaderView setRowHeight:SMEmailTableViewRowHeightParallelView];
             [fromTableColumn setHidden:YES];
             [dateTableColumn setHidden:YES];
+            [mailSplitView setVertical:YES];
             break;
         case @"TraditionalView":
         default:
@@ -379,12 +385,12 @@ var IsReadImage,
 
 - (CPArray)toolbarAllowedItemIdentifiers:(CPToolbar)aToolbar
 {
-    return [CPToolbarFlexibleSpaceItemIdentifier, CPToolbarSpaceItemIdentifier, "searchField", "composeMail", "refreshMailbox", "deleteMail", "replyMail", "switchViewStatus", "logo"];
+    return [CPToolbarFlexibleSpaceItemIdentifier, CPToolbarSpaceItemIdentifier, "searchField", "composeMail", "refreshMailbox", "deleteMail", "replyMail", "pagerControl", "switchViewStatus", "logo"];
 }
 
 - (CPArray)toolbarDefaultItemIdentifiers:(CPToolbar)aToolbar
 {
-    var items = [ "composeMail", "refreshMailbox", CPToolbarFlexibleSpaceItemIdentifier, "deleteMail", "replyMail", CPToolbarFlexibleSpaceItemIdentifier, "switchViewStatus", "searchField"];
+    var items = [ CPToolbarSpaceItemIdentifier, CPToolbarSpaceItemIdentifier, CPToolbarSpaceItemIdentifier, CPToolbarSpaceItemIdentifier, "composeMail", "refreshMailbox", "deleteMail", "replyMail", CPToolbarFlexibleSpaceItemIdentifier, "searchField", CPToolbarFlexibleSpaceItemIdentifier, "pagerControl", "switchViewStatus"];
 
     if ([CPPlatform isBrowser])
         items.unshift("logo");
@@ -438,6 +444,20 @@ var IsReadImage,
             [self addCustomSearchFieldAttributes:searchField];
             break;
 
+        case @"pagerControl":
+            var pager = [[SMPagerView alloc] initWithFrame:CGRectMake(0, 0, 120, 30)];
+
+            [pager setDelegate:self];
+
+            [toolbarItem setView:pager];
+
+            [toolbarItem setMinSize:CGSizeMake(120, 30)];
+            [toolbarItem setMaxSize:CGSizeMake(120, 30)];
+
+            [toolbarItem setTag:@"pagerControl"];
+            [toolbarItem setLabel:[CPString stringWithFormat:@"%@", [[TNLocalizationCenter defaultCenter] localize:@"Page"]]];
+
+            break;
         case @"switchViewStatus":
             var aSwitch = [[CPSegmentedControl alloc] initWithFrame:CGRectMake(0,0,0,0)];
 
@@ -683,7 +703,7 @@ var IsReadImage,
     return newDataView;
 }
 
-- (IBAction) refresh:(id)sender
+- (IBAction)refresh:(id)sender
 {
     console.log(@"Refresh...");
 }
@@ -860,6 +880,74 @@ var IsReadImage,
     [textfield setValue:CGInsetMake(9.0, 14.0, 6.0, 14.0) forThemeAttribute:@"content-inset" inState:CPThemeStateBezeled | CPTextFieldStateRounded | CPThemeStateEditing];
 }
 
+#pragma mark -
+#pragma mark CPSplitView delegate
+
+/*!
+    Don't allocate more width than what is useful to the left hand side of the parallel mode headers/mail split
+    view.
+*/
+- (void)splitView:(CPSplitView)sender resizeSubviewsWithOldSize:(CGSize)oldSize
+{
+    var newFrame = [sender frame],
+        newWidth = newFrame.size.width,
+        oldWidth = oldSize.width,
+        left = nil;
+
+    if (newWidth > oldWidth && sender == mailSplitView && displayedViewKey == @"ParallelView")
+    {
+        left = [sender subviews][0];
+
+        // Figure out the amount of space the header table needs to show all its columns fully.
+        var tableColumns = [emailsHeaderView tableColumns],
+            rightMostVisibleColumnIndex = [tableColumns count] - 1;
+
+        while (rightMostVisibleColumnIndex > 0 && [[tableColumns objectAtIndex:rightMostVisibleColumnIndex] isHidden])
+            rightMostVisibleColumnIndex--;
+
+        var totalColumnWidth = CGRectGetMaxX([emailsHeaderView rectOfColumn:rightMostVisibleColumnIndex]),
+            scrollView = [emailsHeaderView enclosingScrollView],
+            scrollerFrameWidth = [scrollView frame].size.width - [scrollView contentSize].width,
+            leftFrame = [left frame],
+            leftWidth = leftFrame.size.width,
+            newLeftWidth = leftWidth + (newWidth - oldWidth) / 2.0;
+
+        // XXX ATM the subject column auto resizes which mostly negates the purpose of all this code (there
+        // can be no empty space on the right if the column automatically takes up all that space.) To prevent
+        // us from only ever shrinking the subject column and not allowing it to grow back to its regular size
+        // when the window is made larger again, we extent totalColumnWidth to our "desired" width rather than
+        // the actual.
+        if ([subjectTableColumn width] < SMSubjectTableColumnWidthParallelView)
+            totalColumnWidth += 4 + SMSubjectTableColumnWidthParallelView - [subjectTableColumn width];
+
+        // If we just resize uniformly, will the new size be wider than what we need?
+        if (newLeftWidth > totalColumnWidth + scrollerFrameWidth)
+        {
+            // Yes it will. Just max out the left view and give the rest to the right hand side.
+            var right = [sender subviews][1],
+                rightFrame = [right frame],
+                dividerThickness = [sender dividerThickness];
+
+            // Update the subview frames so that any change in width is applied to the right hand side.
+            leftFrame.size.height = newFrame.size.height;
+            rightFrame.size.height = newFrame.size.height;
+
+            leftFrame.origin = CGPointMake(0, 0);
+            leftFrame.size.width = totalColumnWidth + scrollerFrameWidth;
+            rightFrame.size.width = newFrame.size.width - leftFrame.size.width - dividerThickness;
+            rightFrame.origin.x = leftFrame.size.width + dividerThickness;
+            [left setFrame:leftFrame];
+            [right setFrame:rightFrame];
+
+            return;
+        }
+    }
+
+    // Call the normal resizing code.
+    [sender setDelegate:nil];
+    [sender resizeSubviewsWithOldSize:oldSize];
+    [sender setDelegate:self];
+}
 
 @end
 

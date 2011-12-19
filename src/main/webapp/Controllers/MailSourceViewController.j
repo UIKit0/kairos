@@ -13,18 +13,24 @@
 SMOutlineViewMailPaneMinimumSize = 210;
 SMOutlineViewMailPaneMaximumSize = 400;
 
+var ContextMenuAddFolderTag = 0,
+    ContextMenuRenameFolderTag = 1,
+    ContextMenuRemoveFolderTag = 2;
+
 /*!
     Control the source view on the left side of the mail window. The source
     view allows the selection of mailboxes.
 */
 @implementation MailSourceViewController : CPViewController
 {
-    @outlet MailController mailController;
+    @outlet MailController  mailController;
 
-    MailSourceViewRow headerMailboxes;
-    MailSourceViewRow headerOthers;
+    MailSourceViewRow       headerMailboxes;
+    MailSourceViewRow       headerOthers;
 
-    CPDictionary mailboxToItemMap;
+    CPDictionary            mailboxToItemMap;
+
+    @outlet CPMenu          contextMenu;
 }
 
 - (void)awakeFromCib
@@ -62,6 +68,8 @@ SMOutlineViewMailPaneMaximumSize = 400;
     var view = [self view];
     mailboxToItemMap = [CPMutableDictionary dictionary];
     [view reloadData];
+    // Selected mailbox might change. TODO This should all be done with bindings/observation.
+    [mailController setSelectedMailbox:[self selectedMailbox]];
 }
 
 - (void)reloadAndSelectInbox
@@ -69,7 +77,7 @@ SMOutlineViewMailPaneMaximumSize = 400;
     [self reload];
     // The inbox is always the first mailbox.
     var mailboxes = [self mailboxes];
-    [self selectMailbox: mailboxes ? mailboxes[0] : nil];
+    [self selectMailbox:mailboxes ? mailboxes[0] : nil];
 }
 
 - (int)selectedRowIndex
@@ -124,8 +132,11 @@ SMOutlineViewMailPaneMaximumSize = 400;
     }
 }
 
-- (void)addMailbox:(id)sender
+- (IBAction)addMailbox:(id)sender
 {
+    if (![self canAddMailbox])
+        return;
+
     var newMailbox = [[mailController mailAccount] createMailbox:self];
     [self reload];
     [self selectMailbox:newMailbox];
@@ -134,7 +145,59 @@ SMOutlineViewMailPaneMaximumSize = 400;
         rowIndex = [[view selectedRowIndexes] firstIndex];
     if (rowIndex !== nil && rowIndex !== CPNotFound)
         [view editColumn:0 row:rowIndex withEvent:nil select:YES];
+}
 
+- (BOOL)canAddMailbox
+{
+    return YES;
+}
+
+- (IBAction)renameMailbox:(id)sender
+{
+    if (![self canRenameMailbox])
+        return;
+
+    var view = [self view],
+        rowIndex = [[view selectedRowIndexes] firstIndex];
+    if (rowIndex !== nil && rowIndex !== CPNotFound)
+        [view editColumn:0 row:rowIndex withEvent:nil select:YES];
+}
+
+- (BOOL)canRenameMailbox
+{
+    var mailbox = [self selectedMailbox];
+    return mailbox && ![mailbox isSpecial];
+}
+
+- (IBAction)removeMailbox:(id)sender
+{
+    if (![self canRemoveMailbox])
+        return;
+
+    var mailbox = [self selectedMailbox];
+    [mailbox remove];
+}
+
+- (BOOL)canRemoveMailbox
+{
+    var mailbox = [self selectedMailbox];
+    return mailbox && ![mailbox isSpecial];
+}
+
+- (BOOL)validateMenuItem:(CPMenuItem)menuItem
+{
+    var tag = [menuItem tag];
+    switch (tag)
+    {
+        case ContextMenuAddFolderTag:
+            return [self canAddMailbox];
+        case ContextMenuRenameFolderTag:
+            return [self canRenameMailbox];
+        case ContextMenuRemoveFolderTag:
+            return [self canRemoveMailbox];
+        default:
+            return YES;
+    }
 }
 
 #pragma mark -
@@ -144,8 +207,6 @@ SMOutlineViewMailPaneMaximumSize = 400;
 {
     return ![item isHeader];
 }
-
-
 
 /*!
     Convenience method to get the source mailboxes.
@@ -251,6 +312,11 @@ SMOutlineViewMailPaneMaximumSize = 400;
         [mailbox renameTo:aValue];
         [self reload];
     }
+}
+
+- (CPMenu)outlineView:outlineView menuForTableColumn:aTableColumn item:anItem
+{
+    return contextMenu;
 }
 
 #pragma mark -

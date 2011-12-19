@@ -59,6 +59,16 @@
     return r;
 }
 
+- (void)removeMailbox:(SMMailbox)aMailbox
+{
+    if ([mailboxes containsObject:aMailbox])
+    {
+        console.log("removing ", aMailbox);
+        [[self mutableArrayValueForKey:@"mailboxes"] removeObject:aMailbox];
+        [aMailbox setMailAccount:nil];
+    }
+}
+
 #pragma mark -
 #pragma mark Cardano ImapService delegate
 

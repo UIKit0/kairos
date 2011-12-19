@@ -1,0 +1,419 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		64200DBC0FD42578005D41CE /* Mail */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 64200DCB0FD425B7005D41CE /* Build configuration list for PBXAggregateTarget "Mail" */;
+			buildPhases = (
+				64200DE70FD428F4005D41CE /* Build Application */,
+			);
+			dependencies = (
+			);
+			name = Mail;
+			productName = Mail;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXFileReference section */
+		2422B4C113DF3A3B0095B5A5 /* AboutPanelController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = AboutPanelController.j; path = Controllers/AboutPanelController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		243848A913A928D700765E18 /* SMLoginWindowBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SMLoginWindowBackground.png; sourceTree = "<group>"; };
+		244893CF13B0BB0D00331759 /* SMEmailSubjectView.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = SMEmailSubjectView.j; path = Views/SMEmailSubjectView.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		244893D113B0C2E700331759 /* SMEmail.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = SMEmail.j; path = Models/SMEmail.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		2470208C13A92F33005C3198 /* HNAuxiliarWindow.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = HNAuxiliarWindow.j; path = Views/HNAuxiliarWindow.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		2470208D13A92F33005C3198 /* HNLoginWindow.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = HNLoginWindow.j; path = Views/HNLoginWindow.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		2470208E13A92F47005C3198 /* HNAuthController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = HNAuthController.j; path = Controllers/HNAuthController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		247F8B5913BE2C2B006BAA8E /* SMMailbox.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; lineEnding = 0; name = SMMailbox.j; path = Models/SMMailbox.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		24B6ACA813B900D100709912 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
+		24B6ACAD13B9F48B00709912 /* Email.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = Email.j; path = Models/Email.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		24B6ACAF13BA40EC00709912 /* SMEmailService.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; lineEnding = 0; name = SMEmailService.j; path = Models/SMEmailService.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		24E1840913BE6B2100E594EC /* SMMailHeader.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; lineEnding = 0; name = SMMailHeader.j; path = Models/SMMailHeader.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		24E1840C13C09A8900E594EC /* SMMailContent.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; lineEnding = 0; name = SMMailContent.j; path = Models/SMMailContent.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		641D44E00FD437FB00EACBFF /* Frameworks */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Frameworks; sourceTree = "<group>"; };
+		64200A490FD4250F005D41CE /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
+		64200A4A0FD4250F005D41CE /* main.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; path = main.j; sourceTree = "<group>"; };
+		64200A4B0FD4250F005D41CE /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		64200A4C0FD4250F005D41CE /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		64200A4D0FD4250F005D41CE /* AppController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; path = AppController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		64B168F30FD4E529001197CA /* index-debug.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = "index-debug.html"; sourceTree = "<group>"; };
+		B0147FE613255F7F00F837D5 /* Compose.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Compose.xib; sourceTree = "<group>"; };
+		B058F2D51322BC69002DE6C0 /* Login.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Login.xib; sourceTree = "<group>"; };
+		B058F3241322D6B1002DE6C0 /* TNLocalizationCenter.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; path = TNLocalizationCenter.j; sourceTree = "<group>"; };
+		B058F3381322D88C002DE6C0 /* add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add.png; sourceTree = "<group>"; };
+		B058F3391322D88C002DE6C0 /* balloon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = balloon.png; sourceTree = "<group>"; };
+		B058F33A1322D88C002DE6C0 /* bottom.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bottom.png; sourceTree = "<group>"; };
+		B058F33B1322D88C002DE6C0 /* box_add.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = box_add.png; sourceTree = "<group>"; };
+		B058F33C1322D88C002DE6C0 /* box_free.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = box_free.png; sourceTree = "<group>"; };
+		B058F33D1322D88C002DE6C0 /* box_full.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = box_full.png; sourceTree = "<group>"; };
+		B058F33E1322D88C002DE6C0 /* box_remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = box_remove.png; sourceTree = "<group>"; };
+		B058F33F1322D88C002DE6C0 /* calendar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = calendar.png; sourceTree = "<group>"; };
+		B058F3401322D88C002DE6C0 /* circle_free.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle_free.png; sourceTree = "<group>"; };
+		B058F3411322D88C002DE6C0 /* circle_full.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circle_full.png; sourceTree = "<group>"; };
+		B058F3421322D88C002DE6C0 /* download_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = download_blue.png; sourceTree = "<group>"; };
+		B058F3431322D88C002DE6C0 /* download_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = download_green.png; sourceTree = "<group>"; };
+		B058F3441322D88C002DE6C0 /* download_orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = download_orange.png; sourceTree = "<group>"; };
+		B058F3451322D88C002DE6C0 /* Downloaded from.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Downloaded from.rtf"; sourceTree = "<group>"; };
+		B058F3461322D88C002DE6C0 /* edit.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = edit.png; sourceTree = "<group>"; };
+		B058F3471322D88C002DE6C0 /* email.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email.png; sourceTree = "<group>"; };
+		B058F3481322D88C002DE6C0 /* email_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email_red.png; sourceTree = "<group>"; };
+		B058F3491322D88C002DE6C0 /* empty_star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty_star.png; sourceTree = "<group>"; };
+		B058F34A1322D88C002DE6C0 /* error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = error.png; sourceTree = "<group>"; };
+		B058F34B1322D88C002DE6C0 /* favicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = favicon.png; sourceTree = "<group>"; };
+		B058F34C1322D88C002DE6C0 /* feed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = feed.png; sourceTree = "<group>"; };
+		B058F34D1322D88C002DE6C0 /* feed_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = feed_blue.png; sourceTree = "<group>"; };
+		B058F34E1322D88C002DE6C0 /* feed_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = feed_green.png; sourceTree = "<group>"; };
+		B058F34F1322D88C002DE6C0 /* folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder.png; sourceTree = "<group>"; };
+		B058F3501322D88C002DE6C0 /* follow_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = follow_blue.png; sourceTree = "<group>"; };
+		B058F3511322D88C002DE6C0 /* follow_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = follow_green.png; sourceTree = "<group>"; };
+		B058F3521322D88C002DE6C0 /* follow_orange.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = follow_orange.png; sourceTree = "<group>"; };
+		B058F3531322D88C002DE6C0 /* globe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = globe.png; sourceTree = "<group>"; };
+		B058F3541322D88C002DE6C0 /* half_star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = half_star.png; sourceTree = "<group>"; };
+		B058F3551322D88C002DE6C0 /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home.png; sourceTree = "<group>"; };
+		B058F3561322D88C002DE6C0 /* key.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = key.png; sourceTree = "<group>"; };
+		B058F3571322D88C002DE6C0 /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
+		B058F3581322D88C002DE6C0 /* lock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lock.png; sourceTree = "<group>"; };
+		B058F3591322D88C002DE6C0 /* love.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = love.png; sourceTree = "<group>"; };
+		B058F35A1322D88C002DE6C0 /* MailApp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MailApp.png; sourceTree = "<group>"; };
+		B058F35C1322D88C002DE6C0 /* folder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = folder.png; sourceTree = "<group>"; };
+		B058F35D1322D88C002DE6C0 /* inbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = inbox.png; sourceTree = "<group>"; };
+		B058F35E1322D88C002DE6C0 /* sent.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sent.png; sourceTree = "<group>"; };
+		B058F35F1322D88C002DE6C0 /* trash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trash.png; sourceTree = "<group>"; };
+		B058F3601322D88C002DE6C0 /* negative.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = negative.png; sourceTree = "<group>"; };
+		B058F3611322D88C002DE6C0 /* ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ok.png; sourceTree = "<group>"; };
+		B058F3621322D88C002DE6C0 /* positive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = positive.png; sourceTree = "<group>"; };
+		B058F3631322D88C002DE6C0 /* recycle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = recycle.png; sourceTree = "<group>"; };
+		B058F3641322D88C002DE6C0 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
+		B058F3651322D88C002DE6C0 /* remove.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = remove.png; sourceTree = "<group>"; };
+		B058F3661322D88C002DE6C0 /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
+		B058F3671322D88C002DE6C0 /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
+		B058F3681322D88C002DE6C0 /* search_box.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search_box.png; sourceTree = "<group>"; };
+		B058F3691322D88C002DE6C0 /* shop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shop.png; sourceTree = "<group>"; };
+		B058F36A1322D88C002DE6C0 /* spinner.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = spinner.gif; sourceTree = "<group>"; };
+		B058F36B1322D88C002DE6C0 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
+		B058F36C1322D88C002DE6C0 /* tag_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tag_blue.png; sourceTree = "<group>"; };
+		B058F36D1322D88C002DE6C0 /* tag_green.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tag_green.png; sourceTree = "<group>"; };
+		B058F36E1322D88C002DE6C0 /* tag_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tag_red.png; sourceTree = "<group>"; };
+		B058F36F1322D88C002DE6C0 /* top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top.png; sourceTree = "<group>"; };
+		B058F3701322D88C002DE6C0 /* tree_down.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tree_down.png; sourceTree = "<group>"; };
+		B058F3711322D88C002DE6C0 /* tree_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tree_left.png; sourceTree = "<group>"; };
+		B058F3721322D88C002DE6C0 /* tree_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tree_right.png; sourceTree = "<group>"; };
+		B058F3731322D88C002DE6C0 /* tree_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tree_top.png; sourceTree = "<group>"; };
+		B058F3741322D88C002DE6C0 /* warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warning.png; sourceTree = "<group>"; };
+		B058F3C41322DB1D002DE6C0 /* language_registry.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = language_registry.js; sourceTree = "<group>"; };
+		B07E8286130DC57600B78012 /* Mail.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Mail.xib; sourceTree = "<group>"; };
+		B08D131013299F3B00C56D9D /* Dummy.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Dummy.xib; sourceTree = "<group>"; };
+		BF06D9A513654D7400F66223 /* CPString+Custom.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = "CPString+Custom.j"; path = "Categories/CPString+Custom.j"; sourceTree = "<group>"; };
+		BF06D9A613654D7400F66223 /* CPTableView+SelectAll.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = "CPTableView+SelectAll.j"; path = "Categories/CPTableView+SelectAll.j"; sourceTree = "<group>"; };
+		BF06D9A713654E4A00F66223 /* VRCategories.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = VRCategories.j; path = Categories/VRCategories.j; sourceTree = "<group>"; };
+		BFB90F6D13831BB000F049CA /* Imap.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = Imap.j; path = Models/Imap.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		BFB90F6E13831BCB00F049CA /* ComposeController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = ComposeController.j; path = Controllers/ComposeController.j; sourceTree = "<group>"; };
+		BFB90F7013831BCB00F049CA /* LoginController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = LoginController.j; path = Controllers/LoginController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		BFB90F7113831BCB00F049CA /* MailController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = MailController.j; path = Controllers/MailController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		BFB90F7413831BE400F049CA /* MailboxColumnView.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = MailboxColumnView.j; path = Views/MailboxColumnView.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		64200A3A0FD424DD005D41CE = {
+			isa = PBXGroup;
+			children = (
+				BFB90FA413831EFD00F049CA /* Client */,
+			);
+			sourceTree = "<group>";
+		};
+		64200A470FD4250F005D41CE /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				243848A913A928D700765E18 /* SMLoginWindowBackground.png */,
+				B058F3371322D88C002DE6C0 /* Icons */,
+				64200A490FD4250F005D41CE /* MainMenu.xib */,
+				B07E8286130DC57600B78012 /* Mail.xib */,
+				B058F2D51322BC69002DE6C0 /* Login.xib */,
+				B0147FE613255F7F00F837D5 /* Compose.xib */,
+				B08D131013299F3B00C56D9D /* Dummy.xib */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		64200DB90FD42540005D41CE /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				64200A4D0FD4250F005D41CE /* AppController.j */,
+				B058F3241322D6B1002DE6C0 /* TNLocalizationCenter.j */,
+				B058F3C41322DB1D002DE6C0 /* language_registry.js */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		64200DBA0FD4254B005D41CE /* Others */ = {
+			isa = PBXGroup;
+			children = (
+				64200A4A0FD4250F005D41CE /* main.j */,
+				64200A4B0FD4250F005D41CE /* Info.plist */,
+				64200A4C0FD4250F005D41CE /* index.html */,
+				64B168F30FD4E529001197CA /* index-debug.html */,
+			);
+			name = Others;
+			sourceTree = "<group>";
+		};
+		B058F3371322D88C002DE6C0 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				B058F3381322D88C002DE6C0 /* add.png */,
+				B058F3391322D88C002DE6C0 /* balloon.png */,
+				B058F33A1322D88C002DE6C0 /* bottom.png */,
+				B058F33B1322D88C002DE6C0 /* box_add.png */,
+				B058F33C1322D88C002DE6C0 /* box_free.png */,
+				B058F33D1322D88C002DE6C0 /* box_full.png */,
+				B058F33E1322D88C002DE6C0 /* box_remove.png */,
+				B058F33F1322D88C002DE6C0 /* calendar.png */,
+				B058F3401322D88C002DE6C0 /* circle_free.png */,
+				B058F3411322D88C002DE6C0 /* circle_full.png */,
+				B058F3421322D88C002DE6C0 /* download_blue.png */,
+				B058F3431322D88C002DE6C0 /* download_green.png */,
+				B058F3441322D88C002DE6C0 /* download_orange.png */,
+				B058F3451322D88C002DE6C0 /* Downloaded from.rtf */,
+				B058F3461322D88C002DE6C0 /* edit.png */,
+				B058F3471322D88C002DE6C0 /* email.png */,
+				B058F3481322D88C002DE6C0 /* email_red.png */,
+				B058F3491322D88C002DE6C0 /* empty_star.png */,
+				B058F34A1322D88C002DE6C0 /* error.png */,
+				B058F34B1322D88C002DE6C0 /* favicon.png */,
+				B058F34C1322D88C002DE6C0 /* feed.png */,
+				B058F34D1322D88C002DE6C0 /* feed_blue.png */,
+				B058F34E1322D88C002DE6C0 /* feed_green.png */,
+				B058F34F1322D88C002DE6C0 /* folder.png */,
+				B058F3501322D88C002DE6C0 /* follow_blue.png */,
+				B058F3511322D88C002DE6C0 /* follow_green.png */,
+				B058F3521322D88C002DE6C0 /* follow_orange.png */,
+				B058F3531322D88C002DE6C0 /* globe.png */,
+				B058F3541322D88C002DE6C0 /* half_star.png */,
+				B058F3551322D88C002DE6C0 /* home.png */,
+				B058F3561322D88C002DE6C0 /* key.png */,
+				B058F3571322D88C002DE6C0 /* left.png */,
+				B058F3581322D88C002DE6C0 /* lock.png */,
+				B058F3591322D88C002DE6C0 /* love.png */,
+				B058F35A1322D88C002DE6C0 /* MailApp.png */,
+				B058F35B1322D88C002DE6C0 /* Mailboxes */,
+				B058F3601322D88C002DE6C0 /* negative.png */,
+				B058F3611322D88C002DE6C0 /* ok.png */,
+				B058F3621322D88C002DE6C0 /* positive.png */,
+				B058F3631322D88C002DE6C0 /* recycle.png */,
+				B058F3641322D88C002DE6C0 /* refresh.png */,
+				B058F3651322D88C002DE6C0 /* remove.png */,
+				B058F3661322D88C002DE6C0 /* right.png */,
+				B058F3671322D88C002DE6C0 /* search.png */,
+				B058F3681322D88C002DE6C0 /* search_box.png */,
+				B058F3691322D88C002DE6C0 /* shop.png */,
+				B058F36A1322D88C002DE6C0 /* spinner.gif */,
+				B058F36B1322D88C002DE6C0 /* star.png */,
+				B058F36C1322D88C002DE6C0 /* tag_blue.png */,
+				B058F36D1322D88C002DE6C0 /* tag_green.png */,
+				B058F36E1322D88C002DE6C0 /* tag_red.png */,
+				B058F36F1322D88C002DE6C0 /* top.png */,
+				B058F3701322D88C002DE6C0 /* tree_down.png */,
+				B058F3711322D88C002DE6C0 /* tree_left.png */,
+				B058F3721322D88C002DE6C0 /* tree_right.png */,
+				B058F3731322D88C002DE6C0 /* tree_top.png */,
+				B058F3741322D88C002DE6C0 /* warning.png */,
+			);
+			path = Icons;
+			sourceTree = "<group>";
+		};
+		B058F35B1322D88C002DE6C0 /* Mailboxes */ = {
+			isa = PBXGroup;
+			children = (
+				B058F35C1322D88C002DE6C0 /* folder.png */,
+				B058F35D1322D88C002DE6C0 /* inbox.png */,
+				B058F35E1322D88C002DE6C0 /* sent.png */,
+				B058F35F1322D88C002DE6C0 /* trash.png */,
+			);
+			path = Mailboxes;
+			sourceTree = "<group>";
+		};
+		BF06D9A413654D6400F66223 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				BF06D9A713654E4A00F66223 /* VRCategories.j */,
+				BF06D9A513654D7400F66223 /* CPString+Custom.j */,
+				BF06D9A613654D7400F66223 /* CPTableView+SelectAll.j */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		BFB90F6A13831B8500F049CA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2470208C13A92F33005C3198 /* HNAuxiliarWindow.j */,
+				2470208D13A92F33005C3198 /* HNLoginWindow.j */,
+				BFB90F7413831BE400F049CA /* MailboxColumnView.j */,
+				244893CF13B0BB0D00331759 /* SMEmailSubjectView.j */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		BFB90F6B13831B8C00F049CA /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				2422B4C113DF3A3B0095B5A5 /* AboutPanelController.j */,
+				2470208E13A92F47005C3198 /* HNAuthController.j */,
+				BFB90F6E13831BCB00F049CA /* ComposeController.j */,
+				BFB90F7013831BCB00F049CA /* LoginController.j */,
+				BFB90F7113831BCB00F049CA /* MailController.j */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		BFB90F6C13831B9500F049CA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				24E1840C13C09A8900E594EC /* SMMailContent.j */,
+				24E1840913BE6B2100E594EC /* SMMailHeader.j */,
+				247F8B5913BE2C2B006BAA8E /* SMMailbox.j */,
+				BFB90F6D13831BB000F049CA /* Imap.j */,
+				244893D113B0C2E700331759 /* SMEmail.j */,
+				24B6ACAD13B9F48B00709912 /* Email.j */,
+				24B6ACAF13BA40EC00709912 /* SMEmailService.j */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		BFB90FA413831EFD00F049CA /* Client */ = {
+			isa = PBXGroup;
+			children = (
+				24B6ACA813B900D100709912 /* Resources */,
+				641D44E00FD437FB00EACBFF /* Frameworks */,
+				64200A470FD4250F005D41CE /* Resources */,
+				64200DBA0FD4254B005D41CE /* Others */,
+				64200DB90FD42540005D41CE /* Classes */,
+				BF06D9A413654D6400F66223 /* Categories */,
+				BFB90F6A13831B8500F049CA /* Views */,
+				BFB90F6B13831B8C00F049CA /* Controllers */,
+				BFB90F6C13831B9500F049CA /* Models */,
+			);
+			name = Client;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		64200A3C0FD424DD005D41CE /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 64200A3F0FD424DD005D41CE /* Build configuration list for PBXProject "Mail" */;
+			compatibilityVersion = "Xcode 2.4";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = 64200A3A0FD424DD005D41CE;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				64200DBC0FD42578005D41CE /* Mail */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		64200DE70FD428F4005D41CE /* Build Application */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Application";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n\n##################\n### CAPPUCCINO ###\n##################\n\n#validate cappuccino Frameworks path\nif test -d \"$CAPP_FRAMEWORKS_PATH\";\nthen\n\tcappFrameworksPath=$CAPP_FRAMEWORKS_PATH;\nelse\n\t#search for cappuccino frameworks with spotlight\n\tcappFrameworksPaths=$(mdfind \"kMDItemContentType == 'public.folder' && kMDItemDisplayName == 'Frameworks'\");\n\tcappFrameworksPath=\"/usr/local/narwhal/packages/cappuccino/Frameworks\";\n\tfor aCappFrameworksPath in $cappFrameworksPaths; do\n\t\tif test $aCappFrameworksPath -nt $cappFrameworksPath;\n\t\tthen\n\t\t\tif test ! -z \"$(echo $aCappFrameworksPath | awk '/cappuccino\\/Frameworks/')\";\n\t\t\tthen \n\t\t\t\tcappFrameworksPath=$aCappFrameworksPath;\n\t\t\telse\n\t\t\t\tif test ! -z \"$(echo $aCappFrameworksPath | awk '/objj\\/lib\\/Frameworks/')\";\n\t\t\t\tthen \n\t\t\t\t\tcappFrameworksPath=$aCappFrameworksPath;\n\t\t\t\tfi\n\t\t\tfi\n\t\tfi\n\tdone;\nfi\n\n#copy cappuccino frameworks\nif test -d $cappFrameworksPath;\nthen\n\trm -rf ./Frameworks;\n\tmkdir ./Frameworks;\n\n\tif test $LINK_FRAMEWORKS = \"YES\";\n\tthen\n\t\tif test $DEBUG = \"NO\"\n\t\tthen\n\t\t\tln -sf $cappFrameworksPath/* Frameworks;\n\t\t\trm -rf Frameworks/Debug;\n\t\telse\n\t\t\tln -sf $cappFrameworksPath/Debug/* Frameworks;\n\t\tfi\n\telse\n\t\tif test $DEBUG = \"NO\"\n\t\tthen\n\t\t\tcp -rf $cappFrameworksPath/* Frameworks;\n\t\t\trm -rf Frameworks/Debug;\n\t\telse\n\t\t\tcp -rf $cappFrameworksPath/Debug/* Frameworks;\n\t\tfi\n\tfi\t\n\techo \"Copy Cappuccino Frameworks from location '$cappFrameworksPath'\";\nfi\n\n#validate cappuccino bin path\nif test -d \"$CAPP_BIN_PATH\";\nthen\n\tcappBinPath=\"$CAPP_BIN_PATH\";\nelse\n\t#search for objj bin with spotlight\n\tcappBinPaths=$(mdfind \"kMDItemContentType == 'public.unix-executable' && kMDItemDisplayName == 'nib2cib'\");\n\tcappBinPath=\"/usr/local/narwhal/packages/cappuccino/bin\";\n\tfor aCappBinPath in $cappBinPaths; do\n\t\tif test $aCappBinPath -nt $cappBinPath;\n\t\tthen\n\t\t\tif test ! -z \"$(echo $aCappBinPath | awk '/cappuccino\\/bin/')\";\n\t\t\t\tthen \n\t\t\t\tcappBinPath=$aCappBinPath;\n\t\t\tfi\n\t\tfi\n\tdone;\n\tcappBinPath=$(echo $cappBinPath | sed -e 's/\\/nib2cib$//');\nfi\n\necho \"Cappuccino binary path is '$cappBinPath'\";\n\n#add cappuccino bin to profile\nPATH=${PATH}:$cappBinPath;\n\n\n##################\n### OBJECTIVE-J###\n##################\n\n# validate objj runtime path\nif test -d \"$OBJJ_RUNTIME_PATH\";\nthen\n\tobjjRuntimePath=\"$OBJJ_RUNTIME_PATH\";\nelse\n\tobjjRuntimePath=\"/usr/local/narwhal/packages/objective-j/Frameworks\";\n\t#search for cappuccino frameworks with spotlight\n\tobjjRuntimePaths=$(mdfind \"kMDItemContentType == 'public.folder' && kMDItemDisplayName == 'Frameworks'\");\n\tobjjRuntimePath=\"/usr/narwhal/packages/objective-j/Frameworks\";\n\tfor aObjjRuntimePath in $objjRuntimePaths; do\n\t\tif test $aObjjRuntimePath -nt $objjRuntimePath;\n\t\tthen\n\t\t\tif test ! -z \"$(echo $aObjjRuntimePath | awk '/objective-j\\/Frameworks/')\";\n\t\t\t\tthen \n\t\t\t\tobjjRuntimePath=$aObjjRuntimePath;\n\t\t\tfi\n\t\tfi\n\tdone;\nfi\n\n# copy the objective-j runtime\nif test -d $objjRuntimePath;\nthen\n\techo \"Copy Objective-J Frameworks from location '$objjRuntimePath'\";\n\tif test $LINK_FRAMEWORKS = \"YES\";\n\tthen\n\t\tif test $DEBUG = \"NO\"\n\t\tthen\n\t\t\tln -sf $objjRuntimePath/* Frameworks;\n\t\t\trm -rf Frameworks/Debug;\n\t\telse\n\t\t\tln -sf $objjRuntimePath/Debug/* Frameworks;\n\t\tfi\n\telse\n\t\tif test $DEBUG = \"NO\"\n\t\tthen\n\t\t\tcp -rf $objjRuntimePath/* Frameworks;\n\t\t\trm -rf Frameworks/Debug;\n\t\telse\n\t\t\tcp -rf $objjRuntimePath/Debug/* Frameworks;\n\t\tfi\n\tfi\nfi\n\n# validate objj bin path\nif test -d \"$OBJJ_BIN_PATH\";\nthen\n\tobjjBinPath=\"$OBJJ_BIN_PATH\";\nelse\n\t#search for objj bin with spotlight\n\tobjjBinPaths=$(mdfind \"kMDItemContentType == 'public.unix-executable' && kMDItemDisplayName == 'objj'\");\n\tobjjBinPath=\"/usr/local/narwhal/packages/objective-j/bin\";\n\tfor aObjjBinPath in $objjBinPaths; do\n\t\tif test $aObjjBinPath -nt $objjBinPath;\n\t\tthen\n\t\t\tif test ! -z \"$(echo $aObjjBinPath | awk '/objective-j\\/bin/')\";\n\t\t\t\tthen \n\t\t\t\tobjjBinPath=$aObjjBinPath;\n\t\t\tfi\n\t\tfi\n\tdone;\n\tobjjBinPath=$(echo $objjBinPath | sed -e 's/\\/objj$//');\nfi\n\necho \"Objective-J binary path is '$objjBinPath'\";\n\n#add objj bin to profile\nPATH=${PATH}:$objjBinPath;\n\n\n###############\n### NARWHAL ###\n###############\n\n#search for narwhal bin with spotlight\nnarwhalBinPaths=$(mdfind \"kMDItemContentType == 'public.unix-executable' && kMDItemDisplayName == 'narwhal'\");\nnarwhalBinPath=\"narwhalBin\";\nfor aNarwhalBin in $narwhalBinPaths; do\n\tif test $aNarwhalBin -nt $narwhalBinPath;\n\tthen\n\t\tif test ! -z \"$(echo $aNarwhalBin | awk '/narwhal\\/bin/')\";\n\t\t\tthen \n\t\t\tnarwhalBin=$aNarwhalBin;\n\t\tfi\n\tfi\ndone;\nnarwhalBin=$(echo $narwhalBin | sed -e 's/\\/narwhal$//');\nPATH=${PATH}:$narwhalBin;\necho \"NARWHAL binary path is '$narwhalBin'\";\n\n\n### Handle custom frameworks ###\n#copy custom frameworks or files to Frameworks\nif test -n \"$CUSTOM_FRAMEWORKS\";\nthen\n\tif test $LINK_FRAMEWORKS = \"YES\";\n\tthen\n\t\tln -sf $CUSTOM_FRAMEWORKS ./Frameworks/;\n\telse\n\t\tcp -rf $CUSTOM_FRAMEWORKS ./Frameworks/;\n\tfi\nfi\n\n\n###############\n### NIB2CIB ###\n###############\n\necho \"Check Interface Builder Files ....\";\n\n# for xib files\nxibFiles=$(find . -type f -name \"*.xib\");\nfor xibFile in $xibFiles; do\n cibFile=$(echo $xibFile | sed -e 's/\\.xib$/.cib/');\n test $xibFile -nt $cibFile && nib2cib $xibFile || echo \"- Interface Builder File '$cibFile' is up-to-date\";\ndone;\n\n# for nib files\nnibFiles=$(find . -type d -name \"*.nib\");\nfor nibFile in $nibFiles; do\n \tcibFile=$(echo $nibFile | sed -e 's/\\.nib$/.cib/');\n\ttest $nibFile -nt $cibFile && nib2cib $nibFile || echo \"- Interface Builder File \\'$cibFile\\' is up-to-date\";\ndone;\n\n\n#################\n### CORE DATA ###\n#################\n\nmomcBinPaths=$(mdfind \"kMDItemContentType == 'public.unix-executable' && kMDItemDisplayName == 'momc'\");\nmomcBin=\"momc\";\nfor aMomcBin in $momcBinPaths; do\n\tif test $aMomcBin -nt $momcBin;\n\tthen\n\t\tmomcBin=$(echo $aMomcBin | sed -e 's/\\momc$//');\n\tfi\ndone;\necho 'MOMC file location is '$momcBin'';\nPATH=${PATH}:momcBin;\n\nxcdmodels=$(find . -type d -name \"*.xcdatamodel\");\nfor xcdmodel in $xcdmodels; do\n\txccpdfile=$(echo $xcdmodel | sed -e 's/\\.xcdatamodel$/.cxcdatamodel/');\n\tmomc $xcdmodel $xccpdfile\n\tplutil -convert xml1 $xccpdfile\n\techo \"- Core Data Model '$xcdmodel' converted\";\ndone;";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		64200A3E0FD424DD005D41CE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BROWSER_APP_NAME = Safari.app;
+				CAPP_BIN_PATH = /usr/local/narwhal/packages/cappuccino/bin;
+				CAPP_FRAMEWORKS_PATH = /usr/local/narwhal/packages/cappuccino/Frameworks;
+				CUSTOM_FRAMEWORKS = "";
+				DEBUG = NO;
+				INDEX_FILE = index.html;
+				LINK_FRAMEWORKS = NO;
+				OBJJ_BIN_PATH = "/usr/local/narwhal/packages/objective-j/bin";
+				OBJJ_RUNTIME_PATH = "/usr/local/narwhal/packages/objective-j/Frameworks";
+			};
+			name = Release;
+		};
+		64200DBE0FD42578005D41CE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = Untitled;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		64A306A10FD4E183000D6AD7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BROWSER_APP_NAME = Safari.app;
+				CAPP_BIN_PATH = /usr/local/narwhal/packages/cappuccino/bin;
+				CAPP_FRAMEWORKS_PATH = /usr/local/narwhal/packages/cappuccino/Frameworks;
+				CUSTOM_FRAMEWORKS = "";
+				DEBUG = YES;
+				INDEX_FILE = "index-debug.html";
+				LINK_FRAMEWORKS = YES;
+				OBJJ_BIN_PATH = "/usr/local/narwhal/packages/objective-j/bin";
+				OBJJ_RUNTIME_PATH = "/usr/local/narwhal/packages/objective-j/Frameworks";
+			};
+			name = Debug;
+		};
+		64A306A20FD4E183000D6AD7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = Untitled;
+				ZERO_LINK = NO;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		64200A3F0FD424DD005D41CE /* Build configuration list for PBXProject "Mail" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				64A306A10FD4E183000D6AD7 /* Debug */,
+				64200A3E0FD424DD005D41CE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		64200DCB0FD425B7005D41CE /* Build configuration list for PBXAggregateTarget "Mail" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				64A306A20FD4E183000D6AD7 /* Debug */,
+				64200DBE0FD42578005D41CE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 64200A3C0FD424DD005D41CE /* Project object */;
+}

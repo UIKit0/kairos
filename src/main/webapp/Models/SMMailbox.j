@@ -116,12 +116,36 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     [self save];
 }
 
+- (void)remove
+{
+    [[self mailAccount] removeMailbox:self];
+}
+
 - (void)save
 {
     [super save];
     //[imapServer createFolder:name
     //                delegate:@selector(imapServerDidCreateFolder:)
     //                   error:nil];
+}
+
+- (BOOL)isEqual:(id)anOther
+{
+    if (self === anOther)
+        return YES;
+
+    if (!anOther || ![anOther isKindOfClass:SMMailbox])
+        return NO;
+
+    return [self isEqualToMailbox:anOther];
+}
+
+- (BOOL)isEqualToMailbox:(SMMailbox)aMailbox
+{
+    if (!aMailbox)
+        return NO;
+
+    return [[self name] isEqual:[aMailbox name]] && [[self mailAccount] isEqual:[aMailbox mailAccount]];
 }
 
 @end

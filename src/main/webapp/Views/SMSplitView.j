@@ -47,14 +47,12 @@ var SMSmallButtonBezelColor = nil,
 
 - (void)autosaveVertical
 {
-    console.log("autosaveVertical");
     var autosaveName = [self verticalAutosaveName];
     if (!autosaveName)
         return;
 
     var userDefaults = [CPUserDefaults standardUserDefaults];
 
-    console.log("autosaveVertical: ", [self isVertical], "forKey:", autosaveName);
     [userDefaults setBool:[self isVertical] forKey:autosaveName];
 }
 
@@ -72,7 +70,6 @@ var SMSmallButtonBezelColor = nil,
         isVertical = [userDefaults boolForKey:autosaveName];
 
     shouldAutosaveVertical = NO;
-    console.log("_restoreFromAutosave: ", isVertical, "forKey:", autosaveName);
 
     [self _setVertical:isVertical];
     shouldAutosaveVertical = YES;
