@@ -12,7 +12,7 @@ The following prerequisites are necessary to get started :
 * IntelliJ IDEA (Optional)
 
 1) Java 
-On Macos java is installed by default so normally you have nothing to do and you can skip this step.
+On Macos java is installed by default so normally you have nothing to do except entering java in a terminal.
 On linux you can use your package manager to install the latest java version, just make sure you are
 using the Sun/Oracle version and not the OpenJDk because the code is using some imap classes only
 available in proprietary version.
@@ -26,9 +26,11 @@ You can download sbt 0.7.7 here : http://code.google.com/p/simple-build-tool/dow
 Please DO NOT USE a newer version of sbt because build scripts are not compatible for the moment !
 Once the jar is downloaded, please go to the install directory and enter the following commands :
 sudo ln -s sbt-launch-0.7.7.jar sbt-launch.jar
+
 sudo touch sbt
 sudo chmod +x sbt
-sudo sh -c 'echo "java -Dfile.encoding=UTF-8 -Xmx512M -XX:MaxPermSize=256m -jar `dirname $0`/sbt-launch.jar "$@"" >> sbt'
+Open your favorite text editor and add the following command to sbt file
+java -Dfile.encoding=UTF-8 -Xmx512M -XX:MaxPermSize=256m -jar `dirname $0`/sbt-launch.jar "$@""
 
 Once done you should get the following tree directory :
 
@@ -89,6 +91,8 @@ $> cd kairos
 $> tar xvf misc/cardano/cardano.tar.gz  -C misc/cardano/
 $> capp gen -f src/main/webapp
 $> cp -R misc/cardano/cardano/* src/main/webapp/Frameworks/
+
+
 
 Launching
 ---------------
