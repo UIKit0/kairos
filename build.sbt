@@ -82,7 +82,28 @@ scalaVersion := "2.9.1"
 //  ) ++ super.libraryDependencies
 
 // add compile dependencies on some dispatch modules
+
+libraryDependencies ++= {
+  val liftVersion = "2.4-M4" // Put the current/latest lift version here
+  Seq(
+    "net.liftweb" %% "lift-webkit" % liftVersion % "compile->default",
+    "net.liftweb" %% "lift-testkit" % liftVersion % "compile->default",
+    )
+}
+
+// when using the sbt web app plugin 0.2.4+, use "container" instead of "jetty" for the context
+// Customize any further dependencies as desired
 libraryDependencies ++= Seq(
-    
+  //"org.eclipse.jetty" % "jetty-webapp" % "8.0.4.v20111024" % "container", // For Jetty 8
+  //"org.eclipse.jetty" % "jetty-webapp" % "7.3.0.v20110203" % "container", // For Jetty 7
+  "org.mortbay.jetty" % "jetty" % "6.1.22" % "jetty,test", // For Jetty 6, add scope test to make jetty avl. for tests
+  "org.scala-tools.testing" % "specs" % "1.6.9-SNAPSHOT" % "test->default", // For specs.org tests
+  "junit" % "junit" % "4.5" % "test->default", // For JUnit 4 testing
+  "javax.servlet" % "servlet-api" % "2.5" % "provided->default",
+  "com.h2database" % "h2" % "1.2.138", // In-process database, useful for development systems
+  "ch.qos.logback" % "logback-classic" % "0.9.26" % "compile->default" // Logging
 )
+
+
+
 
