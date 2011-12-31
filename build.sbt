@@ -64,24 +64,7 @@ organization := "com.smartmobili"
 // set the Scala version used for the project
 scalaVersion := "2.9.1"
 
-// set the main Scala source directory to be <base>/src
-//scalaSource in Compile <<= baseDirectory(_ / "src")
-
-// set the Scala test source directory to be <base>/test
-//scalaSource in Test <<= baseDirectory(_ / "test")
-
-
-
-//override def libraryDependencies = Set(
-//    "net.liftweb" %% "lift-webkit" % liftVersion % "compile->default",
-//    "net.liftweb" %% "lift-testkit" % liftVersion % "compile->default",
-//    "org.mortbay.jetty" % "jetty" % "6.1.22" % "test->default",
-//    "ch.qos.logback" % "logback-classic" % "0.9.26",
-//    "junit" % "junit" % "4.5" % "test->default",
-//    "org.scala-tools.testing" %% "specs" % "1.6.9-SNAPSHOT" % "test->default"
-//  ) ++ super.libraryDependencies
-
-// add compile dependencies on some dispatch modules
+seq(webSettings :_*)
 
 libraryDependencies ++= {
   val liftVersion = "2.4-M4" // Put the current/latest lift version here
@@ -96,7 +79,7 @@ libraryDependencies ++= {
 libraryDependencies ++= Seq(
   //"org.eclipse.jetty" % "jetty-webapp" % "8.0.4.v20111024" % "container", // For Jetty 8
   //"org.eclipse.jetty" % "jetty-webapp" % "7.3.0.v20110203" % "container", // For Jetty 7
-  "org.mortbay.jetty" % "jetty" % "6.1.22" % "test->default", // For Jetty 6, add scope test to make jetty avl. for tests
+  "org.mortbay.jetty" % "jetty" % "6.1.22" % "container", // For Jetty 6, add scope test to make jetty avl. for tests
   "org.scala-tools.testing" % "specs_2.9.0" % "1.6.8" % "test", // For specs.org tests
   "junit" % "junit" % "4.5" % "test->default", // For JUnit 4 testing
   "javax.servlet" % "servlet-api" % "2.5" % "provided->default",
