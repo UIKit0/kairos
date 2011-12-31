@@ -56,25 +56,25 @@ drwxr-xr-x 15 root    root      4096 2011-12-18 10:58 ../
 -rw-r--r--  1 root    admin   952175 2011-12-10 15:31 sbt-launch-0.7.7.jar  
 lrwxrwxrwx  1 root    admin       20 2011-12-10 15:32 sbt-launch.jar -> sbt-launch-0.7.7.jar  
 
-Now you need to update your shell environment and add sbt to the path
-# simple build tool (sbt)
-export PATH=/usr/local/sbt:${PATH}
+Now you need to update your shell environment and add sbt to the path  
+# simple build tool (sbt)  
+export PATH=/usr/local/sbt:${PATH}  
 
-4) Cappuccino
-In a temporary folder please enter the following command:
+4) Cappuccino  
+In a temporary folder please enter the following command:  
+  
+`curl https://raw.github.com/cappuccino/cappuccino/v0.9.5/bootstrap.sh >/tmp/cb.sh`  
+`sudo bash /tmp/cb.sh`  
 
-`curl https://raw.github.com/cappuccino/cappuccino/v0.9.5/bootstrap.sh >/tmp/cb.sh`
-`sudo bash /tmp/cb.sh`
+and follow the installer instructions.  
+At the end of install, please add cappuccino to your shell path :  
+export PATH=/usr/local/narwhal/bin:${PATH}  
 
-and follow the installer instructions.
-At the end of install, please add cappuccino to your shell path :
-export PATH=/usr/local/narwhal/bin:${PATH}
-
-5) IntelliJ Idea
-Download and install.
-Add install location to your path :
-#IntelliJ
-export PATH=/usr/local/idea-IC-111.69/bin:${PATH}
+5) IntelliJ Idea  
+Download and install.  
+Add install location to your path :  
+#IntelliJ  
+export PATH=/usr/local/idea-IC-111.69/bin:${PATH}  
 
 
 
@@ -83,42 +83,43 @@ a typical shell configuration (on ubuntu for instance) looks like this:
 
 ...
 
-# Java & scala
-export JAVA_HOME="/usr/lib/jvm/java-7-oracle"
-export SCALA_HOME="/usr/lib/jvm/scala-2.9.1"
-export PATH="${SCALA_HOME}/bin:${JAVA_HOME}/bin:${PATH}"
+# Java & scala  
+export JAVA_HOME="/usr/lib/jvm/java-7-oracle"  
+export SCALA_HOME="/usr/lib/jvm/scala-2.9.1"  
+export PATH="${SCALA_HOME}/bin:${JAVA_HOME}/bin:${PATH}"  
 
-# simple build tool (sbt)
-export PATH=/usr/local/sbt:${PATH}
+# simple build tool (sbt)  
+export PATH=/usr/local/sbt:${PATH}  
 
-# Cappuccino
-export PATH=/usr/local/narwhal/bin:$PATH
+# Cappuccino  
+export PATH=/usr/local/narwhal/bin:$PATH  
 
-#IntelliJ
-export PATH=/usr/local/idea-IC-111.69/bin:${PATH}
+#IntelliJ  
+export PATH=/usr/local/idea-IC-111.69/bin:${PATH}  
 
-Getting Sources
----------------
-
-`$> git clone git@github.com:smartmobili/kairos.git`
-`$> cd kairos`
-`$> tar xvf misc/cardano/cardano.tar.gz  -C misc/cardano/`
-`$> capp gen -f src/main/webapp`
-`$> cp -R misc/cardano/cardano/* src/main/webapp/Frameworks/`
+Getting Sources  
+---------------  
+  
+`$> git clone git@github.com:smartmobili/kairos.git`  
+`$> cd kairos`  
+`$> tar xvf misc/cardano/cardano.tar.gz  -C misc/cardano/`  
+`$> capp gen -f src/main/webapp`  
+`$> cp -R misc/cardano/cardano/* src/main/webapp/Frameworks/`  
 
 
 
 Launching
 ---------------
 
-Now we can run sbt :
+Now we can run sbt :  
 
-`$> sbt`
-`> clean`
-`> update`
-`> jetty-run`
+`$> sbt`  
+`> clean`  
+`> update`  
+`> jetty-run`  
 
-Now open your browser and go to http://localhost:8080
+Now open your browser and go to http://localhost:8080  
 
-Et voila! You should see the current status of the project.
+Et voila! You should see the current status of the project.  
+
 
