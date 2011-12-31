@@ -81,8 +81,9 @@ Add install location to your path :
 So once you have installed all the tools above 
 a typical shell configuration (on ubuntu for instance) looks like this:
 
-    # Java & scala  (On MacOS JAVA_HOME is not necessary in our case and should be commented)
-    export JAVA_HOME="/usr/lib/jvm/java-7-oracle"  
+    # Java & scala  
+    # Note: (On MacOS JAVA_HOME is not necessary and should be commented)
+	export JAVA_HOME="/usr/lib/jvm/java-7-oracle"  # comment this line if running macos
     export SCALA_HOME="/usr/lib/jvm/scala-2.9.1"  
     export PATH="${SCALA_HOME}/bin:${JAVA_HOME}/bin:${PATH}"  
 
