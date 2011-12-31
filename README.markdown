@@ -27,13 +27,14 @@ Please DO NOT USE a newer version of sbt because build scripts are not compatibl
 Once the jar is downloaded, please go to the install directory and enter the following commands :
 sudo ln -s sbt-launch-0.7.7.jar sbt-launch.jar
 
-`sudo touch sbt`<br />
-`sudo chmod +x sbt`<br />
+`sudo touch sbt`  
+`sudo chmod +x sbt`  
+
 Open your favorite text editor and add the following command to sbt file :
 
     java -XX:+CMSClassUnloadingEnabled -Dfile.encoding=UTF-8 -Xmx1512M -XX:MaxPermSize=512m -jar `dirname $0`/sbt-launch.jar "$@"
 
-The CMSClassUnloadingEnabled command is used to resolve a problem of memory when restarting sbt too many times.
+The `+CMSClassUnloadingEnabled` command is used to resolve a problem of memory when restarting sbt too many times.
 Here is the explanation from the lift mailing list (sbt ~jetty-run leaks) :
 
 "By default the JVM does not unload classes once they are loaded and loaded 
@@ -49,11 +50,11 @@ Once done you should get the following tree directory :
 
 vincent@vincent-EP35-DS3R:/usr/local/sbt$ ls -la
 total 944
-drwxrwxr-x  2 root    admin     4096 2011-12-18 12:18 ./
-drwxr-xr-x 15 root    root      4096 2011-12-18 10:58 ../
--rwxrwxr-x  1 vincent vincent     96 2011-12-11 13:16 sbt*
--rw-r--r--  1 root    admin   952175 2011-12-10 15:31 sbt-launch-0.7.7.jar
-lrwxrwxrwx  1 root    admin       20 2011-12-10 15:32 sbt-launch.jar -> sbt-launch-0.7.7.jar
+drwxrwxr-x  2 root    admin     4096 2011-12-18 12:18 ./  
+drwxr-xr-x 15 root    root      4096 2011-12-18 10:58 ../  
+-rwxrwxr-x  1 vincent vincent     96 2011-12-11 13:16 sbt*  
+-rw-r--r--  1 root    admin   952175 2011-12-10 15:31 sbt-launch-0.7.7.jar  
+lrwxrwxrwx  1 root    admin       20 2011-12-10 15:32 sbt-launch.jar -> sbt-launch-0.7.7.jar  
 
 Now you need to update your shell environment and add sbt to the path
 # simple build tool (sbt)
