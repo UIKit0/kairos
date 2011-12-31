@@ -44,7 +44,8 @@ high.  But during development or if you've got a container that is changing
 what apps it runs, it's best to allow unloading of the classes and also to 
 set perm gen to a reasonably big number. "
 
-Another better option is to use JRebel. TODO : write a doc for this option 
+Another better option is to use JRebel.  
+TODO : write a doc for this option - http://vimeo.com/27162278
 
 Once done you should get the following tree directory :  
 
