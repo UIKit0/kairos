@@ -83,7 +83,6 @@ scalaVersion := "2.9.1"
 
 // add compile dependencies on some dispatch modules
 libraryDependencies ++= Seq(
-    "net.databinder" %% "dispatch-meetup" % "0.7.8",
-    "net.databinder" %% "dispatch-twitter" % "0.7.8"
+    
 )
 
