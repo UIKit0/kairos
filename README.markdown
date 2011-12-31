@@ -48,8 +48,8 @@ Another better option is to use JRebel. TODO : write a doc for this option
 
 Once done you should get the following tree directory :
 
-vincent@vincent-EP35-DS3R:/usr/local/sbt$ ls -la
-total 944
+vincent@vincent-EP35-DS3R:/usr/local/sbt$ ls -la  
+total 944  
 drwxrwxr-x  2 root    admin     4096 2011-12-18 12:18 ./  
 drwxr-xr-x 15 root    root      4096 2011-12-18 10:58 ../  
 -rwxrwxr-x  1 vincent vincent     96 2011-12-11 13:16 sbt*  
