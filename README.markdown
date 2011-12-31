@@ -32,7 +32,7 @@ sudo ln -s sbt-launch-0.7.7.jar sbt-launch.jar
 
 Open your favorite text editor and add the following command to sbt file :  
 
-    java -XX:+CMSClassUnloadingEnabled -Dfile.encoding=UTF-8 -Xmx1512M -XX:MaxPermSize=512m -jar `dirname $0`/sbt-launch.jar "$@"
+    java -Dfile.encoding=UTF-8 -XX:+CMSClassUnloadingEnabled  -XX:MaxPermSize=512m -Xmx1512M  -jar `dirname $0`/sbt-launch.jar "$@"
 
 The `+CMSClassUnloadingEnabled` command is used to resolve a problem of memory when restarting sbt too many times.  
 Here is the explanation from the lift mailing list (sbt ~jetty-run leaks) :
