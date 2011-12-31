@@ -27,8 +27,8 @@ Please DO NOT USE a newer version of sbt because build scripts are not compatibl
 Once the jar is downloaded, please go to the install directory and enter the following commands :
 sudo ln -s sbt-launch-0.7.7.jar sbt-launch.jar
 
-`sudo touch sbt`
-`sudo chmod +x sbt`
+`sudo touch sbt`<br />
+`sudo chmod +x sbt`<br />
 Open your favorite text editor and add the following command to sbt file :
 
     java -XX:+CMSClassUnloadingEnabled -Dfile.encoding=UTF-8 -Xmx1512M -XX:MaxPermSize=512m -jar `dirname $0`/sbt-launch.jar "$@"
