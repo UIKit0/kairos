@@ -12,14 +12,14 @@ The following prerequisites are necessary to get started :
 * IntelliJ IDEA (Optional)
 
 1) Java 
-On Macos java is installed by default so normally you have nothing to do except entering java in a terminal.
+On Macos java is installed by default so normally you have nothing to do except launching at least once a java application(you can for instance enter java -version inside a terminal)
 On linux you can use your package manager to install the latest java version, just make sure you are
 using the Sun/Oracle version and not the OpenJDk because the code is using some imap classes only
 available in proprietary version.
 
 2) Scala 2.9.x
 You can download the latest scala version here : http://www.scala-lang.org/downloads/distrib/files/scala-2.9.1.final.tgz
-Once downloaded and unarchived you can copy it on the location of your choice and add it to your shell path.
+Once downloaded and unarchived you can copy it on the location of your choice(ex /usr/local/scala-2.9.1) and add it to your shell path.
 
 3) Sbt 0.7.7
 You can download sbt 0.7.7 here : http://code.google.com/p/simple-build-tool/downloads/detail?name=sbt-launch-0.7.7.jar&can=2&q=
@@ -27,10 +27,23 @@ Please DO NOT USE a newer version of sbt because build scripts are not compatibl
 Once the jar is downloaded, please go to the install directory and enter the following commands :
 sudo ln -s sbt-launch-0.7.7.jar sbt-launch.jar
 
-sudo touch sbt
-sudo chmod +x sbt
-Open your favorite text editor and add the following command to sbt file
-java -Dfile.encoding=UTF-8 -Xmx512M -XX:MaxPermSize=256m -jar `dirname $0`/sbt-launch.jar "$@""
+`sudo touch sbt`
+`sudo chmod +x sbt`
+Open your favorite text editor and add the following command to sbt file :
+
+`java -XX:+CMSClassUnloadingEnabled -Dfile.encoding=UTF-8 -Xmx1512M -XX:MaxPermSize=512m -jar `dirname $0`/sbt-launch.jar "$@"`
+
+The CMSClassUnloadingEnabled command is used to resolve a problem of memory when restarting sbt too many times.
+Here is the explanation from the lift mailing list (sbt ~jetty-run leaks) :
+
+"By default the JVM does not unload classes once they are loaded and loaded 
+classes are kept in the "perm gen" (permanent generation) heap space.  This 
+is mostly what you want because the cost of loading and JITing classes is 
+high.  But during development or if you've got a container that is changing 
+what apps it runs, it's best to allow unloading of the classes and also to 
+set perm gen to a reasonably big number. "
+
+Another better option is to use JRebel. TODO : write a doc for this option 
 
 Once done you should get the following tree directory :
 
@@ -49,12 +62,12 @@ export PATH=/usr/local/sbt:${PATH}
 4) Cappuccino
 In a temporary folder please enter the following command:
 
-curl https://raw.github.com/cappuccino/cappuccino/v0.9.5/bootstrap.sh >/tmp/cb.sh
-sudo bash /tmp/cb.sh
+`curl https://raw.github.com/cappuccino/cappuccino/v0.9.5/bootstrap.sh >/tmp/cb.sh`
+`sudo bash /tmp/cb.sh`
 
 and follow the installer instructions.
 At the end of install, please add cappuccino to your shell path :
-export PATH=/usr/local/sbt:${PATH}
+export PATH=/usr/local/narwhal/bin:${PATH}
 
 5) IntelliJ Idea
 Download and install.
@@ -86,11 +99,11 @@ export PATH=/usr/local/idea-IC-111.69/bin:${PATH}
 Getting Sources
 ---------------
 
-$> git clone git@github.com:smartmobili/kairos.git
-$> cd kairos
-$> tar xvf misc/cardano/cardano.tar.gz  -C misc/cardano/
-$> capp gen -f src/main/webapp
-$> cp -R misc/cardano/cardano/* src/main/webapp/Frameworks/
+`$> git clone git@github.com:smartmobili/kairos.git`
+`$> cd kairos`
+`$> tar xvf misc/cardano/cardano.tar.gz  -C misc/cardano/`
+`$> capp gen -f src/main/webapp`
+`$> cp -R misc/cardano/cardano/* src/main/webapp/Frameworks/`
 
 
 
@@ -99,10 +112,10 @@ Launching
 
 Now we can run sbt :
 
-$> sbt
-> clean
-> update
-> jetty-run
+`$> sbt`
+`> clean`
+`> update`
+`> jetty-run`
 
 Now open your browser and go to http://localhost:8080
 
