@@ -105,7 +105,6 @@ Getting Sources
   
 `$> git clone git@github.com:smartmobili/kairos.git`  
 `$> cd kairos`  
-`$> ln -s project-0.11 project`  
 `$> tar xvf misc/cardano/cardano.tar.gz  -C misc/cardano/`  
 `$> capp gen -f src/main/webapp`  
 `$> cp -R misc/cardano/cardano/* src/main/webapp/Frameworks/`  
@@ -137,6 +136,7 @@ http://stackoverflow.com/questions/8104363/run-sbt-project-in-debug-mode-with-a-
 http://blog.morroni.com/  
 http://java.dzone.com/articles/liftweb-setup-10-minutes-ide  
 http://stackoverflow.com/questions/8621542/how-do-i-debug-lift-applications-in-eclipse  
+http://blog.xebia.fr/2010/05/11/configurer-vos-projets-sbt-pour-eclipse-ou-intellij-idea/  
 
 java -Dfile.encoding=UTF-8 ... -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -jar `dirname $0`/sbt-launch.jar "$@"  
 
