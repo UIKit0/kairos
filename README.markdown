@@ -127,4 +127,19 @@ Now open your browser and go to http://localhost:8080
 
 Et voila! You should see the current status of the project.  
 
+A better development environment
+---------------
+Ok so now we have a working environment it's time to configure a bit more to be able  
+to easily debug from an ide (eclipse or idea), put some breakpoints and so on...  
+
+TO BE CONTINUED:  
+http://stackoverflow.com/questions/8104363/run-sbt-project-in-debug-mode-with-a-custom-configuration  
+http://blog.morroni.com/  
+http://java.dzone.com/articles/liftweb-setup-10-minutes-ide  
+http://stackoverflow.com/questions/8621542/how-do-i-debug-lift-applications-in-eclipse  
+
+java -Dfile.encoding=UTF-8 ... -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -jar `dirname $0`/sbt-launch.jar "$@"  
+
+
+
 
