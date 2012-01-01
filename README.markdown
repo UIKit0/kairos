@@ -102,7 +102,7 @@ Getting Sources
   
 `$> git clone git@github.com:smartmobili/kairos.git`  
 `$> cd kairos`  
-`$> ln -s project-sbt-0.7 project`  
+`$> ln -s project-0.7 project`  
 `$> tar xvf misc/cardano/cardano.tar.gz  -C misc/cardano/`  
 `$> capp gen -f src/main/webapp`  
 `$> cp -R misc/cardano/cardano/* src/main/webapp/Frameworks/`  
