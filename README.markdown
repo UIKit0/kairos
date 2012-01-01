@@ -82,8 +82,8 @@ Add install location to your path :
 
 
 
-So once you have installed all the tools above 
-a typical shell configuration (on ubuntu for instance) looks like this:
+So once you have installed all the tools above a typical shell configuration (on ubuntu for instance) looks like this:  
+
 
     # Java & scala  
     # Note: (On MacOS JAVA_HOME is not necessary)
