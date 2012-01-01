@@ -132,6 +132,7 @@ Ok so now we have a working environment it's time to configure a bit more to be 
 to easily debug from an ide (eclipse or idea), put some breakpoints and so on...  
 
 TO BE CONTINUED:  
+Eclipse plugin for scala: Help->Install New software->Add... and in Location enter http://download.scala-ide.org/releases-29/stable/site  
 http://stackoverflow.com/questions/8104363/run-sbt-project-in-debug-mode-with-a-custom-configuration  
 http://blog.morroni.com/  
 http://java.dzone.com/articles/liftweb-setup-10-minutes-ide  
