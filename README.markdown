@@ -131,8 +131,16 @@ A better development environment
 Ok so now we have a working environment it's time to configure a bit more to be able  
 to easily debug from an ide (eclipse or idea), put some breakpoints and so on...  
 
+1) Install Eclipse Indigo  
+On linux sometimes the update repository list is empty so you need to add a new site  
+Go to menu Help->Install New software...->"Available Software Sites"->Add  
+Name: Indigo  
+Location: http://download.eclipse.org/releases/indigo  
+
+
+
 TO BE CONTINUED:  
-Eclipse plugin for scala: Help->Install New software->Add... and in Location enter http://download.scala-ide.org/releases-29/stable/site  
+Eclipse plugin for scala: Help->Install New software...->Add... and in Location enter http://download.scala-ide.org/releases-29/stable/site  
 http://stackoverflow.com/questions/8104363/run-sbt-project-in-debug-mode-with-a-custom-configuration  
 http://blog.morroni.com/  
 http://java.dzone.com/articles/liftweb-setup-10-minutes-ide  
