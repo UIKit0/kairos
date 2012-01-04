@@ -3,6 +3,7 @@ apply {
     plugin 'scala'
     plugin 'war'
     plugin 'jetty'
+    plugin 'eclipse'
 }
 
 scalaVersion = '2.9.1'
@@ -13,18 +14,22 @@ jettyRun.contextPath = "/"
 repositories {
     mavenCentral()
     mavenRepo name:'scala-releases', urls:'http://scala-tools.org/repo-releases/'
+    mavenRepo name:'scala-snapshots', urls:'http://scala-tools.org/repo-snapshots/'
+    flatDir name: 'localRepository', dirs: "lib"
 }
 
 dependencies {
-    scalaTools "org.scala-lang:scala-compiler:$scalaVersion",
+    scalaTools "org.scala-lang:scala-compiler:$scalaVersion", 
         "org.scala-lang:scala-library:$scalaVersion"
 
     compile "org.scala-lang:scala-library:$scalaVersion",
-    	"net.liftweb:lift-webkit:$liftVersion",
-    	"net.liftweb:lift-mapper:$liftVersion",
-    	"net.liftweb:lift-testkit:$liftVersion",
+    	"net.liftweb:lift-webkit_$scalaVersion:$liftVersion",
+    	"net.liftweb:lift-mapper_$scalaVersion:$liftVersion",
+    	"net.liftweb:lift-testkit_$scalaVersion:$liftVersion",
         "com.h2database:h2:1.3.146",
-        "ch.qos.logback:logback-classic:0.9.26"
+        "ch.qos.logback:logback-classic:0.9.26",
+        "cardano-core_2.8.1:cardano-core_2.8.1:0.1.2"
+        
 
     testCompile "junit:junit:4.5",
         "org.scala-tools.testing:specs:1.6.1",
@@ -37,5 +42,5 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.0-milestone-6'
+    gradleVersion = '1.0-milestone-3'
 }

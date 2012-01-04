@@ -82,14 +82,13 @@ Add install location to your path :
 
 
 
-So once you have installed all the tools above a typical shell configuration (on ubuntu for instance) looks like this:  
-
+So once you have installed all the tools above a typical shell configuration(macos) looks like this:  
 
     # Java & scala  
-    # Note: (On MacOS JAVA_HOME is not necessary)
-    # export JAVA_HOME="/usr/lib/jvm/java-7-oracle"  # uncomment this line if running linux
-    export SCALA_HOME="/usr/lib/jvm/scala-2.9.1"  
-    export PATH="${SCALA_HOME}/bin:${JAVA_HOME}/bin:${PATH}"  
+    export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Home"
+    # export PATH="${JAVA_HOME}/bin:${PATH}" On MacOS java is already in path so no need to add it
+    export SCALA_HOME="/usr/local/scala-2.9.1"  
+    export PATH="${SCALA_HOME}/bin"  
 
     # simple build tool (sbt)  
     export PATH=/usr/local/sbt:${PATH}  
