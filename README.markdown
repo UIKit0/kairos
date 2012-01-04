@@ -137,15 +137,18 @@ Location: http://download.eclipse.org/releases/indigo
 
 
 TO BE CONTINUED:  
-Eclipse plugin for scala: Help->Install New software...->Add... and in Location enter http://download.scala-ide.org/releases-29/stable/site  
+Eclipse plugin for scala: Help->Install New software...->Add... and in Location enter   http://download.scala-ide.org/releases-29/stable/site  
+
+
+http://groups.google.com/group/liftweb/browse_thread/thread/6a0f1ee6fd87081b  
 http://stackoverflow.com/questions/8104363/run-sbt-project-in-debug-mode-with-a-custom-configuration  
 http://blog.morroni.com/  
 http://java.dzone.com/articles/liftweb-setup-10-minutes-ide  
-http://stackoverflow.com/questions/8621542/how-do-i-debug-lift-applications-in-eclipse
+http://stackoverflow.com/questions/8621542/how-do-i-debug-lift-applications-in-eclipse  
 http://zikaprog.wordpress.com/2010/04/19/scala-eclipse-sbt-and-debugging/  
 http://blog.xebia.fr/2010/05/11/configurer-vos-projets-sbt-pour-eclipse-ou-intellij-idea/  
 
-Create sbt_debug from sbt file and add following commands:
+Create sbt_debug from sbt file and add following commands:  
 java -Dfile.encoding=UTF-8 ... -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005 -jar `dirname $0`/sbt-launch.jar "$@"  
 
 
