@@ -86,7 +86,7 @@ So once you have installed all the tools above a typical shell configuration(mac
 
     # Java & scala  
     export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Home"
-    # export PATH="${JAVA_HOME}/bin:${PATH}" On MacOS java is already in path so no need to add it
+    # export PATH="${JAVA_HOME}/bin:${PATH}" # On MacOS java is already in path so no need to add it
     export SCALA_HOME="/usr/local/scala-2.9.1"  
     export PATH="${SCALA_HOME}/bin"  
 
