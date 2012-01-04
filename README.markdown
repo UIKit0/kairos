@@ -105,12 +105,7 @@ Getting Sources
   
 `$> git clone git@github.com:smartmobili/kairos.git`  
 `$> cd kairos`  
-`$> tar xvf misc/cardano/cardano.tar.gz  -C misc/cardano/`  
-`$> capp gen -f src/main/webapp`  
-`$> cp -R misc/cardano/cardano/* src/main/webapp/Frameworks/`  
-`$> cp -R misc/cardano/cardano/Debug/* src/main/webapp/Frameworks/Debug/`  
-
-
+`$> sh ./setup.sh`  
 
 Launching
 ---------------
@@ -136,6 +131,9 @@ On linux sometimes the update repository list is empty so you need to add a new 
 Go to menu Help->Install New software...->"Available Software Sites"->Add  
 Name: Indigo  
 Location: http://download.eclipse.org/releases/indigo  
+
+
+
 
 
 
