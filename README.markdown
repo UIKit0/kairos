@@ -133,26 +133,26 @@ Location: http://download.eclipse.org/releases/indigo
 
 It is possible to use Eclipse Classic version.
 
-2) Set up Eclipse to work with scala
-2.1) Set more memory for JVM to run Eclipse. This is made in eclipse.ini file. Please refer to http://www.assembla.com/spaces/scala-ide/wiki/Setup
-On MacOS eclipse.ini file is located in Eclipse.app/Contents/MacOS
-2.2) Open Eclipse and install "Scala IDE for Eclipse" ( http://scala-ide.org/download/current.html ).
+2) Set up Eclipse to work with scala  
+2.1) Set more memory for JVM to run Eclipse. This is made in eclipse.ini file. Please refer to http://www.assembla.com/spaces/scala-ide/wiki/Setup  
+eclipse.ini file on MacOS is located in Eclipse.app/Contents/MacOS  
+2.2) Open Eclipse and install "Scala IDE for Eclipse" ( http://scala-ide.org/download/current.html ).  
 Usually this made via menu Help->Install New Software, type-in there "http://download.scala-ide.org/releases-29/stable/site", check "Scala IDE for Eclipse" checkbox, press Next and follow wizard instructions. After restarting Eclipse, it will ask to run Scala Setup Deiagnostics. Answer Yes, set "Use recommended default settings", check in "Heap settings" that you have enough JVM memory, and then press OK. Scala IDE setup is done.
 
-3) Create Eclipse project from sbt
+3) Create Eclipse project from sbt  
 In kairos project folder, start sbt, and type "eclipse". It will create .classpath and .project files for kairos.
 
-4) Import Eclipse into your workspace.
+4) Import Eclipse into your workspace  
 Open/Create your workspace (outside of kairos project folder), and in Eclipse use File → Import → General/Existing Project into Workspace. For sources select root of kairos project folder (where is .classpath and .project files is located from previous step). Press Finish.
 
-5) Create "run configuration"
-To create first time a "run configuration", expand in Package Explorer src/test/scala → (default package). Right click on "RunWebApp.scala" and choose "Run As" → Scala Application. Now you can open your browser and navigate to http://localhost:8080/
+5) Create "run configuration"  
+To create first time a "run configuration", expand in Package Explorer src/test/scala → (default package). Right click on "RunWebApp.scala" and choose "Run As" → Scala Application. Now you can open your browser and navigate to http://localhost:8080/  
 To stop application, in Eclipse in Console window press "Terminate" button.
 
-6) Debugging
+6) Debugging  
 After above steps you have "RunWebApp" configuration, so you can just press a "Bug" icon in Eclipse toolbar to start Kairos scala code in debugger. You can set breakpoints in scala files. When execution is stopped on breakpoint or on another step, you can see variables in "Variables" window.
 
-----(old)---
+---(old)---
 TO BE CONTINUED:  
 Eclipse plugin for scala: Help->Install New software...->Add... and in Location enter   http://download.scala-ide.org/releases-29/stable/site  
 
