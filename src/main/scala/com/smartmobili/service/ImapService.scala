@@ -90,7 +90,7 @@ case class ImapService() extends Logger {
 
   /**
    * Connection
-   *
+   *mailContentForMessageId:selectedEmail
    */
   
   // Connection with credentials
@@ -330,7 +330,33 @@ case class ImapService() extends Logger {
     topLevelFoldersList.reverse
   }
   
-  
+  def createFolder(folderName: String): List[SMMailbox] = {
+    var folders: List[SMMailbox] = List()
+    
+    try {
+      // Connect
+      val store: Store = connect
+      
+      // Get the specified folder
+      val newFolder: Folder = store.getFolder(folderName)
+      if(! newFolder.exists) {
+      
+        if(newFolder.create(Folder.HOLDS_MESSAGES)) {
+          // creation succeeded - create a list with one SMMailbox element
+          folders = List(new SMMailbox(folderName, 0, 0))
+        }
+
+      }
+
+      store.close 
+      } catch {
+        case e: Exception => e.printStackTrace();log.info("Cannot create folder "+folderName);
+        //case e: NoSuchProviderException => e.printStackTrace(); log.info("Authentication denied to "); ""
+        //case e: MessagingException => e.printStackTrace(); log.debug("Error found when trying to authenticate "+user); stackTrace(e)
+        } 
+      
+      folders
+  }
   
   /**
    * Headers
