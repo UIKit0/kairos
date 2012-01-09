@@ -9,5 +9,5 @@ if [ ! -d ./misc/cardano/cardano ]; then
     tar xvf ./misc/cardano/cardano.tar.gz -C ./misc/cardano/
 fi
 
-cp -R ./misc/cardano/cardano/* ./src/main/webapp/Frameworks/
-cp -R ./misc/cardano/cardano/Debug/* ./src/main/webapp/Frameworks/Debug/
+cp -R ./misc/cardano/cardano/Cardano ./src/main/webapp/Frameworks/
+cp -R ./misc/cardano/cardano/Debug ./src/main/webapp/Frameworks/
