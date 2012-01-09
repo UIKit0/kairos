@@ -18,6 +18,8 @@ repositories {
     flatDir name: 'localRepository', dirs: "lib"
 }
 
+eclipse.classpath.downloadSources = false
+
 dependencies {
     scalaTools "org.scala-lang:scala-compiler:$scalaVersion", 
         "org.scala-lang:scala-library:$scalaVersion"
@@ -41,9 +43,11 @@ dependencies {
     providedCompile 'javax.servlet:servlet-api:2.5'
 }
 
-eclipseClasspath {
-       downloadSources = false; // required for eclipseClasspath to work
-}
+// required for eclipseClasspath to work
+//eclipse.classpath.downloadSources = false
+//eclipseClasspath {
+//       downloadSources = false; // required for eclipseClasspath to work
+//}
 
 task wrapper(type: Wrapper) {
     gradleVersion = '1.0-milestone-3'
