@@ -360,9 +360,9 @@ case class ImapService() extends Logger {
   
   /*
    * Return "null" if no errors, or return string with error description.
+   * TODO: need add localization of return strings
    */
    def renameOrCreateFolder(oldName: String, destName: String): String = {
-    // TODO: implement real renaming 
     try {
 
       // TODO: it is not good to connect every time. We should in future use some
