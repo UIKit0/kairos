@@ -102,18 +102,34 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     var oldName = name;
     [self setName:aName];
 
-    if ([self isNew])
+   /* OLD CODE:
+     if ([self isNew])
         [self save];
     else {
-        // TODO Not implemented.
+        //  Not implemented.
         //[imapServer renameFolder:oldName
         //                      to:name
         //                delegate:@selector(imapServerDidRenameFolder:)
         //                   error:nil];
-    }
+    }*/
+    
+    [imapServer renameOrCreateFolder:oldName
+                          destName:aName
+                    delegate:@selector(imapServerDidRenameOrCreateFolder:)
+                       error:nil];
 
-    // TODO Actually implement this.
+    
     [self save];
+}
+
+- (void)imapServerDidRenameOrCreateFolder:(String)err 
+{ 
+    if (err != null)
+    {
+        // Output error to user
+        alert(err)
+    }
+    CPLog("imapServerDidRenameOrCreateFolder");
 }
 
 - (void)remove
@@ -123,8 +139,12 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
 
 - (void)save
 {
-    [super save];
-    //[imapServer createFolder:name
+    CPLog("SMMailbox Save called");
+    [super save]; 
+    // Obevic comment: no need to call create folder here, this is not good. 
+    // We call "renameOrCreateFolder" each time when renameTo ends. 
+    // Old code (was also commented before):
+    // [imapServer createFolder:name
     //                delegate:@selector(imapServerDidCreateFolder:)
     //                   error:nil];
 }

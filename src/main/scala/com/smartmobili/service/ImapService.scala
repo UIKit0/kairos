@@ -330,7 +330,7 @@ case class ImapService() extends Logger {
     topLevelFoldersList.reverse
   }
   
-  def createFolder(folderName: String): List[SMMailbox] = {
+ /* def createFolder(folderName: String): List[SMMailbox] = {
     var folders: List[SMMailbox] = List()
     
     try {
@@ -356,6 +356,50 @@ case class ImapService() extends Logger {
         } 
       
       folders
+  }*/
+  
+  /*
+   * Return "null" if no errors, or return string with error description.
+   */
+   def renameOrCreateFolder(oldName: String, destName: String): String = {
+    // TODO: implement real renaming 
+    try {
+
+      // TODO: it is not good to connect every time. We should in future use some
+      // IMAP pool, which should be already connected to IMAP for this user.
+      // This pool will speedup things, because using it will pass connect() stage
+      // and srart making renaming/craeting folder immidiatly.
+      // (But in current case, user will not feel difference, because current operation
+      // is asynchronius and user don't wait end of this operation. It will feel
+      // result in other operations, such as browse between emails, pages and etc.)
+
+      // Connect
+      val store: Store = connect
+
+      val rootFolder: Folder = store.getDefaultFolder
+
+      var oldFolder: Folder = rootFolder.getFolder(oldName)
+      val newFolder: Folder = rootFolder.getFolder(destName)
+      if (oldFolder.exists()) {
+        if (oldFolder.renameTo(newFolder) == false)
+          "Failed to rename folder"
+      } else {
+        if (!newFolder.exists) {
+          if (newFolder.create(Folder.HOLDS_MESSAGES) == false) {
+            "Failed to create folder"
+          }
+        }
+      }
+
+      store.close
+    } catch {
+      case e: Exception => e.printStackTrace(); log.info("Cannot create or rename folder " + destName);
+      //case e: NoSuchProviderException => e.printStackTrace(); log.info("Authentication denied to "); ""
+      //case e: MessagingException => e.printStackTrace(); log.debug("Error found when trying to authenticate "+user); stackTrace(e)
+      "Failed to create or rename folder"
+    }
+
+    null
   }
   
   /**
