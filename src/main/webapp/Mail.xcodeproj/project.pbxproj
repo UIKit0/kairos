@@ -21,6 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXFileReference section */
+		0146B0E314BBFD7E0020764E /* MailSourceViewController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = MailSourceViewController.j; path = Controllers/MailSourceViewController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		01BA4EBC14BC038B00CD27F6 /* SMMailAccount.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = SMMailAccount.j; path = Models/SMMailAccount.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2422B4C113DF3A3B0095B5A5 /* AboutPanelController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = AboutPanelController.j; path = Controllers/AboutPanelController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		243848A913A928D700765E18 /* SMLoginWindowBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SMLoginWindowBackground.png; sourceTree = "<group>"; };
 		244893CF13B0BB0D00331759 /* SMEmailSubjectView.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = SMEmailSubjectView.j; path = Views/SMEmailSubjectView.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -259,6 +261,7 @@
 		BFB90F6B13831B8C00F049CA /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				0146B0E314BBFD7E0020764E /* MailSourceViewController.j */,
 				2422B4C113DF3A3B0095B5A5 /* AboutPanelController.j */,
 				2470208E13A92F47005C3198 /* HNAuthController.j */,
 				BFB90F6E13831BCB00F049CA /* ComposeController.j */,
@@ -271,6 +274,7 @@
 		BFB90F6C13831B9500F049CA /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				01BA4EBC14BC038B00CD27F6 /* SMMailAccount.j */,
 				24E1840C13C09A8900E594EC /* SMMailContent.j */,
 				24E1840913BE6B2100E594EC /* SMMailHeader.j */,
 				247F8B5913BE2C2B006BAA8E /* SMMailbox.j */,
