@@ -384,26 +384,34 @@ case class ImapService() extends Logger {
 
       var oldFolder: Folder = rootFolder.getFolder(oldName)
       val newFolder: Folder = rootFolder.getFolder(destName)
+      
+      var resultCode: String = "" //empty string will mean no error
+      
       if (oldFolder.exists()) {
-        if (oldFolder.renameTo(newFolder) == false)
-          "Failed to rename folder"
+        if (newFolder.exists())
+          resultCode = "Folder with such name is already exists. Failed to rename folder"
+        else {
+          if (oldFolder.renameTo(newFolder) == false)
+            resultCode = "Failed to rename folder"
+        }
       } else {
         if (!newFolder.exists) {
           if (newFolder.create(Folder.HOLDS_MESSAGES) == false) {
-            "Failed to create folder"
+            resultCode = "Failed to create folder"
           }
         }
+        else
+           resultCode = "Folder with such name is already exists. Failed to create folder"
       }
 
       store.close
+      resultCode
     } catch {
       case e: Exception => e.printStackTrace(); log.info("Cannot create or rename folder " + destName);
       //case e: NoSuchProviderException => e.printStackTrace(); log.info("Authentication denied to "); ""
       //case e: MessagingException => e.printStackTrace(); log.debug("Error found when trying to authenticate "+user); stackTrace(e)
       "Failed to create or rename folder"
     }
-
-    null
   }
   
   /**

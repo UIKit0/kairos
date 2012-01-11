@@ -113,6 +113,7 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
         //                   error:nil];
     }*/
     
+    CPLog("renameTo from " + oldName + " to " + aName);
     [imapServer renameOrCreateFolder:oldName
                           destName:aName
                     delegate:@selector(imapServerDidRenameOrCreateFolder:)
@@ -124,12 +125,13 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
 
 - (void)imapServerDidRenameOrCreateFolder:(String)err 
 { 
-    if (err != null)
+    CPLog("imapServerDidRenameOrCreateFolder");
+    if (err != "")
     {
         // Output error to user
         alert(err)
     }
-    CPLog("imapServerDidRenameOrCreateFolder");
+    
 }
 
 - (void)remove
