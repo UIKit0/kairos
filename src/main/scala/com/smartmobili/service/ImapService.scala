@@ -359,6 +359,8 @@ case class ImapService() extends Logger {
   }*/
   
   /*
+   * Try to rename IMAP folder if it exists, or create new folder if previous
+   * one is not exists.
    * Return "null" if no errors, or return string with error description.
    * TODO: need add localization of return strings
    */
