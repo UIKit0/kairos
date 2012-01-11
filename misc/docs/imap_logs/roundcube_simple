@@ -1,0 +1,560 @@
+[11-Jan-2012 14:22:55 +0100]: [DBD1] S: * OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN AUTH=DIGEST-MD5 AUTH=CRAM-MD5] Dovecot ready.
+[11-Jan-2012 14:22:55 +0100]: [DBD1] C: A0001 ID ("name" "Roundcube Webmail" "version" "0.6" "php" "5.3.5-1ubuntu7.4" "os" "Linux" "command" "/")
+[11-Jan-2012 14:22:55 +0100]: [DBD1] S: * ID NIL
+[11-Jan-2012 14:22:55 +0100]: [DBD1] S: A0001 OK ID completed.
+[11-Jan-2012 14:22:55 +0100]: [DBD1] C: A0002 AUTHENTICATE CRAM-MD5
+[11-Jan-2012 14:22:55 +0100]: [DBD1] S: + PDM1MTE1NjkxOTQzODE4NDEuMTMyNjI4ODE3NUBzZC0zMDYzNT4=
+[11-Jan-2012 14:22:55 +0100]: [DBD1] C: d2ViZ3Vlc3RAc21hcnRtb2JpbGkuY29tIDczODMxNjUzZmVlYzdjNDVlNzRkYTg1YjIwMjk2NWM0
+[11-Jan-2012 14:22:55 +0100]: [DBD1] S: A0002 OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE SORT SORT=DISPLAY THREAD=REFERENCES THREAD=REFS MULTIAPPEND UNSELECT CHILDREN NAMESPACE UIDPLUS LIST-EXTENDED I18NLEVEL=1 CONDSTORE QRESYNC ESEARCH ESORT SEARCHRES WITHIN CONTEXT=SEARCH LIST-STATUS FUZZY] Logged in
+[11-Jan-2012 14:22:55 +0100]: [DBD1] C: A0003 NAMESPACE
+[11-Jan-2012 14:22:55 +0100]: [DBD1] S: * NAMESPACE (("" ".")) NIL NIL
+[11-Jan-2012 14:22:55 +0100]: [DBD1] S: A0003 OK Namespace completed.
+[11-Jan-2012 14:22:55 +0100]: [DBD1] C: A0004 LOGOUT
+[11-Jan-2012 14:22:55 +0100]: [DBD1] S: * BYE Logging out
+[11-Jan-2012 14:22:55 +0100]: [DBD1] S: A0004 OK Logout completed.
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: * OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN AUTH=DIGEST-MD5 AUTH=CRAM-MD5] Dovecot ready.
+[11-Jan-2012 14:22:56 +0100]: [18BE] C: A0001 ID ("name" "Roundcube Webmail" "version" "0.6" "php" "5.3.5-1ubuntu7.4" "os" "Linux" "command" "/?_task=mail")
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: * ID NIL
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: A0001 OK ID completed.
+[11-Jan-2012 14:22:56 +0100]: [18BE] C: A0002 AUTHENTICATE CRAM-MD5
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: + PDY2NDkxNjM2NTU3NTIwOTUuMTMyNjI4ODE3NkBzZC0zMDYzNT4=
+[11-Jan-2012 14:22:56 +0100]: [18BE] C: d2ViZ3Vlc3RAc21hcnRtb2JpbGkuY29tIGU5NDc5YjhlMjBhNjI4ZWYxY2E0YjYwOWI5YmM3NWQ4
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: A0002 OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE SORT SORT=DISPLAY THREAD=REFERENCES THREAD=REFS MULTIAPPEND UNSELECT CHILDREN NAMESPACE UIDPLUS LIST-EXTENDED I18NLEVEL=1 CONDSTORE QRESYNC ESEARCH ESORT SEARCHRES WITHIN CONTEXT=SEARCH LIST-STATUS FUZZY] Logged in
+[11-Jan-2012 14:22:56 +0100]: [18BE] C: A0003 LIST (SUBSCRIBED) "" "*"
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: * LIST (\Subscribed) "." "Drafts"
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: * LIST (\Subscribed) "." "Sent"
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: * LIST (\Subscribed) "." "Junk"
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: * LIST (\Subscribed) "." "Trash"
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: * LIST (\Subscribed) "." "Apple Mail To Do"
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: * LIST (\Subscribed) "." "Deleted Messages"
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: * LIST (\Subscribed) "." "Notes"
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: A0003 OK List completed.
+[11-Jan-2012 14:22:56 +0100]: [18BE] C: A0004 LOGOUT
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: * BYE Logging out
+[11-Jan-2012 14:22:56 +0100]: [18BE] S: A0004 OK Logout completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN AUTH=DIGEST-MD5 AUTH=CRAM-MD5] Dovecot ready.
+[11-Jan-2012 14:22:56 +0100]: [BC01] C: A0001 ID ("name" "Roundcube Webmail" "version" "0.6" "php" "5.3.5-1ubuntu7.4" "os" "Linux" "command" "/?_task=mail&_action=list&_mbox=INBOX&_refresh=1&_remote=1&_unlock=loading1326288154063&_=1326288154069")
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * ID NIL
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: A0001 OK ID completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] C: A0002 AUTHENTICATE CRAM-MD5
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: + PDk1ODI0NjE4ODUwNDY4NzUuMTMyNjI4ODE3NkBzZC0zMDYzNT4=
+[11-Jan-2012 14:22:56 +0100]: [BC01] C: d2ViZ3Vlc3RAc21hcnRtb2JpbGkuY29tIDQzOWE2NmVmOWQ3ZTRlMTMzMjI3NmY2NTM2NjM1MjE3
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: A0002 OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE SORT SORT=DISPLAY THREAD=REFERENCES THREAD=REFS MULTIAPPEND UNSELECT CHILDREN NAMESPACE UIDPLUS LIST-EXTENDED I18NLEVEL=1 CONDSTORE QRESYNC ESEARCH ESORT SEARCHRES WITHIN CONTEXT=SEARCH LIST-STATUS FUZZY] Logged in
+[11-Jan-2012 14:22:56 +0100]: [BC01] C: A0003 STATUS INBOX (MESSAGES UNSEEN)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * STATUS "INBOX" (MESSAGES 359 UNSEEN 282)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: A0003 OK Status completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] C: A0004 SELECT INBOX
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * FLAGS (\Answered \Flagged \Deleted \Seen \Draft $NotJunk JunkRecorded $Junk NonJunk)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * OK [PERMANENTFLAGS (\Answered \Flagged \Deleted \Seen \Draft $NotJunk JunkRecorded $Junk NonJunk \*)] Flags permitted.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 359 EXISTS
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 0 RECENT
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * OK [UNSEEN 50] First unseen.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * OK [UIDVALIDITY 1312633653] UIDs valid
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * OK [UIDNEXT 362] Predicted next UID
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * OK [HIGHESTMODSEQ 1] Highest
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: A0004 OK [READ-WRITE] Select completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] C: A0005 FETCH 359 (UID)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 359 FETCH (UID 359)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: A0005 OK Fetch completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] C: A0006 FETCH 320,321,322,323,324,325,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359 (UID RFC822.SIZE FLAGS INTERNALDATE BODY.PEEK[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)])
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 320 FETCH (UID 320 RFC822.SIZE 7716 FLAGS () INTERNALDATE "16-Dec-2011 20:45:31 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {448}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Fri, 16 Dec 2011 11:44:46 -0800
+Subject: [haiku-development] Re: Expanding the size of the nightly VM images WAS:[haiku-commits]
+ Re: haiku: hrev43517 - build/jam
+From: scottmc <scottmc2@gmail.com>
+To: haiku-commits@freelists.org, haiku-development@freelists.org
+Content-Type: multipart/alternative; boundary=f46d0444023250c39e04b43ad5e8
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 321 FETCH (UID 321 RFC822.SIZE 6191 FLAGS () INTERNALDATE "16-Dec-2011 20:51:47 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {432}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Fri, 16 Dec 2011 20:50:52 +0100
+From: =?ISO-8859-1?Q?Axel_D=F6rfler?= <axeld@pinc-software.de>
+To: haiku-development@freelists.org
+Subject: [haiku-development] Re: Expanding the size of the nightly VM
+ images WAS:[haiku-commits] Re: haiku: hrev43517 - build/jam
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 322 FETCH (UID 322 RFC822.SIZE 5982 FLAGS () INTERNALDATE "16-Dec-2011 20:53:42 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {390}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Fri, 16 Dec 2011 14:53:07 -0500
+Subject: [haiku-development] Re: Expanding the size of the nightly VM
+ images WAS:[haiku-commits] Re: haiku: hrev43517 - build/jam
+From: Rene Gollent <anevilyak@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: text/plain; charset=UTF-8
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 323 FETCH (UID 323 RFC822.SIZE 6304 FLAGS () INTERNALDATE "16-Dec-2011 20:56:37 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {401}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Fri, 16 Dec 2011 11:56:02 -0800
+Subject: [haiku-development] Re: Expanding the size of the nightly VM images WAS:[haiku-commits]
+ Re: haiku: hrev43517 - build/jam
+From: Urias McCullough <umccullough@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: text/plain; charset=ISO-8859-1
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 324 FETCH (UID 324 RFC822.SIZE 6367 FLAGS () INTERNALDATE "16-Dec-2011 22:13:40 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {364}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Content-Type: text/plain; charset=utf-8; format=flowed; delsp=yes
+To: haiku-development@freelists.org
+Subject: [haiku-development] Re: Review & Pull request for Workspaces app
+Date: Sat, 17 Dec 2011 10:12:40 +1300
+From: Clemens <clemens.zeidler@googlemail.com>
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 325 FETCH (UID 325 RFC822.SIZE 7475 FLAGS () INTERNALDATE "18-Dec-2011 14:26:30 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {375}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Sun, 18 Dec 2011 14:25:52 +0100
+Subject: [haiku-development] What happened to Rosetta Project?
+From: fano il primo <fanoilprimo@gmail.com>
+To: haiku-development <haiku-development@freelists.org>
+Content-Type: multipart/related; boundary=001636ed670af3477604b45dc56b
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 326 FETCH (UID 326 RFC822.SIZE 8872 FLAGS (\Seen) INTERNALDATE "18-Dec-2011 21:18:52 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {350}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Sun, 18 Dec 2011 12:18:14 -0800
+Subject: [haiku-development] Re: What happened to Rosetta Project?
+From: scottmc <scottmc2@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: multipart/related; boundary=f46d04440262a532e804b4638880
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE STARTTLS AUTH=PLAIN AUTH=LOGIN AUTH=DIGEST-MD5 AUTH=CRAM-MD5] Dovecot ready.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 327 FETCH (UID 327 RFC822.SIZE 13397 FLAGS () INTERNALDATE "18-Dec-2011 21:41:42 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {359}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Sun, 18 Dec 2011 21:41:01 +0100
+Subject: [haiku-development] Re: What happened to Rosetta Project?
+From: fano il primo <fanoilprimo@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: multipart/related; boundary=20cf3020756029ef2b04b463dad3
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] C: A0001 ID ("name" "Roundcube Webmail" "version" "0.6" "php" "5.3.5-1ubuntu7.4" "os" "Linux" "command" "/?_task=mail&_action=getunread&&_remote=1&_unlock=0&_=1326288154073")
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * ID NIL
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 328 FETCH (UID 328 RFC822.SIZE 6109 FLAGS () INTERNALDATE "19-Dec-2011 20:31:24 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {364}
+[11-Jan-2012 14:22:56 +0100]: [A941] S: A0001 OK ID completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: To: <haiku-development@freelists.org>
+Subject: [haiku-development] RFC: Deep thoughts on Mesa / 3D Rendering / DRI2
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Date: Mon, 19 Dec 2011 13:31:00 -0600
+From: Alexander von Gluck <kallisti5@unixzen.com>
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] C: A0002 AUTHENTICATE CRAM-MD5
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] S: + PDUyMDE3NTc0MTMxNjM5NjEuMTMyNjI4ODE3NkBzZC0zMDYzNT4=
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 329 FETCH (UID 329 RFC822.SIZE 6544 FLAGS () INTERNALDATE "19-Dec-2011 21:50:22 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {369}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: To: <haiku-development@freelists.org>
+Subject: [haiku-development] Re: RFC: Deep thoughts on Mesa / 3D Rendering /  DRI2
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Date: Mon, 19 Dec 2011 14:49:58 -0600
+From: Alexander von Gluck <kallisti5@unixzen.com>
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] C: d2ViZ3Vlc3RAc21hcnRtb2JpbGkuY29tIGU5NmQwMGE2NzJlMzRiNmIyYTI0MzkxYmE5ZGJiYWIx
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 330 FETCH (UID 330 RFC822.SIZE 6609 FLAGS () INTERNALDATE "19-Dec-2011 22:33:22 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {350}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Mon, 19 Dec 2011 16:32:16 -0500
+Subject: [haiku-development] BMenuBar scrolling support
+From: John Scipione <jscipione@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: multipart/alternative; boundary=e89a8f2351e142391604b478afdc
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 331 FETCH (UID 331 RFC822.SIZE 7089 FLAGS () INTERNALDATE "20-Dec-2011 10:10:41 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {371}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Tue, 20 Dec 2011 10:10:05 +0100
+Subject: [haiku-development] Re: RFC: Deep thoughts on Mesa / 3D Rendering
+ / DRI2
+From: =?ISO-8859-1?B?Suly9G1lIER1dmFs?= <korli@users.berlios.de>
+To: haiku-development@freelists.org
+Content-Type: text/plain; charset=ISO-8859-1
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 332 FETCH (UID 332 RFC822.SIZE 7920 FLAGS () INTERNALDATE "20-Dec-2011 10:38:56 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {340}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Tue, 20 Dec 2011 13:37:50 +0400
+From: Andrey Ponomarenko <aponomarenko@ispras.ru>
+To: haiku-development@freelists.org
+Subject: [haiku-development] Re: RFC: Layout changes
+Content-Type: text/plain; charset=ISO-8859-1; format=flowed
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 333 FETCH (UID 333 RFC822.SIZE 6466 FLAGS () INTERNALDATE "20-Dec-2011 14:24:55 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {369}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: To: <haiku-development@freelists.org>
+Subject: [haiku-development] Re: RFC: Deep thoughts on Mesa / 3D  Rendering / DRI2
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Date: Tue, 20 Dec 2011 07:24:33 -0600
+From: Alexander von Gluck <kallisti5@unixzen.com>
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 334 FETCH (UID 334 RFC822.SIZE 8138 FLAGS () INTERNALDATE "20-Dec-2011 14:38:48 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {444}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Tue, 20 Dec 2011 05:38:07 -0800 (PST)
+From: Michael Oliveira <michaelvoliveira@yahoo.com.br>
+Subject: [haiku-development] Re: RFC: Deep thoughts on Mesa / 3D  Rendering / DRI2
+To: "haiku-development@freelists.org" <haiku-development@freelists.org>
+Content-Type: multipart/alternative; boundary="1625196408-556129637-1324388287=:73777"
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] S: A0002 OK [CAPABILITY IMAP4rev1 LITERAL+ SASL-IR LOGIN-REFERRALS ID ENABLE IDLE SORT SORT=DISPLAY THREAD=REFERENCES THREAD=REFS MULTIAPPEND UNSELECT CHILDREN NAMESPACE UIDPLUS LIST-EXTENDED I18NLEVEL=1 CONDSTORE QRESYNC ESEARCH ESORT SEARCHRES WITHIN CONTEXT=SEARCH LIST-STATUS FUZZY] Logged in
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 335 FETCH (UID 335 RFC822.SIZE 4803 FLAGS () INTERNALDATE "20-Dec-2011 15:12:09 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {349}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Content-Type: text/plain; charset="utf-8"
+Date: Tue, 20 Dec 2011 15:11:18 +0100
+From: "Ingo Weinhold" <ingo_weinhold@gmx.de>
+Subject: [haiku-development] Re: RFC: Deep thoughts on Mesa / 3D  Rendering
+ / DRI2
+To: haiku-development@freelists.org
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] C: A0003 LIST (SUBSCRIBED) "" "*"
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 336 FETCH (UID 336 RFC822.SIZE 6287 FLAGS () INTERNALDATE "20-Dec-2011 15:14:41 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {371}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Tue, 20 Dec 2011 15:14:03 +0100
+Subject: [haiku-development] Re: RFC: Deep thoughts on Mesa / 3D Rendering
+ / DRI2
+From: =?ISO-8859-1?B?Suly9G1lIER1dmFs?= <korli@users.berlios.de>
+To: haiku-development@freelists.org
+Content-Type: text/plain; charset=ISO-8859-1
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * LIST (\Subscribed) "." "Drafts"
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * LIST (\Subscribed) "." "Sent"
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * LIST (\Subscribed) "." "Junk"
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * LIST (\Subscribed) "." "Trash"
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 337 FETCH (UID 337 RFC822.SIZE 6580 FLAGS (\Seen) INTERNALDATE "21-Dec-2011 20:04:14 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {368}
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * LIST (\Subscribed) "." "Apple Mail To Do"
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Wed, 21 Dec 2011 20:03:36 +0100
+Subject: [haiku-development] Re: BMenuBar scrolling support
+From: Stefano Ceccherini <stefano.ceccherini@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: multipart/alternative; boundary=00504502ec2a53378d04b49ed731
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * LIST (\Subscribed) "." "Deleted Messages"
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * LIST (\Subscribed) "." "Notes"
+[11-Jan-2012 14:22:56 +0100]: [A941] S: A0003 OK List completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 338 FETCH (UID 338 RFC822.SIZE 6263 FLAGS () INTERNALDATE "21-Dec-2011 20:11:00 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {363}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: To: <haiku-development@freelists.org>
+Subject: [haiku-development] Haiku Mesa3D (A roadmap to ponies and unicorns)
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Date: Wed, 21 Dec 2011 13:10:37 -0600
+From: Alexander von Gluck <kallisti5@unixzen.com>
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 339 FETCH (UID 339 RFC822.SIZE 9589 FLAGS () INTERNALDATE "21-Dec-2011 21:15:16 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {354}
+[11-Jan-2012 14:22:56 +0100]: [A941] C: A0004 STATUS INBOX (MESSAGES UNSEEN)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Wed, 21 Dec 2011 15:14:30 -0500
+Subject: [haiku-development] Re: BMenuBar scrolling support
+From: John Scipione <jscipione@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: multipart/alternative; boundary=bcaec52e5eb5de2db104b49fd464
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 340 FETCH (UID 340 RFC822.SIZE 7289 FLAGS () INTERNALDATE "22-Dec-2011 04:09:25 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {344}
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * STATUS "INBOX" (MESSAGES 359 UNSEEN 282)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Wed, 21 Dec 2011 19:08:44 -0800 (PST)
+From: Disreali <mdisreali@yahoo.com>
+Subject: [haiku-development] Re: Haiku Mesa3D (A roadmap to ponies and unicorns)
+To: haiku-development@freelists.org
+Content-Type: text/plain; charset=us-ascii
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] S: A0004 OK Status completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] C: A0005 STATUS Drafts (MESSAGES UNSEEN)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 341 FETCH (UID 341 RFC822.SIZE 5790 FLAGS () INTERNALDATE "22-Dec-2011 06:56:47 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {368}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: To: <haiku-development@freelists.org>
+Subject: [haiku-development] Re: Haiku Mesa3D (A roadmap to ponies and  unicorns)
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Date: Wed, 21 Dec 2011 23:56:21 -0600
+From: Alexander von Gluck <kallisti5@unixzen.com>
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * STATUS "Drafts" (MESSAGES 1 UNSEEN 0)
+[11-Jan-2012 14:22:56 +0100]: [A941] S: A0005 OK Status completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] C: A0006 STATUS Sent (MESSAGES UNSEEN)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 342 FETCH (UID 342 RFC822.SIZE 5034 FLAGS () INTERNALDATE "22-Dec-2011 10:13:21 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {399}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Thu, 22 Dec 2011 10:12:03 +0100 (MET)
+To: haiku-development@freelists.org
+From: "=?iso-8859-1?q?=41=78=65=6c=20=44=f6=72=66=6c=65=72?=" <axeld@pinc-software.de>
+Subject: [haiku-development] Re: Haiku Mesa3D (A roadmap to ponies and  unicorns)
+Content-Type: text/plain; charset="ISO-8859-1"
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * STATUS "Sent" (MESSAGES 3 UNSEEN 0)
+[11-Jan-2012 14:22:56 +0100]: [A941] S: A0006 OK Status completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] C: A0007 STATUS Junk (MESSAGES UNSEEN)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 343 FETCH (UID 343 RFC822.SIZE 6480 FLAGS () INTERNALDATE "22-Dec-2011 15:50:10 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {368}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Thu, 22 Dec 2011 06:49:31 -0800
+Subject: [haiku-development] Re: Haiku Mesa3D (A roadmap to ponies and unicorns)
+From: scottmc <scottmc2@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: multipart/alternative; boundary=0016e6de1741790b1b04b4af68cc
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * STATUS "Junk" (MESSAGES 1 UNSEEN 0)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] S: A0007 OK Status completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 344 FETCH (UID 344 RFC822.SIZE 5216 FLAGS () INTERNALDATE "22-Dec-2011 20:15:50 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {368}
+[11-Jan-2012 14:22:56 +0100]: [A941] C: A0008 STATUS Trash (MESSAGES UNSEEN)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: To: <haiku-development@freelists.org>
+Subject: [haiku-development] Re: Haiku Mesa3D (A roadmap to ponies and  unicorns)
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Date: Thu, 22 Dec 2011 13:15:27 -0600
+From: Alexander von Gluck <kallisti5@unixzen.com>
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * STATUS "Trash" (MESSAGES 3 UNSEEN 0)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] S: A0008 OK Status completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 345 FETCH (UID 345 RFC822.SIZE 6617 FLAGS () INTERNALDATE "22-Dec-2011 20:38:19 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {368}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Thu, 22 Dec 2011 11:37:40 -0800
+Subject: [haiku-development] Re: Haiku Mesa3D (A roadmap to ponies and unicorns)
+From: scottmc <scottmc2@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: multipart/alternative; boundary=0015174be2a0fb2af804b4b36eae
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] C: A0009 STATUS "Apple Mail To Do" (MESSAGES UNSEEN)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * STATUS "Apple Mail To Do" (MESSAGES 0 UNSEEN 0)
+[11-Jan-2012 14:22:56 +0100]: [A941] S: A0009 OK Status completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 346 FETCH (UID 346 RFC822.SIZE 5241 FLAGS () INTERNALDATE "23-Dec-2011 00:10:01 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {320}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Fri, 23 Dec 2011 00:09:17 +0100
+Subject: [haiku-development] Accessing the Mail API from scripts
+From: Jerry <jquill81@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: text/plain; charset=ISO-8859-1
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] C: A0010 STATUS "Deleted Messages" (MESSAGES UNSEEN)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * STATUS "Deleted Messages" (MESSAGES 0 UNSEEN 0)
+[11-Jan-2012 14:22:56 +0100]: [A941] S: A0010 OK Status completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 347 FETCH (UID 347 RFC822.SIZE 5560 FLAGS () INTERNALDATE "23-Dec-2011 10:06:15 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {386}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Fri, 23 Dec 2011 10:05:32 +0100 (MET)
+To: haiku-development@freelists.org
+From: "=?iso-8859-1?q?=41=78=65=6c=20=44=f6=72=66=6c=65=72?=" <axeld@pinc-software.de>
+Subject: [haiku-development] Re: Accessing the Mail API from scripts
+Content-Type: text/plain; charset="ISO-8859-1"
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] C: A0011 STATUS Notes (MESSAGES UNSEEN)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * STATUS "Notes" (MESSAGES 1 UNSEEN 0)
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 348 FETCH (UID 348 RFC822.SIZE 5008 FLAGS () INTERNALDATE "23-Dec-2011 23:22:14 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {366}
+[11-Jan-2012 14:22:56 +0100]: [A941] S: A0011 OK Status completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Fri, 23 Dec 2011 23:21:20 +0100
+From: Siarzhuk Zharski <zharik@gmx.li>
+To: haiku-development@freelists.org
+Subject: [haiku-development] Request to update KeymapSwitcher and Vim optional packages.
+Content-Type: text/plain; charset=ISO-8859-15; format=flowed
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 349 FETCH (UID 349 RFC822.SIZE 5762 FLAGS (\Seen) INTERNALDATE "23-Dec-2011 23:52:05 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {351}
+[11-Jan-2012 14:22:56 +0100]: [A941] C: A0012 LOGOUT
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: From: Matt Madia <mattmadia@gmail.com>
+Date: Fri, 23 Dec 2011 17:51:03 -0500
+Subject: [haiku-development] Re: Request to update KeymapSwitcher and Vim
+ optional packages.
+To: haiku-development@freelists.org
+Content-Type: text/plain; charset=UTF-8
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [A941] S: * BYE Logging out
+[11-Jan-2012 14:22:56 +0100]: [A941] S: A0012 OK Logout completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 350 FETCH (UID 350 RFC822.SIZE 5690 FLAGS () INTERNALDATE "24-Dec-2011 00:38:59 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {362}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: From: Joseph Prostko <joe.prostko@gmail.com>
+Date: Fri, 23 Dec 2011 18:37:49 -0500
+Subject: [haiku-development] Re: Request to update KeymapSwitcher and Vim
+ optional packages.
+To: haiku-development@freelists.org
+Content-Type: text/plain; charset=ISO-8859-1
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 351 FETCH (UID 351 RFC822.SIZE 5955 FLAGS (\Seen) INTERNALDATE "24-Dec-2011 00:55:59 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {324}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Sat, 24 Dec 2011 00:55:20 +0100
+Subject: [haiku-development] Re: Accessing the Mail API from scripts
+From: Jerry <jquill81@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: text/plain; charset=ISO-8859-1
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 352 FETCH (UID 352 RFC822.SIZE 6026 FLAGS () INTERNALDATE "24-Dec-2011 05:29:19 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {336}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Fri, 23 Dec 2011 23:28:38 -0500
+Subject: [haiku-development] Re: Accessing the Mail API from scripts
+From: Ryan Leavengood <leavengood@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: text/plain; charset=ISO-8859-1
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 353 FETCH (UID 353 RFC822.SIZE 8885 FLAGS (\Seen) INTERNALDATE "25-Dec-2011 09:04:19 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {358}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Sun, 25 Dec 2011 10:03:34 +0200
+Subject: [haiku-development] Re: Accessing the Mail API from scripts
+From: hey68 you <hey68you@gmail.com>
+To: haiku-development@freelists.org
+Content-Type: multipart/alternative; boundary=f46d044480d72e585604b4e616eb
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 354 FETCH (UID 354 RFC822.SIZE 6890 FLAGS () INTERNALDATE "26-Dec-2011 21:43:41 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {374}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Content-Type: text/plain; charset=utf-8; format=flowed; delsp=yes
+Subject: [haiku-development] restart app_server
+Date: Tue, 27 Dec 2011 09:42:50 +1300
+To: "haiku-development@freelists.org" <haiku-development@freelists.org>
+From: Clemens <clemens.zeidler@googlemail.com>
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 355 FETCH (UID 355 RFC822.SIZE 5400 FLAGS (\Seen) INTERNALDATE "26-Dec-2011 22:38:50 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {338}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Mon, 26 Dec 2011 22:38:04 +0100
+From: Adrien Destugues <pulkomandy@pulkomandy.ath.cx>
+To: haiku-development@freelists.org
+Subject: [haiku-development] Re: restart app_server
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 356 FETCH (UID 356 RFC822.SIZE 6636 FLAGS (\Seen) INTERNALDATE "26-Dec-2011 22:48:20 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {342}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Content-Type: text/plain; charset=utf-8; format=flowed; delsp=yes
+To: haiku-development@freelists.org
+Subject: [haiku-development] Re: restart app_server
+Date: Tue, 27 Dec 2011 10:47:29 +1300
+From: Clemens <clemens.zeidler@googlemail.com>
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 357 FETCH (UID 357 RFC822.SIZE 5650 FLAGS () INTERNALDATE "26-Dec-2011 23:01:24 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {338}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Mon, 26 Dec 2011 23:00:42 +0100
+From: Adrien Destugues <pulkomandy@pulkomandy.ath.cx>
+To: haiku-development@freelists.org
+Subject: [haiku-development] Re: restart app_server
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 358 FETCH (UID 358 RFC822.SIZE 6193 FLAGS (\Seen) INTERNALDATE "26-Dec-2011 23:36:15 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {342}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Content-Type: text/plain; charset=utf-8; format=flowed; delsp=yes
+To: haiku-development@freelists.org
+Subject: [haiku-development] Re: restart app_server
+Date: Tue, 27 Dec 2011 11:35:23 +1300
+From: Clemens <clemens.zeidler@googlemail.com>
+Reply-To: haiku-development@freelists.org
+List-post: <mailto:haiku-development@freelists.org>
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * 359 FETCH (UID 359 RFC822.SIZE 2835 FLAGS (\Answered \Seen) INTERNALDATE "27-Dec-2011 13:01:00 +0100" BODY[HEADER.FIELDS (DATE FROM TO SUBJECT CONTENT-TYPE CC REPLY-TO LIST-POST DISPOSITION-NOTIFICATION-TO)] {234}
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: Date: Tue, 27 Dec 2011 07:00:46 -0500 (EST)
+From: FreeLists Mailing List Manager <ecartis@freelists.org>
+Reply-To: ecartis@freelists.org
+To: webguest@smartmobili.com
+Subject: Unsubscription confirmation for 'haiku-development'
+
+
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: )
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: A0006 OK Fetch completed.
+[11-Jan-2012 14:22:56 +0100]: [BC01] C: A0007 LOGOUT
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: * BYE Logging out
+[11-Jan-2012 14:22:56 +0100]: [BC01] S: A0007 OK Logout completed.
