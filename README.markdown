@@ -1,6 +1,8 @@
 Project Kairos
 ==============
 
+![Kairos-Webmail](https://github.com/downloads/smartmobili/kairos/kairos_webmail_horz.png)
+
 Getting Started
 ---------------
 The following prerequisites are necessary to get started :
