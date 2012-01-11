@@ -48,8 +48,9 @@ case class ImapService() extends Logger {
   // FIXME this set of booleans will
   // be replaced by appropriate vars given by the client
   // once the cache panel is implemented
-  private val shouldUseCache: Boolean = true
-  private var needsUpdate: Boolean = false
+  private val shouldUseCache: Boolean = true // set false to disable caching in kairos mail
+
+  private var needsUpdate: Boolean = !shouldUseCache // false to use cache
   private val isFirstTime: Boolean = false
   
   
@@ -71,7 +72,8 @@ case class ImapService() extends Logger {
         val ageUserCache = System.currentTimeMillis() - u.cacheCreation.getTime
         log.info("Cache creation" + u.cacheCreation.getTime + "\nSystem.currentTimeMillis() - u.cacheCreation.getTime "+ ageUserCache + " timeCacheOld: " + ageCacheIsConsideredOld)
         
-        needsUpdate = ageUserCache > ageCacheIsConsideredOld
+        if (shouldUseCache)
+        	needsUpdate = ageUserCache > ageCacheIsConsideredOld
         
         if(needsUpdate){
           println("\n*****************\nCache is old\nConnecting...\n*****************\n")
