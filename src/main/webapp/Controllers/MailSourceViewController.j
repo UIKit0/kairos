@@ -15,7 +15,9 @@ SMOutlineViewMailPaneMaximumSize = 400;
 
 var ContextMenuAddFolderTag = 0,
     ContextMenuRenameFolderTag = 1,
-    ContextMenuRemoveFolderTag = 2;
+    ContextMenuRemoveFolderTag = 2,
+    RootObjectsCount = 2; // "Mailboxes" and "Others"
+
 
 /*!
     Control the source view on the left side of the mail window. The source
@@ -267,7 +269,7 @@ var ContextMenuAddFolderTag = 0,
     if (item === nil)
     {
         // Root object, so returns 2 to allow Mailboxes and Others
-        return 2;
+        return RootObjectsCount;
     }
     else if (item === headerMailboxes)
         return [self mainMailboxesCount];
@@ -317,6 +319,61 @@ var ContextMenuAddFolderTag = 0,
 - (CPMenu)outlineView:outlineView menuForTableColumn:aTableColumn item:anItem
 {
     return contextMenu;
+}
+
+- (void)outlineViewItemDidExpand:(CPNotification)notification
+{
+    // HACK: see more details in myTimerTick function comments.
+    [CPTimer scheduledTimerWithTimeInterval:0.01
+                                     target:self
+                                   selector:@selector(timerTickAfterOutlineViewItemDidExpand:)
+                                   userInfo:nil
+                                    repeats:NO];
+}
+
+
+- (void)timerTickAfterOutlineViewItemDidExpand:(var)aMailbox
+{
+    // HACK: 
+    // This is a fix of bug "line stay in edit mode with folder renaming in UI". 
+    // Steps to reproduce bug:
+    // 1) Create a new folder and change the focus to another folder
+    // 2) Collapse Others node
+    // 3) Expand Others node
+    // You should see that the newly created folder is still in edit mode.
+    // 
+    // This HACK makes the same what user do with mouse to bypass the bug. This is why it is "HACK" and not a FIX.
+    // Usually user to bypass this bug, should select item which is "bugged" and then select any other item,
+    // so "bugged" item stops to be in "edit" mode.
+    // But we don't know how to determine via code, which item is "bugged", so we selecting all items here.
+    // It just select all items from first to last, and then deselect all and select last selected item (to
+    // restore state as it was before calling this HACK code).
+    // Also NOTE that we call this code in timer, and not in outlineViewItemDidExpand() function, because 
+    // bug appears (folder is returning to editing mode) after expanding.
+    // TODO: perhaps this HACK add new small bug: it select INBOX folder twice during load of app, because there
+    // is expanded "Mailboxes" folder automatically after load, and it call this code also. This need to test later,
+    // and possible fix for this is to add flag, meaning that this is "Loading of app" (e.g. initial expanding of
+    // INBOX) so no need to call this code bellow if flag is set "true". Possible places for fix: this function, 
+    // and "reloadAndSelectInbox" function.
+    {    
+        var view = [self view];
+    
+        var wasSelectedRowIndex = [view selectedRow];
+    
+        for (i=0; i<[[self mailboxes] count]+ RootObjectsCount; i++) {
+            var newIndexes = [[CPIndexSet alloc] init]; 
+            [newIndexes addIndex:i]; 
+            [view selectRowIndexes:newIndexes byExtendingSelection:NO];
+        }
+        [view deselectAll];
+    
+        // select "wasSelectedRowIndex" row (e.g. select as it was before calling this HACK code).
+        { 
+            var newIndexes = [[CPIndexSet alloc] init]; 
+            [newIndexes addIndex:wasSelectedRowIndex]; 
+            [view selectRowIndexes:newIndexes byExtendingSelection:NO]; 
+        }
+    }
 }
 
 #pragma mark -
