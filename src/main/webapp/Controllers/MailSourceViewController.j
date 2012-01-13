@@ -335,12 +335,7 @@ var ContextMenuAddFolderTag = 0,
             }
             return;
         }
-        
-        /*var newIndexes = [[CPIndexSet alloc] init]; 
-        [newIndexes addIndex:i]; 
-        [view selectRowIndexes:newIndexes byExtendingSelection:NO];*/
     }
-
     
     var mailbox = [anItem object];
     if (![mailbox isSpecial])
@@ -360,7 +355,7 @@ var ContextMenuAddFolderTag = 0,
 {
     if (_disableExpandHackTemporary == false)
     {
-        // HACK: see more details in myTimerTick function comments.
+        // HACK: see more details in @selector function comments.
         [CPTimer scheduledTimerWithTimeInterval:0.01
                                      target:self
                                    selector:@selector(timerTickAfterOutlineViewItemDidExpand:)
