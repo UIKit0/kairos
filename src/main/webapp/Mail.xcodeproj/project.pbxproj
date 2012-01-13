@@ -23,6 +23,7 @@
 /* Begin PBXFileReference section */
 		0146B0E314BBFD7E0020764E /* MailSourceViewController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = MailSourceViewController.j; path = Controllers/MailSourceViewController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		01BA4EBC14BC038B00CD27F6 /* SMMailAccount.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = SMMailAccount.j; path = Models/SMMailAccount.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		01D1A56A14C0B368007E19BE /* SMPagerView.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = SMPagerView.j; path = Views/SMPagerView.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2422B4C113DF3A3B0095B5A5 /* AboutPanelController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = AboutPanelController.j; path = Controllers/AboutPanelController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		243848A913A928D700765E18 /* SMLoginWindowBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SMLoginWindowBackground.png; sourceTree = "<group>"; };
 		244893CF13B0BB0D00331759 /* SMEmailSubjectView.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = SMEmailSubjectView.j; path = Views/SMEmailSubjectView.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -250,6 +251,7 @@
 		BFB90F6A13831B8500F049CA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				01D1A56A14C0B368007E19BE /* SMPagerView.j */,
 				2470208C13A92F33005C3198 /* HNAuxiliarWindow.j */,
 				2470208D13A92F33005C3198 /* HNLoginWindow.j */,
 				BFB90F7413831BE400F049CA /* MailboxColumnView.j */,
