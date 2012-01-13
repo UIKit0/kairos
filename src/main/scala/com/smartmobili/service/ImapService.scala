@@ -389,16 +389,59 @@ case class ImapService() extends Logger {
         }
         else {
         	if (newFolder.isSubscribed() == false)
-        	  newFolder.setSubscribed(true);
+        	  newFolder.setSubscribed(true)
         }
       }
       store.close
     } catch {
       case e: Exception =>
-        e.printStackTrace(); log.info("Cannot create folder " + newFolderName);
-        //case e: NoSuchProviderException => e.printStackTrace(); log.info("Authentication denied to "); ""
-        //case e: MessagingException => e.printStackTrace(); log.debug("Error found when trying to authenticate "+user); stackTrace(e)
-        resultCode = "Error exception raised: Failed to create folder."
+        {
+          e.printStackTrace(); log.info("Cannot create folder " + newFolderName)
+          resultCode = "Error exception raised: Failed to create folder."
+        }
+    }
+    resultCode
+  }
+
+  /*
+   * Rename IMAP folder.
+   * Return "" if no errors, or return string with error description.
+   * TODO: need add localization of return strings
+   */
+  def renameFolder(oldFolderName: String, toName: String): String = {
+    var resultCode: String = "" //empty string will mean no error
+    try {
+      // TODO: it is not good to connect every time. We should in future use some
+      // IMAP pool, which should be already connected to IMAP for this user.
+      // This pool will speedup things, because using it will pass connect() stage
+      // and start making renaming/creating folder immediately.
+      // (But in current case, user will not feel difference, because current operation
+      // is asynchronous and user don't wait end of this operation. It will feel
+      // result in other operations, such as browse between emails, pages and etc.)
+
+      // Connect
+      val store: Store = connect
+      val rootFolder: Folder = store.getDefaultFolder
+      var oldFolder: Folder = rootFolder.getFolder(oldFolderName)
+      val newFolder: Folder = rootFolder.getFolder(toName)
+
+      if (oldFolder.exists() == false)
+        resultCode = "Folder to rename is not exists."
+      else {
+        if (newFolder.exists())
+          resultCode = "Folder with such name is already exists. Failed to rename folder."
+        else {
+          if (oldFolder.renameTo(newFolder) == false)
+            resultCode = "Failed to rename folder."
+        }
+      }
+
+      store.close
+    } catch {
+      case e: Exception => {
+        e.printStackTrace(); log.info("Cannot rename folder from " + oldFolderName + " to " + toName)
+        resultCode = "Error exception raised: Failed to rename folder."
+      }
     }
     resultCode
   }

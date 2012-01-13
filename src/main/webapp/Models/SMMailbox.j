@@ -118,7 +118,9 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     if (folderEditMode == FolderEditModes.RenameFolder)
     {
         // rename
-        alert("Folder renaming is not yet implemented. App now stay in an unconsistent state, it is recommended to reload this App.");
+        [imapServer renameFolder:oldName toName:aName
+                        delegate:@selector(imapServerDidRenameFolder:)
+                           error:nil];
     }
     else
     {
