@@ -371,9 +371,9 @@ case class ImapService() extends Logger {
       // TODO: it is not good to connect every time. We should in future use some
       // IMAP pool, which should be already connected to IMAP for this user.
       // This pool will speedup things, because using it will pass connect() stage
-      // and srart making renaming/craeting folder immidiatly.
+      // and start making renaming/creating folder immediately.
       // (But in current case, user will not feel difference, because current operation
-      // is asynchronius and user don't wait end of this operation. It will feel
+      // is asynchronous and user don't wait end of this operation. It will feel
       // result in other operations, such as browse between emails, pages and etc.)
 
       // Connect
