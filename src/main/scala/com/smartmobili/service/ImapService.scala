@@ -331,8 +331,8 @@ case class ImapService() extends Logger {
     // The preferred order is the reversed one
     topLevelFoldersList.reverse
   }
-  
- /* def createFolder(folderName: String): List[SMMailbox] = {
+
+  /* OLD: def createFolder(folderName: String): List[SMMailbox] = {
     var folders: List[SMMailbox] = List()
     
     try {
@@ -359,6 +359,49 @@ case class ImapService() extends Logger {
       
       folders
   }*/
+
+  /*
+   * Create IMAP folder and "subscribe" (IMAP command) to it.
+   * Return "" if no errors, or return string with error description.
+   * TODO: need add localization of return strings
+   */
+  def createFolder(newFolderName: String): String = {
+    var resultCode: String = "" //empty string will mean no error
+    try {
+      // TODO: it is not good to connect every time. We should in future use some
+      // IMAP pool, which should be already connected to IMAP for this user.
+      // This pool will speedup things, because using it will pass connect() stage
+      // and srart making renaming/craeting folder immidiatly.
+      // (But in current case, user will not feel difference, because current operation
+      // is asynchronius and user don't wait end of this operation. It will feel
+      // result in other operations, such as browse between emails, pages and etc.)
+
+      // Connect
+      val store: Store = connect
+      val rootFolder: Folder = store.getDefaultFolder
+      val newFolder: Folder = rootFolder.getFolder(newFolderName)
+
+      if (newFolder.exists()) {
+        resultCode = "Folder with such name is already exists. Failed to create folder."
+      } else {
+        if (newFolder.create(Folder.HOLDS_MESSAGES) == false) {
+          resultCode = "Failed to create folder."
+        }
+        else {
+        	if (newFolder.isSubscribed() == false)
+        	  newFolder.setSubscribed(true);
+        }
+      }
+      store.close
+    } catch {
+      case e: Exception =>
+        e.printStackTrace(); log.info("Cannot create folder " + newFolderName);
+        //case e: NoSuchProviderException => e.printStackTrace(); log.info("Authentication denied to "); ""
+        //case e: MessagingException => e.printStackTrace(); log.debug("Error found when trying to authenticate "+user); stackTrace(e)
+        resultCode = "Error exception raised: Failed to create folder."
+    }
+    resultCode
+  }
   
   /*
    * Try to rename IMAP folder if it exists, or create new folder if previous
@@ -366,7 +409,7 @@ case class ImapService() extends Logger {
    * Return "null" if no errors, or return string with error description.
    * TODO: need add localization of return strings
    */
-   def renameOrCreateFolder(oldName: String, destName: String): String = {
+   /*def renameOrCreateFolder(oldName: String, destName: String): String = {
     try {
 
       // TODO: it is not good to connect every time. We should in future use some
@@ -412,7 +455,7 @@ case class ImapService() extends Logger {
       //case e: MessagingException => e.printStackTrace(); log.debug("Error found when trying to authenticate "+user); stackTrace(e)
       "Failed to create or rename folder"
     }
-  }
+  }*/
   
   /**
    * Headers

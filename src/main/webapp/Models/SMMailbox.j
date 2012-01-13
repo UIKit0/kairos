@@ -10,6 +10,8 @@
 
 @import "SMRemoteObject.j"
 
+@import "../Controllers/MailSourceViewController.j" // for FolderEditModes enum.
+
 // The order to display mailboxes. Any mailbox name not in this list goes at the end.
 var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
 
@@ -94,7 +96,7 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     [self setMailHeaders:result];
 }
 
-- (void)renameTo:(CPString)aName
+- (void)setFolderName:(CPString)aName withFolderEditMode:(FolderEditModes)folderEditMode
 {
     if (name == aName)
         return;
@@ -112,26 +114,32 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
         //                delegate:@selector(imapServerDidRenameFolder:)
         //                   error:nil];
     }*/
-    
-    CPLog("renameTo from " + oldName + " to " + aName);
-    [imapServer renameOrCreateFolder:oldName
-                          destName:aName
-                    delegate:@selector(imapServerDidRenameOrCreateFolder:)
-                       error:nil];
 
+    if (folderEditMode == FolderEditModes.RenameFolder)
+    {
+        // rename
+        alert("Folder renaming is not yet implemented. App now stay in an unconsistent state, it is recommended to reload this App.");
+    }
+    else
+    {
+        // create
+        [imapServer createFolder:aName
+                                delegate:@selector(imapServerDidCreateFolder:)
+                                   error:nil];
+    }
     
     [self save];
 }
 
-- (void)imapServerDidRenameOrCreateFolder:(String)err 
+- (void)imapServerDidCreateFolder:(String)err
 { 
-    CPLog("imapServerDidRenameOrCreateFolder");
     if (err != "")
     {
         // Output error to user
         alert(err)
-    }
-    
+        // remove folder from screen
+        [self remove];
+    } 
 }
 
 - (void)remove

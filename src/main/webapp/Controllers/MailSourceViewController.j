@@ -12,6 +12,7 @@
 
 SMOutlineViewMailPaneMinimumSize = 210;
 SMOutlineViewMailPaneMaximumSize = 400;
+FolderEditModes = {"RenameFolder" : 0, "CreateFolder" : 1};
 
 var ContextMenuAddFolderTag = 0,
     ContextMenuRenameFolderTag = 1,
@@ -29,14 +30,18 @@ var ContextMenuAddFolderTag = 0,
 
     MailSourceViewRow       headerMailboxes;
     MailSourceViewRow       headerOthers;
-
     CPDictionary            mailboxToItemMap;
+    FolderEditModes         _folderEditMode;
+    bool                    _disableExpandHackTemporary;
 
     @outlet CPMenu          contextMenu;
 }
 
 - (void)awakeFromCib
 {
+    _folderEditMode = FolderEditModes.RenameFolder;
+    _disableExpandHackTemporary = false;
+    
     mailboxToItemMap = [CPMutableDictionary dictionary];
     headerMailboxes = [MailSourceViewRow headerWithName:@"Mailboxes"];
     headerOthers = [MailSourceViewRow headerWithName:@"Others"];
@@ -138,15 +143,19 @@ var ContextMenuAddFolderTag = 0,
 {
     if (![self canAddMailbox])
         return;
-
+    
     var newMailbox = [[mailController mailAccount] createMailbox:self];
     [self reload];
+    _disableExpandHackTemporary = true;
     [self selectMailbox:newMailbox];
-
+ 
     var view = [self view],
         rowIndex = [[view selectedRowIndexes] firstIndex];
-    if (rowIndex !== nil && rowIndex !== CPNotFound)
+    if (rowIndex !== nil && rowIndex !== CPNotFound) {
+        _folderEditMode = FolderEditModes.CreateFolder;
+       
         [view editColumn:0 row:rowIndex withEvent:nil select:YES];
+    }    
 }
 
 - (BOOL)canAddMailbox
@@ -308,10 +317,36 @@ var ContextMenuAddFolderTag = 0,
 
 - (void)outlineView:(CPOutlineView)anOutlineView setObjectValue:(id)aValue forTableColumn:(CPTableColumn)aColumn byItem:(id)anItem
 {
+    _disableExpandHackTemporary = false;
+    
+    for (i=0; i<[[self mailboxes] count]; i++) {
+        var mailboxes = [self mailboxes];
+        var mailbox = mailboxes[i];
+        if ([mailbox name] == aValue)
+        {
+            alert("Folder with name \"" + aValue + "\" is already exists"); // TODO: add localization
+            
+            if (_folderEditMode == FolderEditModes.CreateFolder)
+            {
+                var mailboxUnnamed = [anItem object];
+                [mailboxUnnamed remove]; // remove "Unnamed" folder
+
+                _folderEditMode = FolderEditModes.RenameFolder; // reset to default value "RenameFolder"
+            }
+            return;
+        }
+        
+        /*var newIndexes = [[CPIndexSet alloc] init]; 
+        [newIndexes addIndex:i]; 
+        [view selectRowIndexes:newIndexes byExtendingSelection:NO];*/
+    }
+
+    
     var mailbox = [anItem object];
     if (![mailbox isSpecial])
     {
-        [mailbox renameTo:aValue];
+        [mailbox setFolderName:aValue withFolderEditMode:_folderEditMode];
+        _folderEditMode = FolderEditModes.RenameFolder; // reset to default value "RenameFolder"
         [self reload];
     }
 }
@@ -323,12 +358,17 @@ var ContextMenuAddFolderTag = 0,
 
 - (void)outlineViewItemDidExpand:(CPNotification)notification
 {
-    // HACK: see more details in myTimerTick function comments.
-    [CPTimer scheduledTimerWithTimeInterval:0.01
+    if (_disableExpandHackTemporary == false)
+    {
+        // HACK: see more details in myTimerTick function comments.
+        [CPTimer scheduledTimerWithTimeInterval:0.01
                                      target:self
                                    selector:@selector(timerTickAfterOutlineViewItemDidExpand:)
                                    userInfo:nil
                                     repeats:NO];
+    }
+    
+    _disableExpandHackTemporary = false;
 }
 
 
