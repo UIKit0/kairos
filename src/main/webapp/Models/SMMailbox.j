@@ -81,11 +81,13 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     return [self inverseDisplayPriority] < [MailboxSortPriorityList count];
 }
 
-- (void)loadHeaders
+- (void)loadHeadersAtPage:(int)pageToLoad
 {
     [self setMailHeaders:[]];
-
-    [imapServer headersForFolder:[self name]
+    
+    var str = pageToLoad.toString();
+    
+    [imapServer headersForFolder:[self name] pageToLoad:str
                         delegate:@selector(imapServersHeadersDidLoad:)
                            error:nil];
 }

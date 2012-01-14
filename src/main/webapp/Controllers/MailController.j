@@ -77,6 +77,8 @@ var IsReadImage,
     // This should be moved to the App Controller
     CPString                displayedViewKey @accessors;
     @outlet CPView          logoView;
+    
+    SMPagerView             _pagerView @accessors;
 }
 
 + (void)initialize
@@ -229,10 +231,12 @@ var IsReadImage,
     if (!selectedMailbox)
         return;
 
-    [loadingLabel setObjectValue:[[CPString alloc] initWithFormat:@"Mailboxes Loaded. Loading Headers for %@...", [selectedMailbox name]]];
+    [loadingLabel setObjectValue:[[CPString alloc] initWithFormat:@"Loading Headers for %@...", [selectedMailbox name]]];
 
     [emailsHeaderView deselectAll];
-    [selectedMailbox loadHeaders];
+    var page = [_pagerView getPage];
+
+    [selectedMailbox loadHeadersAtPage:page];  
 }
 
 - (void)reload
@@ -288,6 +292,7 @@ var IsReadImage,
 #pragma mark Actions
 - (IBAction)composeMail:(id)sender
 {
+    // TODO: alert([_pagerView2 getPage]);
     var indexesSelectedEmail = emailsHeaderView._selectedRowIndexes;
     if ([indexesSelectedEmail count] == 1)
     {
@@ -446,6 +451,7 @@ var IsReadImage,
 
         case @"pagerControl":
             var pager = [[SMPagerView alloc] initWithFrame:CGRectMake(0, 0, 120, 30)];
+            _pagerView = pager;
 
             [pager setDelegate:self];
 
@@ -456,7 +462,6 @@ var IsReadImage,
 
             [toolbarItem setTag:@"pagerControl"];
             [toolbarItem setLabel:[CPString stringWithFormat:@"%@", [[TNLocalizationCenter defaultCenter] localize:@"Page"]]];
-
             break;
         case @"switchViewStatus":
             var aSwitch = [[CPSegmentedControl alloc] initWithFrame:CGRectMake(0,0,0,0)];
@@ -767,7 +772,7 @@ var IsReadImage,
             [self clearMailContent];
             if ([indexesSelectedEmail count] == 0)
             {
-                [loadingLabel setObjectValue:@"None E-mail selected."];
+ // TODO: add this if need later, but it overlap "Headers load event status"               [loadingLabel setObjectValue:@"None E-mail selected."];
                 // None Active
                 [deleteItem setEnabled:NO];
                 [replyItem setEnabled:NO];

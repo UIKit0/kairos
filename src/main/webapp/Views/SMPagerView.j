@@ -33,7 +33,7 @@
         [navigationSegmentedControl setTarget:self];
         [navigationSegmentedControl setAction:@selector(pageWithSegmentedControl:)];
 
-        pages = 40;
+        pages = 45;
         // TODO Just for testing purposes.
         [self setPage:1];
         [self setNeedsLayout];
@@ -45,10 +45,10 @@
 {
     var selectedSegment = [sender selectedSegment];
     if (selectedSegment == 0)
-        [self setPage:MAX(0, (page - 1))];
+        [self setPage:MAX(1, (page - 1))];
     else if (selectedSegment == 2)
-        [self setPage:MIN(pages - 1, (page + 1))];
-    alert("Display page " + (1 + page) + " of " + pages);
+        [self setPage:MIN(pages, (page + 1))];
+    alert("Display page " + (page) + " of " + pages);
 }
 
 - (void)setPage:(int)aPage
@@ -58,6 +58,11 @@
 
     page = aPage;
     [self setNeedsLayout];
+}
+
+- (int)getPage
+{
+    return page;
 }
 
 - (void)setPages:(int)pageCount
@@ -73,7 +78,7 @@
 {
     [super layoutSubviews];
 
-    [navigationSegmentedControl setLabel:@"" + (1 + page) + " of " + pages forSegment:1];
+    [navigationSegmentedControl setLabel:@"" + (page) + " of " + pages forSegment:1];
 
     [navigationSegmentedControl setFrame:CGRectMake(0, 2, [self frame].size.width, 28)];
 

@@ -45,6 +45,8 @@ case class ImapService() extends Logger {
 
   private val isDebuggingEnabled: Boolean = false
   
+  private val messagesCountPerPage = 50
+  
   // FIXME this set of booleans will
   // be replaced by appropriate vars given by the client
   // once the cache panel is implemented
@@ -181,6 +183,7 @@ case class ImapService() extends Logger {
     }
   }
 
+  /* OLD:
   def synchronizeAll(in: String) = {
     // Synchronize all mailboxes
     val mailboxesHaveBeenUpdated = updateCacheListMailboxes("fresh")
@@ -190,6 +193,7 @@ case class ImapService() extends Logger {
     }
     // Synchronize all headers/messages
   }
+*/
   
   def listMailInFolder(folderLabel: String): String = {
     val store = CardanoSession.is.openOr(Empty)
@@ -445,7 +449,7 @@ case class ImapService() extends Logger {
     }
     resultCode
   }
-  
+
   /*
    * Try to rename IMAP folder if it exists, or create new folder if previous
    * one is not exists.
@@ -499,12 +503,13 @@ case class ImapService() extends Logger {
       "Failed to create or rename folder"
     }
   }*/
-  
+
   /**
    * Headers
    *
    */
-  
+
+  /* OLD:
   def headersForFolder(folderLabel: String): List[SMMailHeader] = {
     
     if (isFirstTime) {
@@ -521,8 +526,89 @@ case class ImapService() extends Logger {
       log.info("Imap Server: Retrieving from the database the stored headers")
       databaseHeadersForFolder(folderLabel)
     }
+  }*/
+
+  def headersForFolder(folderLabel: String, pageToLoad: String): List[SMMailHeader] = {
+    try {
+      var pageToLoadInt: Int = pageToLoad.toInt    
+      log.info("Load headers for page " + pageToLoad)
+      
+      
+      // Connect
+    val store: Store = connect
+        
+    // Get the specified folder
+    val folder: Folder = store.getFolder(folderLabel)
+    
+    // Folders are retrieved closed. To get the messages it is necessary to
+    // open them (but not to rename them, for example)
+    folder.open(Folder.READ_ONLY)
+   
+    
+    // With IMAP, getMessages does not download the mail: we get a pointer
+    // to the actual message that it is in the server up to the moment
+    // we access it (note that this is probably the reason why we can not
+    // refactor the getting into teh messagesInFolder function)
+    
+    val from = 1 + messagesCountPerPage * (pageToLoadInt-1)
+    var to = from + messagesCountPerPage
+    if (to > folder.getMessageCount())
+      to = folder.getMessageCount()   
+    
+    val messagesArr = folder.getMessages(from, to)
+    val fp: FetchProfile = new FetchProfile()
+    fp.add(FetchProfile.Item.ENVELOPE);
+    fp.add(FetchProfile.Item.FLAGS);
+    fp.add("Newsgroups");
+    folder.fetch(messagesArr, fp)
+    val messages: List[Message] = messagesArr.toList
+  
+    // Implementation 2: using messages directly
+    // Advantages: 
+    //     - date received as java.util.Date
+    //     - subject is properly decoded
+    log.info("asdf")
+    val headerList: List[SMMailHeader] = messages.map( message => {
+      log.info("------qwer1")
+      val m = message.asInstanceOf[IMAPMessage]
+      // Note the capitalization of the ID in IMAP API
+      val id = m.getMessageID
+      val from: List[Address] = m.getFrom.toList
+
+      val fromName = from.map(f => f.asInstanceOf[InternetAddress].getPersonal).mkString(", ")
+      val fromEmail = from.map(f => f.asInstanceOf[InternetAddress].getAddress).mkString(", ")
+      
+      val subject = SMMailUtil.decodeSubject(m)
+      val util = new HNUtil
+      val date = util.toCappuccinoDate(m.getSentDate)
+      val md5 = m.isSet(Flags.Flag.SEEN).toString
+      val isSeen: Boolean = m.isSet(Flags.Flag.SEEN)
+       log.info("------qwer2")
+      new SMMailHeader(id, subject, fromName, fromEmail, date, md5, isSeen)
+      
+      // val util = new HNUtil
+     // new SMMailHeader("id", "subject", "fromName", "fromEmail", util.toCappuccinoDate(m.getSentDate), "md5", false)
+      })
+      
+    // Disconnect
+    // The false argument indicates that we do not want to expunge deleted 
+    // folders in the server
+    folder.close(false)
+    store.close
+    
+    headerList
+      
+      
+      //List()
+    } catch {
+      case _: java.lang.Exception => {
+    	  log.error("Imap Server: headersForFolder function exception.")
+          List()
+      }
+    }
   }
   
+  /* OLD
   private def databaseHeadersForFolder(folderLabel: String): List[SMMailHeader] = {
 
     val cachedUser = CardanoCachedUser.is.openOr(Empty)
@@ -690,6 +776,7 @@ case class ImapService() extends Logger {
     
     headerList
   }
+*/
  
   /**
   * Mail content API
