@@ -19,6 +19,7 @@ var DEBUG_BADGES = NO,
 
 @implementation MailboxColumnView : CPView
 {
+    id          delegate @accessors;
     CPTextView  label;
 
     SMBadgeView unread;
@@ -177,15 +178,17 @@ var DEBUG_BADGES = NO,
     return [label isKindOfClass:aClass] || [super isKindOfClass:aClass];
 }
 
-- (void)setDelegate:(id)aDelegate
-{
-    // For editing compatibility.
-}
-
 - (void)setBezeled:(BOOL)aFlag
 {
     [label setBezeled:aFlag];
     [self setNeedsLayout];
+}
+
+- (void)controlTextDidBlur:(CPNotification)aNotification	
+{
+    // Pretend we were the text field which just blurred.
+    if ([delegate respondsToSelector:@selector(controlTextDidBlur:)])
+        [delegate controlTextDidBlur:[CPNotification notificationWithName:CPTextFieldDidBlurNotification object:self userInfo:nil]];
 }
 
 - (void)setEditable:(BOOL)aFlag
@@ -223,20 +226,6 @@ var DEBUG_BADGES = NO,
     return [label stringValue];
 }
 
-- (BOOL)unsetThemeState:(CPThemeState)aState
-{
-    var r = [super unsetThemeState:aState];
-
-    if (![self hasThemeState:CPThemeStateSelectedDataView])
-    {
-        // Cancel editing if a row is deselected. FIXME This should probably be fixed in Cappuccino.
-        [self setSelectable:NO];
-        [self setEditable:NO];
-    }
-
-    return r;
-}
-
 @end
 
 @implementation MailboxColumnView (CPCoding)
@@ -248,6 +237,8 @@ var DEBUG_BADGES = NO,
         label = [aCoder decodeObjectForKey:@"label"];
         imageView = [aCoder decodeObjectForKey:@"imageView"];
         unread = [aCoder decodeObjectForKey:@"unread"];
+        
+         [label setDelegate:self];
     }
 
     return self;
