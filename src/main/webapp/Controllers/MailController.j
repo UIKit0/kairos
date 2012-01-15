@@ -241,6 +241,10 @@ var IsReadImage,
     if (!selectedMailbox)
         return; 
     
+    // get count of mails in folder and convert to pages count
+    var pages = Math.floor([selectedMailbox count] / 50 + 1);
+    [[self getPagerControlFromToolbar] setPages:pages]; 
+    
     [self reLoadHeadersListForMailbox:aMailbox andPage:1];
 }
 

@@ -33,8 +33,8 @@
         [navigationSegmentedControl setTarget:self];
         [navigationSegmentedControl setAction:@selector(pageWithSegmentedControl:)];
 
-        pages = 45;
-        // TODO Just for testing purposes.
+        pages = 1;
+        
         [self setPage:1];
         [self setNeedsLayout];
     }
@@ -95,8 +95,8 @@
     // it one more time.
     [navigationSegmentedControl setFrame:CGRectMake(0, 2, [self frame].size.width, 28)];
 
-    [navigationSegmentedControl setEnabled:(page > 0) forSegment:0];
-    [navigationSegmentedControl setEnabled:(page < pages - 1) forSegment:2];
+    [navigationSegmentedControl setEnabled:(page > 1) forSegment:0];
+    [navigationSegmentedControl setEnabled:(page < pages) forSegment:2];
 }
 
 @end
