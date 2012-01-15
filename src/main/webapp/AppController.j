@@ -38,6 +38,12 @@ APPLICATION_VERSION_NUMBER = 0.1;
              CPPanel    cachedAboutPanel;
 }
 
+- (void)toolbarItemPagerControlChangedValue:(id)sender
+{
+    var myMailController = [MailController sharedController];
+    [myMailController toolbarItemPagerControlChangedValue];
+}
+
 - (void)applicationWillFinishLaunching:(CPNotification)aNotification
 {
     // Register user defaults.

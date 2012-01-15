@@ -14,7 +14,7 @@
     int                 page @accessors;
     int                 pages @accessors;
 
-    id                  delegate @accessors;
+    //id                  delegate @accessors;
 }
 
 - (id)initWithFrame:(CGRect)aRect
@@ -48,7 +48,10 @@
         [self setPage:MAX(1, (page - 1))];
     else if (selectedSegment == 2)
         [self setPage:MIN(pages, (page + 1))];
-    alert("Display page " + (page) + " of " + pages);
+    //alert("Display page " + (page) + " of " + pages);
+    
+    // For sending event outside of custom toolbar item used tutorial: http://www.nice-panorama.com/Programmation/cappuccino/Tutorial_CPToolbar.html
+    [CPApp sendAction:@selector(toolbarItemPagerControlChangedValue:) to:nil from:sender];
 }
 
 - (void)setPage:(int)aPage
@@ -112,7 +115,7 @@
         navigationSegmentedControl = [aCoder decodeObjectForKey:@"navigationSegmentedControl"];
         pages = [aCoder decodeIntForKey:@"pages"];
         [self setPage:[aCoder decodeIntForKey:@"page"]];
-
+        
         [self setNeedsLayout];
     }
     return self;

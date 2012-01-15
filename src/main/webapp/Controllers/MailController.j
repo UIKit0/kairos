@@ -30,7 +30,8 @@ var IsReadImage,
     SwitcherTraditionalViewOnImage,
     SwitcherTraditionalViewOffImage,
     SwitcherParallelViewOnImage,
-    SwitcherParallelViewOffImage;
+    SwitcherParallelViewOffImage,
+    SharedMailController = nil;
 
 @implementation MailController : CPWindowController
 {
@@ -77,8 +78,6 @@ var IsReadImage,
     // This should be moved to the App Controller
     CPString                displayedViewKey @accessors;
     @outlet CPView          logoView;
-    
-    SMPagerView             _pagerView @accessors;
 }
 
 + (void)initialize
@@ -92,9 +91,20 @@ var IsReadImage,
     SwitcherParallelViewOffImage = [[CPImage alloc] initWithContentsOfFile:[[CPBundle mainBundle] pathForResource:@"SMSwitcherParallelViewOffIcon.png"] size:CGSizeMake(19, 16)];
 }
 
++ (MailController)sharedController
+{
+    return SharedMailController;
+}
+
 #pragma mark ViewControler cyle
 - (void)awakeFromCib
 {
+    if (!SharedMailController)
+    {
+        SharedMailController = self;
+    }
+
+    
     [theWindow setFullBridge:YES];
 
     var bundle      = [CPBundle mainBundle],
@@ -229,14 +239,20 @@ var IsReadImage,
     selectedMailbox = aMailbox;
 
     if (!selectedMailbox)
-        return;
+        return; 
+    
+    [self reLoadHeadersListForMailbox:aMailbox andPage:1];
+}
 
-    [loadingLabel setObjectValue:[[CPString alloc] initWithFormat:@"Loading Headers for %@...", [selectedMailbox name]]];
-
-    [emailsHeaderView deselectAll];
-    var page = [_pagerView getPage];
-
-    [selectedMailbox loadHeadersAtPage:page];  
+- (void)reLoadHeadersListForMailbox:(SMMailbox)aMailbox andPage:(int)page
+{
+    [loadingLabel setObjectValue:[[CPString alloc] initWithFormat:@"Loading Headers for %@...", [aMailbox name]]];
+    
+    [[self getPagerControlFromToolbar] setPage:page];
+    
+    [emailsHeaderView deselectAll]; // TODO: perhaps need disable emails view or make it nonclickable etc.
+    
+    [aMailbox loadHeadersAtPage:page];
 }
 
 - (void)reload
@@ -292,7 +308,6 @@ var IsReadImage,
 #pragma mark Actions
 - (IBAction)composeMail:(id)sender
 {
-    // TODO: alert([_pagerView2 getPage]);
     var indexesSelectedEmail = emailsHeaderView._selectedRowIndexes;
     if ([indexesSelectedEmail count] == 1)
     {
@@ -451,9 +466,6 @@ var IsReadImage,
 
         case @"pagerControl":
             var pager = [[SMPagerView alloc] initWithFrame:CGRectMake(0, 0, 120, 30)];
-            _pagerView = pager;
-
-            [pager setDelegate:self];
 
             [toolbarItem setView:pager];
 
@@ -542,6 +554,32 @@ var IsReadImage,
     [imapServer synchronizeAll:@""
                       delegate:nil
                          error:nil];
+}
+
+- (CPToolbarItem)getToolBarItemViaIdentifier:(CPString)toolbarItemIdentifier
+{
+    var toolbarItems = [toolbar items];
+    for (var i = 0; i < [toolbarItems count]; i++)
+    {
+        var item = [toolbarItems objectAtIndex:i];
+        if ([item itemIdentifier] == toolbarItemIdentifier)
+            return item;
+    }
+    return nil;
+}
+
+- (SMPagerView)getPagerControlFromToolbar
+{
+    var toolbarItem = [self getToolBarItemViaIdentifier:@"pagerControl"];
+    var smPagerView = toolbarItem._view;
+    return smPagerView;
+}
+
+- (void)toolbarItemPagerControlChangedValue
+{
+    var page = [[self getPagerControlFromToolbar] getPage];
+
+    [self reLoadHeadersListForMailbox:selectedMailbox andPage:page];
 }
 
 #pragma mark -
@@ -884,6 +922,7 @@ var IsReadImage,
     [textfield setValue:CGInsetMake(0.0, 0.0, 0.0, 0.0) forThemeAttribute:@"bezel-inset" inState:CPThemeStateBezeled | CPTextFieldStateRounded | CPThemeStateEditing];
     [textfield setValue:CGInsetMake(9.0, 14.0, 6.0, 14.0) forThemeAttribute:@"content-inset" inState:CPThemeStateBezeled | CPTextFieldStateRounded | CPThemeStateEditing];
 }
+
 
 #pragma mark -
 #pragma mark CPSplitView delegate

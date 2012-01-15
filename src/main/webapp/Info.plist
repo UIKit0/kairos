@@ -6,5 +6,9 @@
 	<string>MainMenu.cib</string>
 	<key>CPBundleName</key>
 	<string>Mail</string>
+	<key>CPApplicationDelegateClass</key>
+	<string>AppController</string>
+	<key>CPPrincipalClass</key>
+	<string>CPApplication</string>
 </dict>
 </plist>

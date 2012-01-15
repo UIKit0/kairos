@@ -549,6 +549,7 @@ case class ImapService() extends Logger {
       // refactor the getting into teh messagesInFolder function)
 
       val from = 1 + messagesCountPerPage * (pageToLoadInt - 1)
+      // TODO: what if will be requested page which not exists at IMAP, so from will be greater that messages count?
       var to = from + messagesCountPerPage
       if (to > folder.getMessageCount())
         to = folder.getMessageCount()
