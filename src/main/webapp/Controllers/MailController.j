@@ -298,6 +298,8 @@ var IsReadImage,
             [loadingLabel setObjectValue:@"No Mailbox Selected."];
         else
         {
+           
+             [loadingLabel setObjectValue:@"Mail headers loaded"];
             // FIXME: The selected mail should be the most recent
             [emailsHeaderView selectRowIndexes:[CPIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
         }
