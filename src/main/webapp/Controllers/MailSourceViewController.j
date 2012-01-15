@@ -17,7 +17,8 @@ FolderEditModes = {"RenameFolder" : 0, "CreateFolder" : 1};
 var ContextMenuAddFolderTag = 0,
     ContextMenuRenameFolderTag = 1,
     ContextMenuRemoveFolderTag = 2,
-    RootObjectsCount = 2; // "Mailboxes" and "Others"
+    RootObjectsCount = 2, // "Mailboxes" and "Others"
+    SharedMailSourceViewController = Nil;
 
 
 /*!
@@ -32,12 +33,23 @@ var ContextMenuAddFolderTag = 0,
     MailSourceViewRow       headerOthers;
     CPDictionary            mailboxToItemMap;
     FolderEditModes         _folderEditMode;
+    CPString                _folderCreatingNowName;
 
     @outlet CPMenu          contextMenu;
 }
 
++ (MailSourceViewController)sharedController
+{
+    return SharedMailSourceViewController;
+}
+
 - (void)awakeFromCib
 {
+    if (!SharedMailSourceViewController)
+    {
+        SharedMailSourceViewController = self;
+    }
+    
     _folderEditMode = FolderEditModes.RenameFolder;
     
     mailboxToItemMap = [CPMutableDictionary dictionary];
@@ -150,6 +162,7 @@ var ContextMenuAddFolderTag = 0,
         rowIndex = [[view selectedRowIndexes] firstIndex];
     if (rowIndex !== nil && rowIndex !== CPNotFound) {
         _folderEditMode = FolderEditModes.CreateFolder;
+        _folderCreatingNowName = [newMailbox name];
        
         [view editColumn:0 row:rowIndex withEvent:nil select:YES];
     }    
@@ -205,6 +218,30 @@ var ContextMenuAddFolderTag = 0,
             return [self canRemoveMailbox];
         default:
             return YES;
+    }
+}
+
+- (void)leftPaneFolderRenamingEnded
+{
+    // This is a "fix" for new folder creation, when user click outside of editing field without setting an name.
+    // Usual event of creating folder (setObjectValue) is not triggered in this case, and here we delete 
+    // not created unnamed folder from screen:
+    if (_folderEditMode == FolderEditModes.CreateFolder)
+    {
+        _folderEditMode = FolderEditModes.RenameFolder; // Reset to default
+        var mailboxes = [self mailboxes];
+        for (i=0; i<[mailboxes count]; i++) {
+            
+            var mailbox = mailboxes[i];
+            if ([mailbox name] == _folderCreatingNowName)
+            {
+                _folderCreatingNowName = @"_"; // reset
+                
+                [mailbox remove];
+                
+                return;
+            }
+        }
     }
 }
 
@@ -319,14 +356,26 @@ var ContextMenuAddFolderTag = 0,
         var mailbox = mailboxes[i];
         if ([mailbox name] == aValue)
         {
-            alert("Folder with name \"" + aValue + "\" is already exists"); // TODO: add localization
-            
-            if (_folderEditMode == FolderEditModes.CreateFolder)
+            if ([mailbox name] == _folderCreatingNowName)
             {
+                 alert("Please set an new name to folder!"); // TODO: add localization
                 var mailboxUnnamed = [anItem object];
-                [mailboxUnnamed remove]; // remove "Unnamed" folder
-
+                [mailboxUnnamed remove]; // remove that "new" folder  from screen
+                
                 _folderEditMode = FolderEditModes.RenameFolder; // reset to default value "RenameFolder"
+                _folderCreatingNowName = @"_";
+            }
+            else
+            {
+                alert("Folder with name \"" + aValue + "\" is already exists"); // TODO: add localization
+            
+                if (_folderEditMode == FolderEditModes.CreateFolder)
+                {
+                    var mailboxUnnamed = [anItem object];
+                    [mailboxUnnamed remove]; // remove that new folder from screen
+
+                    _folderEditMode = FolderEditModes.RenameFolder; // reset to default value "RenameFolder"
+                }
             }
             return;
         }

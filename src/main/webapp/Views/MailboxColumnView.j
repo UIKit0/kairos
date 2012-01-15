@@ -189,6 +189,8 @@ var DEBUG_BADGES = NO,
     // Pretend we were the text field which just blurred.
     if ([delegate respondsToSelector:@selector(controlTextDidBlur:)])
         [delegate controlTextDidBlur:[CPNotification notificationWithName:CPTextFieldDidBlurNotification object:self userInfo:nil]];
+    
+    [CPApp sendAction:@selector(leftPaneFolderRenamingEnded:) to:nil from:nil];
 }
 
 - (void)setEditable:(BOOL)aFlag

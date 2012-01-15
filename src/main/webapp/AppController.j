@@ -44,6 +44,12 @@ APPLICATION_VERSION_NUMBER = 0.1;
     [myMailController toolbarItemPagerControlChangedValue];
 }
 
+- (void)leftPaneFolderRenamingEnded:(id)sender
+{
+    var myMailSourceViewController = [MailSourceViewController sharedController];
+    [myMailSourceViewController leftPaneFolderRenamingEnded];
+}
+
 - (void)applicationWillFinishLaunching:(CPNotification)aNotification
 {
     // Register user defaults.
