@@ -1,0 +1,2 @@
+List of broken things:
+*. in index.html and index-debug.html broken initial background image and progress indication is not exists anymore. (Don't know which script controll that progress indicator, perhaps lift java script?). Perhaps need to investigate, how to create loading indicator for cappuccino.
