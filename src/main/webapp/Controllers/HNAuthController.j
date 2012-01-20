@@ -12,6 +12,7 @@
 
 @import "../Views/HNLoginWindow.j"
 @import "../Controllers/MailController.j"
+@import "../ServerConnection.j"
 
 BASE_URL = "http://localhost:3000/"; // TODO: what is this? Is it somewhere used?
 
@@ -99,25 +100,33 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
 @implementation HNAuthController (HNConnection)
 
 
-- (void)findWithUsername:(CPString)user password:(CPString)pass
+- (void)authenticateWithUsername:(CPString)user password:(CPString)pass
 {
     var email = [username lowercaseString],
-        host = @"mail.smartmobili.com",
-        imapServer = [[HNRemoteService alloc] initForScalaTrait:@"com.smartmobili.service.ImapService"
-                                                   objjProtocol:nil
-                                                       endPoint:nil
-                                                       delegate:self];
+   //     host = @"mail.smartmobili.com",
+    imapServer = [[ServerConnection alloc] init];
 
     [imapServer authenticateUser:user
-                        password:pass
-                            host:host
-                        delegate:@selector(imapServerAuthenticationDidChange:)
+                        withPassword:pass
+                      //      host:host
+                        delegate:self
+                  didEndSelector:@selector(imapServerAuthenticationDidChange:status:)
                            error:nil];
+    /*[self asdf];
+    var ss = @selector(imapServerAuthenticationDidChange:withQuakus:);
+    debugger;
+    objj_msgSend(self, ss, "asdf2", "asdf3" /*TODO accomodated data?*///);
+ //   [self ss];
 }
 
 
-- (void)imapServerAuthenticationDidChange:(CPString)status
+//- (void)imapServerAuthenticationDidChange:(id)sender (CPString)status
+- (void)imapServerAuthenticationDidChange: (id)sender status:(CPString)aStatus
 {
+    alert("UNDONE:imapServerAuthenticationDidChange");
+    alert(aStatus);
+
+    /*
     var msg;
 
     if (status == @"SMAuthenticationGranted")
@@ -133,7 +142,7 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
     {
         msg = [CPDictionary dictionaryWithObject:status forKey:@"message"];
         [self updateErrorMessage:msg];
-    }
+    }*/
 
 }
 

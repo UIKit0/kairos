@@ -117,7 +117,7 @@ var SharedLoginWindow = nil;
 
     [progressIndicator setHidden:NO];
     [errorMessageField setHidden:YES];
-    [authenticationController findWithUsername:[usernameField stringValue]
+    [authenticationController authenticateWithUsername:[usernameField stringValue]
                                       password:[passwordField stringValue]];
 
     //var githubController = [GithubAPIController sharedController];

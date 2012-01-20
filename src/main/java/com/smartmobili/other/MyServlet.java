@@ -50,7 +50,7 @@ http://docstore.mik.ua/orelly/java-ent/servlet/ch05_03.htm
     bytes.writeTo(res.getOutputStream());
   }*/
 
- public void doGet(HttpServletRequest req, HttpServletResponse res)
+/* public void doGet(HttpServletRequest req, HttpServletResponse res)
                                throws ServletException, IOException {
 
     res.setContentType("text/html");
@@ -96,5 +96,22 @@ http://docstore.mik.ua/orelly/java-ent/servlet/ch05_03.htm
     // Send the buffer
     bytes.writeTo(res.getOutputStream());
 	}
+  }*/
+
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+    try
+    {
+      resp.getOutputStream().print("asdf");
+    }
+    catch(Exception ex){}
+  }
+
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+    try
+    {
+      resp.getOutputStream().print("qwer");
+      // TODO: parse incoming command (one of functions is called from cappuccino, and need call one function here and pass parameters)
+    }
+    catch(Exception ex){}
   }
 }
