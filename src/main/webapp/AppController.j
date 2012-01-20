@@ -11,7 +11,6 @@ APPLICATION_VERSION_NUMBER = 0.1;
 
 @import <Foundation/Foundation.j>
 @import <AppKit/AppKit.j>
-@import <Cardano/Cardano.j>
 
 @import "./Categories/VRCategories.j"
 

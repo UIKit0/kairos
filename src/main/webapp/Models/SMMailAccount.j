@@ -27,6 +27,8 @@
 
         // In the future we might want to support more than one account, but for now everything is set up
         // for a single account at a time.
+
+        // TODO: make imapServer in java
         imapServer = [[HNRemoteService alloc] initForScalaTrait:@"com.smartmobili.service.ImapService"
                                                    objjProtocol:nil
                                                        endPoint:nil
@@ -53,8 +55,8 @@
 - (SMMailBox)createMailbox:(id)sender
 {
     // TODO: find empty name in "Unnamed" is already exists. E.g. "Unnamed2".
-    
-    
+
+
     var r = [[SMMailbox alloc] initWithName:@"Unnamed" count:0 unread:0];
     [[self mutableArrayValueForKey:@"mailboxes"] addObject:r];
     // Don't create the new mailbox yet. We want to wait until it has been given a name. The rename code
@@ -73,7 +75,7 @@
 }
 
 #pragma mark -
-#pragma mark Cardano ImapService delegate
+#pragma mark Remote ImapService delegate
 
 - (void)imapServerListMailboxesDidChange:(CPArray)result
 {
