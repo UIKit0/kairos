@@ -25,8 +25,12 @@ dependencies {
             'org.mortbay.jetty:jetty:6.1.22', 
             'org.mortbay.jetty:jetty-util:6.1.22', 
             'org.mortbay.jetty:jetty-management:6.1.22'
+            //'net.sf.json-lib:json-lib:2.4'
     providedCompile 'javax.servlet:servlet-api:2.5' //, 'org.eclipse.jetty:jetty-websocket:7.4.4.v20110707'
+    compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4', classifier: 'jdk15'
 }
+
+
 
 /*sourceSets {
     main {

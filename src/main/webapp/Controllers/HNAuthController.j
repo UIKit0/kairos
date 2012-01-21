@@ -100,40 +100,28 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
 @implementation HNAuthController (HNConnection)
 
 
-- (void)authenticateWithUsername:(CPString)user password:(CPString)pass
+- (void)authenticateWithUsername:(CPString)userName password:(CPString)password
 {
     var email = [username lowercaseString],
    //     host = @"mail.smartmobili.com",
-    imapServer = [[ServerConnection alloc] init];
+    webServer = [[ServerConnection alloc] init];
 
-    [imapServer authenticateUser:user
-                        withPassword:pass
-                      //      host:host
+    [webServer callRemoteFunction:@"authenticate"
+     withFunctionParametersAsJSON:[CPString JSONFromObject: { "userName" : userName, "password" : password } ]
                         delegate:self
-                  didEndSelector:@selector(imapServerAuthenticationDidChange:status:)
+                  didEndSelector:@selector(imapServerAuthenticationDidChange:withParametersObject:)
                            error:nil];
-    /*[self asdf];
-    var ss = @selector(imapServerAuthenticationDidChange:withQuakus:);
-    debugger;
-    objj_msgSend(self, ss, "asdf2", "asdf3" /*TODO accomodated data?*///);
- //   [self ss];
 }
 
-
-//- (void)imapServerAuthenticationDidChange:(id)sender (CPString)status
-- (void)imapServerAuthenticationDidChange: (id)sender status:(CPString)aStatus
+- (void)imapServerAuthenticationDidChange: (id)sender withParametersObject:parametersObject
 {
-    alert("UNDONE:imapServerAuthenticationDidChange");
-    alert(aStatus);
-
-    /*
     var msg;
 
-    if (status == @"SMAuthenticationGranted")
+    if (parametersObject.status == @"SMAuthenticationGranted")
     {
         [self grantAuthentication];
     }
-    else if (status == @"SMAuthenticationDenied")
+    else if (parametersObject.status == @"SMAuthenticationDenied")
     {
         msg = [CPDictionary dictionaryWithObject:@"User and password do not match" forKey:@"message"];
         [self updateErrorMessage:msg];
@@ -142,15 +130,13 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
     {
         msg = [CPDictionary dictionaryWithObject:status forKey:@"message"];
         [self updateErrorMessage:msg];
-    }*/
-
+    }
 }
 
 - (void)connection:(CPURLConnection)connection didFailWithError:(CPString)error
 {
     CPLog.debug(@"error received: %@", error);
 }
-
 
 - (void)grantAuthentication
 {
