@@ -9,6 +9,7 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.util.Properties;
 import org.apache.log4j.*;
+import com.sun.mail.imap.IMAPFolder;
 import net.sf.json.*;
 //import org.eclipse.jetty.websocket.*;
 
@@ -47,9 +48,12 @@ public class MyServlet extends HttpServlet {
 			JSONObject jsonObject = (JSONObject) JSONSerializer.toJSON(data);
 			String functionNameToCall = (String) jsonObject
 					.get("functionNameToCall");
-			String functionParametersAsJsonString = (String) jsonObject
-					.get("functionParameters");
-			JSONObject functionParametersAsJsonObject = (JSONObject) JSONSerializer
+			String functionParametersAsJsonString = null;
+			if (jsonObject.get("functionParameters") instanceof JSONNull == false)
+				functionParametersAsJsonString = (String) jsonObject.get("functionParameters");
+			JSONObject functionParametersAsJsonObject = null;
+			if (functionParametersAsJsonString != null)
+				functionParametersAsJsonObject = (JSONObject) JSONSerializer
 					.toJSON(functionParametersAsJsonString);
 
 			HttpSession session = request.getSession();
@@ -102,6 +106,35 @@ public class MyServlet extends HttpServlet {
 
 		return res;
 	}
+
+	public JSONObject listMailfolders(JSONObject parameters, HttpSession httpSession) throws MessagingException {
+		Store imapStore = imapConnect(httpSession); // TODO: get cached opened
+													// and connected imapStore,
+													// or reconnect.
+		try {
+			IMAPFolder defaultFolder = (IMAPFolder)imapStore.getDefaultFolder();
+			Folder[] imapFolders = defaultFolder.list(); 
+
+			// TODO: find way to speedup gettin attributes. Somekind of "fetch" for all folders from list. Perhaps "Fetch" command will work? If no, then split getting list of folder names and gettin folder attributes. And then in GUI first show list of folders, then show "loading" icon near each folder, and then load attributes for each folder in background, replacing loading icon with number of unread messages. Worse way: use some kind of cache, but it will show not actual information which can confuse user, and still we need show progress icon and reload attributes in background. So better way to not use cache.
+			JSONArray jsonArrayOfFolders = new JSONArray();
+			for (Folder f : imapFolders) {
+				JSONObject folderAsJson = new JSONObject();
+				folderAsJson.put("label", f.toString());// f.getFullName());
+				folderAsJson.put("count", f.getMessageCount());
+				folderAsJson.put("unread", f.getUnreadMessageCount());
+				jsonArrayOfFolders.add(folderAsJson);
+			}
+			JSONObject result = new JSONObject();
+			result.put("listOfFolders", jsonArrayOfFolders);
+			return result;
+		} finally {
+			imapStore.close();
+		}
+	}
+	
+	
+/* supporter functions */	
+	
 
 	public Store imapConnect(HttpSession httpSession) {
 		Store store = null;

@@ -40,10 +40,12 @@
 - (void)load
 {
     isReloading = YES;
-
-    [_serverConnection listMailboxes:@""
-                     delegate:@selector(imapServerListMailboxesDidChange:)
-                        error:nil];
+    
+    [_serverConnection callRemoteFunction:@"listMailfolders"
+                    withFunctionParametersAsJSON:nil
+                    delegate:self
+                    didEndSelector:@selector(imapServerListMailboxesDidChange:withParametersObject:)
+                    error:nil];
 }
 
 - (void)setMailboxes:(CPArray)someMailboxes
@@ -54,8 +56,7 @@
 
 - (SMMailBox)createMailbox:(id)sender
 {
-    // TODO: find empty name in "Unnamed" is already exists. E.g. "Unnamed2".
-
+    // TODO: find empty name if "Unnamed" is already exists. E.g. it should be "Unnamed2" (Perhaps not need this, Unnamed is fine?).
 
     var r = [[SMMailbox alloc] initWithName:@"Unnamed" count:0 unread:0];
     [[self mutableArrayValueForKey:@"mailboxes"] addObject:r];
@@ -77,8 +78,17 @@
 #pragma mark -
 #pragma mark Remote ImapService delegate
 
-- (void)imapServerListMailboxesDidChange:(CPArray)result
+- (void)imapServerListMailboxesDidChange:(id)sender withParametersObject:parametersObject
 {
+    var listOfFolders = parametersObject.listOfFolders;
+        
+    var result = [CPArray array];
+    for (var i = 0; i < listOfFolders.length; i++) 
+    {
+        var mailBox = [[SMMailbox alloc] initWithName:listOfFolders[i].label count:listOfFolders[i].count unread:listOfFolders[i].unread];
+        result = [result arrayByAddingObject:mailBox];
+    }
+
     [self setMailboxes:result];
 
     if (isReloading)
