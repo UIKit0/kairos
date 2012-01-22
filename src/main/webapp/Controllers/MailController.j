@@ -67,7 +67,7 @@ var IsReadImage,
     ComposeController       _composeController;
 
     SMMailAccount           mailAccount @accessors;
-    HNRemoteServicer        imapServer;
+    ServerConnection        _serverConnection;
 
     SMMailbox               selectedMailbox @accessors;
     SMEmail                 selectedEmail @accessors;
@@ -200,11 +200,12 @@ var IsReadImage,
     if ([authenticationController isAuthenticated])
     {
         [loadingLabel setObjectValue:@"Loading Mailboxes..."];
-
+        /*alert("asdf1");
         imapServer = [[HNRemoteService alloc] initForScalaTrait:@"com.smartmobili.service.ImapService"
                                                    objjProtocol:nil
                                                        endPoint:nil
-                                                       delegate:self];
+                                                       delegate:self];*/
+        _serverConnection = [[ServerConnection alloc] init];
 
         [self setMailAccount:[SMMailAccount new]];
         [mailAccount load];
@@ -556,10 +557,14 @@ var IsReadImage,
 
 - (void)refreshMailbox:(id)sender
 {
+    /* disabled during porting from scala to java. Because now No cardano/lift autoupdated objects anymore, so after refresh 
+     objects at server we need also realod screen or something like that).
+     *
     CPLog.debug(@"%@", _cmd);
     [imapServer synchronizeAll:@""
                       delegate:nil
-                         error:nil];
+                         error:nil];*/
+    alert("Refresh function is not yet implemented");
 }
 
 - (CPToolbarItem)getToolBarItemViaIdentifier:(CPString)toolbarItemIdentifier
@@ -801,7 +806,7 @@ var IsReadImage,
 
             // TODO We should use an SMEmail (with only headers) and have it load its own data here.
             // That way the results are cached, and the flow simpler.
-            [imapServer mailContentForMessageId:selectedEmail
+            [_serverConnection mailContentForMessageId:selectedEmail
                                          folder:selectedMailboxName
                                        delegate:@selector(imapServerMailContentDidReceived:)
                                           error:nil];

@@ -20,7 +20,7 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     /*! The account the mailbox belongs to. */
     SMMailAccount   mailAccount @accessors;
 
-    HNRemoteService imapServer @accessors;
+    ServerConnection _serverConnection @accessors;
 
     // Headers of email within the box, if loaded.
     CPArray         mailHeaders @accessors;
@@ -49,12 +49,13 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
 
 - (void)_init
 {
-    // FIXME Seems like a waste to have one 'imapServer' instance per mailbox, but every HNRemoteService
+    // FIXME Seems like a waste to have one 'imapServer' instance per mailbox, but every ServerConnection
     // can only have one, unchangable delegate.
-    imapServer = [[HNRemoteService alloc] initForScalaTrait:@"com.smartmobili.service.ImapService"
+    /*imapServer = [[HNRemoteService alloc] initForScalaTrait:@"com.smartmobili.service.ImapService"
                                        objjProtocol:nil
                                            endPoint:nil
-                                           delegate:self];
+                                           delegate:self];*/
+    _serverConnection = [[ServerConnection alloc] init];
 }
 
 /*!
@@ -87,7 +88,7 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     
     var str = pageToLoad.toString();
     
-    [imapServer headersForFolder:[self name] pageToLoad:str
+    [_serverConnection headersForFolder:[self name] pageToLoad:str
                         delegate:@selector(imapServersHeadersDidLoad:)
                            error:nil];
 }
@@ -120,14 +121,14 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     if (folderEditMode == FolderEditModes.RenameFolder)
     {
         // rename
-        [imapServer renameFolder:oldName toName:aName
+        [_serverConnection renameFolder:oldName toName:aName
                         delegate:@selector(imapServerDidRenameFolder:)
                            error:nil];
     }
     else
     {
         // create
-        [imapServer createFolder:aName
+        [_serverConnection createFolder:aName
                                 delegate:@selector(imapServerDidCreateFolder:)
                                    error:nil];
     }

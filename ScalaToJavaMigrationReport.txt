@@ -1,2 +1,3 @@
 List of broken things:
-*. in index.html and index-debug.html broken initial background image and progress indication is not exists anymore. (Don't know which script controll that progress indicator, perhaps lift java script?). Perhaps need to investigate, how to create loading indicator for cappuccino.
+*. In index.html and index-debug.html broken initial background image and progress indication is not exists anymore. (Don't know which script controll that progress indicator, perhaps lift java script?). Perhaps need to investigate, how to create loading indicator for cappuccino.
+*. In MailController.j disabled function refreshMailbox (called when user press Refresh button in toolbar). Not implemented porting of "synchronizeAll" function from scala to java. Because now No cardano/lift autoupdated objects anymore, so after refresh objects at server we need also reload screen or something like that).

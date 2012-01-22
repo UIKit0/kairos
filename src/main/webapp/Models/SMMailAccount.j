@@ -13,7 +13,7 @@
 {
     CPArray         mailboxes @accessors;
 
-    HNRemoteService imapServer @accessors;
+    ServerConnection        _serverConnection @accessors;
 
     id              delegate @accessors;
     boolean         isReloading;
@@ -28,11 +28,11 @@
         // In the future we might want to support more than one account, but for now everything is set up
         // for a single account at a time.
 
-        // TODO: make imapServer in java
-        imapServer = [[HNRemoteService alloc] initForScalaTrait:@"com.smartmobili.service.ImapService"
+        /*imapServer = [[HNRemoteService alloc] initForScalaTrait:@"com.smartmobili.service.ImapService"
                                                    objjProtocol:nil
                                                        endPoint:nil
-                                                       delegate:self];
+                                                       delegate:self];*/
+        _serverConnection = [[ServerConnection alloc] init];
     }
     return self;
 }
@@ -41,7 +41,7 @@
 {
     isReloading = YES;
 
-    [imapServer listMailboxes:@""
+    [_serverConnection listMailboxes:@""
                      delegate:@selector(imapServerListMailboxesDidChange:)
                         error:nil];
 }
