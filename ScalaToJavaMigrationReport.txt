@@ -1,3 +1,9 @@
 List of broken things:
-*. In index.html and index-debug.html broken initial background image and progress indication is not exists anymore. (Don't know which script controll that progress indicator, perhaps lift java script?). Perhaps need to investigate, how to create loading indicator for cappuccino.
+*. Need to update "setup.sh": now it not need to install cardano.
+*. In index.html and index-debug.html broken initial background image and progress indication is not exists anymore. (Don't know which script control that progress indicator, perhaps lift java script?). Perhaps need to investigate, how to create loading indicator for cappuccino.
 *. In MailController.j disabled function refreshMailbox (called when user press Refresh button in toolbar). Not implemented porting of "synchronizeAll" function from scala to java. Because now No cardano/lift autoupdated objects anymore, so after refresh objects at server we need also reload screen or something like that).
+
+Found bottlenecks:
+*. In ImapServiceServlet.java function listMailfolders is makes too much requests to IMAP server to get required attributes (count of messages and etc). Two solutions: 1) Try to find way to load all attributes with one request 2) Make separate functions: load folders list and load folder attributes. Then implement asynchronous folders list loading in GUI: it should load just folder names at first, then near each folder show loading icon and in background load all attributes and replaces loading icon to messages count or to empry place if no unread messages.
+*. In whole ImapServiceServlet.java need implement keeping imap connections open, associate each imap connection to users session. This will speedup all requests to imap server. Caveat - for each user will be opened 1 imap connection, this can overload imap server, or imap can reject new connections. (need think). On another side, current realization where each new user create many connections to server and they closing and openting for each request is also not good and imap server also can sometime start to block such traffic.
+

@@ -28,7 +28,7 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
     CPString    authenticationToken    @accessors;
 
     CPDictionary grantedUsers;
-    HNConnection conn;
+    //HNConnection conn;
 
     MailController mailController;
     @outlet CPWindow theWindow;
@@ -103,11 +103,11 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
 - (void)authenticateWithUsername:(CPString)userName password:(CPString)password
 {
     var email = [username lowercaseString],
-   //     host = @"mail.smartmobili.com",
-    webServer = [[ServerConnection alloc] init];
+    serverConnection = [[ServerConnection alloc] init];
 
-    [webServer callRemoteFunction:@"authenticate"
-     withFunctionParametersAsJSON:[CPString JSONFromObject: { "userName" : userName, "password" : password } ]
+    //     host = @"mail.smartmobili.com"
+    [serverConnection callRemoteFunction:@"authenticate"
+     withFunctionParametersAsObject: { "userName" : userName, "password" : password }
                         delegate:self
                   didEndSelector:@selector(imapServerAuthenticationDidChange:withParametersObject:)
                            error:nil];

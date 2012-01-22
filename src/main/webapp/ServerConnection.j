@@ -31,8 +31,8 @@
 
 -(void)connection:(CPURLConnection)connection didReceiveData:(CPString)data
 {
-    // TODO: what if didRecieveData will be called several times? Perhaps need to aggreggate data and use only at DidFinishLoading.
-   // alert(data);
+    // TODO: what if didRecieveData will be called several times? Perhaps need to aggreggate data and use only at DidFinishLoading
+    
     if (_delegate)
     if (_didEndSelector)
     {
@@ -48,14 +48,17 @@
 
 #pragma mark -
 #pragma mark Commands From Client to Server
-- (void) callRemoteFunction:(CPString)functionNameToCall withFunctionParametersAsJSON:functionParametersInJSON delegate:(id)aDelegate didEndSelector:(SEL)aSelector error:(id)aError
+- (void) callRemoteFunction:(CPString)functionNameToCall withFunctionParametersAsObject:functionParametersInObject delegate:(id)aDelegate didEndSelector:(SEL)aSelector error:(id)aError
 {
     _delegate = aDelegate;
     _didEndSelector = aSelector;
     
-    var request = [[CPURLRequest alloc] initWithURL:@"/hi"]; // TODO: need add random subparameter to avoid caching ?
+    var request = [[CPURLRequest alloc] initWithURL:@"/postRequest"]; // TODO: need add random subparameter to avoid caching ?
     [request setHTTPMethod:@"POST"];
     
+    var functionParametersInJSON = nil;
+    if (functionParametersInObject)
+        functionParametersInJSON = [CPString JSONFromObject:functionParametersInObject];
     var jsonObjectToPost = { "functionNameToCall" : functionNameToCall,
         "functionParameters"  : functionParametersInJSON };
     

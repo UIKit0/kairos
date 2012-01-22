@@ -42,7 +42,7 @@
     isReloading = YES;
     
     [_serverConnection callRemoteFunction:@"listMailfolders"
-                    withFunctionParametersAsJSON:nil
+                    withFunctionParametersAsObject:nil
                     delegate:self
                     didEndSelector:@selector(imapServerListMailboxesDidChange:withParametersObject:)
                     error:nil];

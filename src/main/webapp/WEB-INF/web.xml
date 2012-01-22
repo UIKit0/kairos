@@ -6,13 +6,13 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 
 <web-app>
 <servlet>
-	<servlet-name>KairosServlet</servlet-name>
-	<servlet-class>com.smartmobili.other.MyServlet</servlet-class>
+	<servlet-name>KairosImapServiceServlet</servlet-name>
+	<servlet-class>com.smartmobili.ImapServiceServlet</servlet-class>
 </servlet>
 
 <servlet-mapping>
-	<servlet-name>KairosServlet</servlet-name>
-	<url-pattern>/hi</url-pattern>
+	<servlet-name>KairosImapServiceServlet</servlet-name>
+	<url-pattern>/postRequest</url-pattern>
 </servlet-mapping>
 
 </web-app>

@@ -1,4 +1,4 @@
-package com.smartmobili.other;
+package com.smartmobili;
 
 import javax.mail.*;
 import javax.servlet.http.HttpServlet;
@@ -14,12 +14,12 @@ import net.sf.json.*;
 //import org.eclipse.jetty.websocket.*;
 
 @SuppressWarnings("serial")
-public class MyServlet extends HttpServlet {
+public class ImapServiceServlet extends HttpServlet {
 	final int SessionMaxInactiveInterval = 10*60;
 	final boolean isDebuggingEnabled = true;
 	final String mailHost = "mail.smartmobili.com"; // TODO: in future mail host perhaps will be user-editable setting, so this constant will be removed and in-place somewhere settings will be used.
 	
-	Logger log = Logger.getLogger(MyServlet.class);
+	Logger log = Logger.getLogger(ImapServiceServlet.class);
 /*	public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol)
     {
         return null;//new ChatWebSocket();
@@ -59,7 +59,7 @@ public class MyServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setMaxInactiveInterval(SessionMaxInactiveInterval); // TODO: need to test, if between requests is more time, what application will do withoout all attributes from session? It should reload/re-request user login? Or silently reconnect with same credentials and continue to work (show folders and etc).
 
-			Method method = MyServlet.class.getMethod(functionNameToCall,
+			Method method = ImapServiceServlet.class.getMethod(functionNameToCall,
 					JSONObject.class, HttpSession.class);
 			JSONObject res = (JSONObject) method.invoke(this,
 					functionParametersAsJsonObject, session);
