@@ -246,6 +246,11 @@ public class ImapServiceServlet extends HttpServlet {
 		}
 	}
 	
+	/*
+	 * Rename IMAP folder. 
+	 * Result is "" if no errors, or result is string with
+	 * error description. TODO: need add localization of return strings
+	 */
 	public JSONObject renameFolder(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
 		Store imapStore = imapConnect(httpSession); // TODO: get cached opened
 		// and connected imapStore,
@@ -297,6 +302,58 @@ public class ImapServiceServlet extends HttpServlet {
 		return result;
 	}
 	
+	/*
+	   * Create IMAP folder and "subscribe" (IMAP command) to it.
+	   * Result is "" if no errors, or result is string with error description.
+	   * TODO: need add localization of return strings
+	   */
+	public JSONObject createFolder(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
+		Store imapStore = imapConnect(httpSession); // TODO: get cached opened
+		// and connected imapStore,
+		// or reconnect.
+
+		// TODO: it is not good to connect every time. We should in future use
+		// some
+		// IMAP pool, which should be already connected to IMAP for this user.
+		// This pool will speedup things, because using it will pass connect()
+		// stage
+		// and start making renaming/creating folder immediately.
+		// (But in current case, user will not feel difference, because current
+		// operation
+		// is asynchronous and user don't wait end of this operation. It will
+		// feel
+		// result in other operations, such as browse between emails, pages and
+		// etc.)
+
+		JSONObject result = new JSONObject();
+		try {
+			String resultCode = "";
+			Folder rootFolder = imapStore.getDefaultFolder();
+			Folder newFolder = rootFolder.getFolder(parameters
+					.getString("folderNameToCreate"));
+
+			if (newFolder.exists()) {
+				resultCode = "Folder with such name is already exists. Failed to create folder.";
+			} else {
+				if (newFolder.create(Folder.HOLDS_MESSAGES) == false) {
+					resultCode = "Failed to create folder.";
+				} else {
+					if (newFolder.isSubscribed() == false)
+						newFolder.setSubscribed(true);
+				}
+			}
+
+			result.put("result", resultCode);
+		} catch (Exception ex) {
+			log.info("Cannot create folder  "
+					+ parameters.getString("folderNameToCreate"));
+			result.put("result",
+					"Error exception raised: Failed to create folder.");
+		} finally {
+			imapStore.close();
+		}
+		return result;
+	}
 	
 	
 /* supporter functions */	

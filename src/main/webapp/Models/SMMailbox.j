@@ -179,9 +179,11 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     else
     {
         // create
-        [_serverConnection createFolder:aName
-                                delegate:@selector(imapServerDidCreateFolder:)
-                                   error:nil];
+        [_serverConnection callRemoteFunction:@"createFolder"
+               withFunctionParametersAsObject:{"folderNameToCreate":aName}
+                                     delegate:self
+                               didEndSelector:@selector(imapServerDidCreateFolder:withParametersObject:)
+                                        error:nil];
     }
     
     [self save];
@@ -192,16 +194,16 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     if (withParametersObject.err != "")
     {
         // Output error to user
-        alert(err);
+        alert(withParametersObject.err);
     } 
 }
 
-- (void)imapServerDidCreateFolder:(String)err
+- (void)imapServerDidCreateFolder:(id)sender withParametersObject:parametersObject
 { 
-    if (err != "")
+    if (withParametersObject.err != "")
     {
         // Output error to user
-        alert(err);
+        alert(withParametersObject.err);
         // remove folder from screen
         [self remove];
     } 
