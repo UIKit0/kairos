@@ -98,45 +98,48 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     var listOfMessagesHeaders = parametersObject.listOfHeaders;
     
     var result = [CPArray array]; // Result is an array with SMMailHeader elements
-    for (var i = 0; i < listOfMessagesHeaders.length; i++) 
+    if (listOfMessagesHeaders)
     {
-        var mailHeader= [[SMMailHeader alloc] init];
-        [mailHeader setSubject:listOfMessagesHeaders[i].subject];
-        
-        var sd = listOfMessagesHeaders[i].sentDate;
-        var date = [[CPDate alloc] initWithTimeIntervalSince1970:sd];
-        [mailHeader setDate:date];
-        
-        [mailHeader setMessageId:listOfMessagesHeaders[i].messageId];
-        [mailHeader setIsSeen:listOfMessagesHeaders[i].isSeen];
-        
-        [mailHeader setMd5:"undone"]; // TODO: why we need md5, where this field is used?
-        
-        var from_Array = listOfMessagesHeaders[i].from_Array;
-       
-        var fromName = @"";
-        var fromEmail = @"";
-       
-        for (var j = 0; j < from_Array.length; j++) 
+        for (var i = 0; i < listOfMessagesHeaders.length; i++) 
         {
-            fromName = fromName + ", " + from_Array[j].personal;
-            fromEmail = fromEmail + ", " + from_Array[j].address;
+            var mailHeader= [[SMMailHeader alloc] init];
+            [mailHeader setSubject:listOfMessagesHeaders[i].subject];
+        
+            var sd = listOfMessagesHeaders[i].sentDate;
+            var date = [[CPDate alloc] initWithTimeIntervalSince1970:sd];
+            [mailHeader setDate:date];
+        
+            [mailHeader setMessageId:listOfMessagesHeaders[i].messageId];
+            [mailHeader setIsSeen:listOfMessagesHeaders[i].isSeen];
+        
+            [mailHeader setMd5:"undone"]; // TODO: why we need md5, where this field is used?
+        
+            var from_Array = listOfMessagesHeaders[i].from_Array;
+       
+            var fromName = @"";
+            var fromEmail = @"";
+       
+            for (var j = 0; j < from_Array.length; j++) 
+            {
+                fromName = fromName + ", " + from_Array[j].personal;
+                fromEmail = fromEmail + ", " + from_Array[j].address;
+            }
+        
+            // TODO: if lentgh > 0 remove first 2 chars in fromName,fromEmail
+            if (fromName.length > 2)
+                fromName = [fromName substringFromIndex:2];
+            else
+                fromName = @"";
+            if (fromEmail.length > 2)
+                fromEmail = [fromEmail substringFromIndex:2];
+            else
+                fromEmail = @"";
+        
+            [mailHeader setFromName:fromName]; // TODO: wrong model. We should save pairs of name and email. But, where is this info used? To show table and column "from" ?
+            [mailHeader setFromEmail:fromEmail];
+        
+            result = [result arrayByAddingObject:mailHeader];
         }
-        
-        // TODO: if lentgh > 0 remove first 2 chars in fromName,fromEmail
-        if (fromName.length > 2)
-            fromName = [fromName substringFromIndex:2];
-        else
-            fromName = @"";
-        if (fromEmail.length > 2)
-            fromEmail = [fromEmail substringFromIndex:2];
-        else
-            fromEmail = @"";
-        
-        [mailHeader setFromName:fromName]; // TODO: wrong model. We should save pairs of name and email. But, where is this info used? To show table and column "from" ?
-        [mailHeader setFromEmail:fromEmail];
-        
-        result = [result arrayByAddingObject:mailHeader];
     }
     
     [self setMailHeaders:result];

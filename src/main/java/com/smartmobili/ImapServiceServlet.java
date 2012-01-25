@@ -137,7 +137,7 @@ public class ImapServiceServlet extends HttpServlet {
 		}
 	}
 	
-	public JSONObject headersForFolder(JSONObject parameters, HttpSession httpSession) throws MessagingException {
+	public JSONObject headersForFolder(JSONObject parameters, HttpSession httpSession) throws MessagingException  {
 		Store imapStore = imapConnect(httpSession); // TODO: get cached opened
 													// and connected imapStore,
 													// or reconnect.
@@ -183,13 +183,21 @@ public class ImapServiceServlet extends HttpServlet {
 			JSONObject result = new JSONObject();
 			result.put("listOfHeaders", jsonArrayOfMessagesHeaders);
 			return result;
-		} finally {
+		}
+		catch(Exception ex) {
+			JSONObject result = new JSONObject();
+			result.put("listOfHeaders", null);
+			return result;
+		}
+		finally {
 			imapStore.close();
 		}
 	}
 	
 	public JSONObject mailContentForMessageId(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
-		Store imapStore = imapConnect(httpSession);
+		Store imapStore = imapConnect(httpSession); // TODO: get cached opened
+		// and connected imapStore,
+		// or reconnect.
 
 		try {
 			// Get the specified folder
