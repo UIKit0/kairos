@@ -164,9 +164,14 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     if (folderEditMode == FolderEditModes.RenameFolder)
     {
         // rename
-        [_serverConnection renameFolder:oldName toName:aName
+        /*[_serverConnection renameFolder:oldName toName:aName
                         delegate:@selector(imapServerDidRenameFolder:)
-                           error:nil];
+                           error:nil];*/
+        [_serverConnection callRemoteFunction:@"renameFolder"
+               withFunctionParametersAsObject:{"oldFolderName":oldName, "toName" : aName}
+                                     delegate:self
+                               didEndSelector:@selector(imapServerDidRenameFolder:withParametersObject:)
+                                        error:nil];
     }
     else
     {
@@ -179,12 +184,21 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     [self save];
 }
 
+- (void)imapServerDidRenameFolder:(id)sender withParametersObject:parametersObject
+{
+    if (withParametersObject.err != "")
+    {
+        // Output error to user
+        alert(err);
+    } 
+}
+
 - (void)imapServerDidCreateFolder:(String)err
 { 
     if (err != "")
     {
         // Output error to user
-        alert(err)
+        alert(err);
         // remove folder from screen
         [self remove];
     } 

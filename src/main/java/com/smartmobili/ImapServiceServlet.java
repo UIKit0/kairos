@@ -238,6 +238,56 @@ public class ImapServiceServlet extends HttpServlet {
 		}
 	}
 	
+	public JSONObject renameFolder(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
+		Store imapStore = imapConnect(httpSession); // TODO: get cached opened
+		// and connected imapStore,
+		// or reconnect.
+
+		// TODO: it is not good to connect every time. We should in future use
+		// some
+		// IMAP pool, which should be already connected to IMAP for this user.
+		// This pool will speedup things, because using it will pass connect()
+		// stage
+		// and start making renaming/creating folder immediately.
+		// (But in current case, user will not feel difference, because current
+		// operation
+		// is asynchronous and user don't wait end of this operation. It will
+		// feel
+		// result in other operations, such as browse between emails, pages and
+		// etc.)
+
+		JSONObject result = new JSONObject();
+		try {
+			String resultCode = "";
+			Folder rootFolder = imapStore.getDefaultFolder();
+			Folder oldFolder = rootFolder.getFolder(parameters
+					.getString("oldFolderName"));
+			Folder newFolder = rootFolder.getFolder(parameters
+					.getString("toName"));
+
+			if (oldFolder.exists() == false)
+				resultCode = "Folder to rename is not exists.";
+			else {
+				if (newFolder.exists())
+					resultCode = "Folder with such name is already exists. Failed to rename folder.";
+				else {
+					if (oldFolder.renameTo(newFolder) == false)
+						resultCode = "Failed to rename folder.";
+				}
+			}
+
+			result.put("result", resultCode);
+		} catch (Exception ex) {
+			log.info("Cannot rename folder from "
+					+ parameters.getString("oldFolderName") + " to "
+					+ parameters.getString("toName"));
+			result.put("result",
+					"Error exception raised: Failed to rename folder.");
+		} finally {
+			imapStore.close();
+		}
+		return result;
+	}
 	
 	
 	
