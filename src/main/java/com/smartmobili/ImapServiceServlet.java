@@ -1,6 +1,8 @@
 package com.smartmobili;
 
 import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.search.MessageIDTerm;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -185,6 +187,58 @@ public class ImapServiceServlet extends HttpServlet {
 			imapStore.close();
 		}
 	}
+	
+	public JSONObject mailContentForMessageId(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
+		Store imapStore = imapConnect(httpSession);
+
+		try {
+			// Get the specified folder
+			Folder folder = imapStore.getFolder(parameters.getString("folder"));
+	
+			// Folders are retrieved closed. To get the messages it is necessary to
+		    // open them (but not to rename them, for example)
+			folder.open(Folder.READ_ONLY);
+			
+			MessageIDTerm mIdTerm = new MessageIDTerm(parameters.getString("messageId"));
+			
+			JSONObject result = new JSONObject();
+		
+			Message[] arr = folder.search(mIdTerm);
+			if (arr.length > 0)
+			{
+				IMAPMessage msg = (IMAPMessage)arr[0];
+				JSONObject mailContentInJson = new JSONObject();
+				mailContentInJson.put("from_Array", msg.getFrom());
+				mailContentInJson.put("from", InternetAddress.toString(msg.getFrom()));
+				
+				mailContentInJson.put("replyTo_Array", msg.getReplyTo());
+				mailContentInJson.put("to_Array", msg.getRecipients(Message.RecipientType.TO));
+				mailContentInJson.put("to", InternetAddress.toString(msg.getRecipients(Message.RecipientType.TO)));
+				mailContentInJson.put("cc_Array", msg.getRecipients(Message.RecipientType.CC));
+				mailContentInJson.put("bcc_Array", msg.getRecipients(Message.RecipientType.BCC));
+				mailContentInJson.put("subject", msg.getSubject());	
+				mailContentInJson.put("sentDate", (int)(msg.getSentDate().getTime() / 1000));
+				
+				SMMailUtilJava javaUtil = new SMMailUtilJava();
+				mailContentInJson.put("body", javaUtil.getText(msg)); // TODO: need to send to cappucino not just "text" but separated multipart content as is (so it will show images and text properly). See more comments by Oobe in SMMailUtilJava regarding background downloading of attachements (images).
+				
+				mailContentInJson.put("isSeen", msg.isSet(Flags.Flag.SEEN));
+				
+				mailContentInJson.put("attachements", null); // TODO: SMMailUtil function attachmentListForMessage from Scala was used here. 
+				
+				result.put("mailContent", mailContentInJson);
+			}
+			else
+			{
+				result.put("mailContent", null);
+			}
+			return result;
+		} finally {
+			imapStore.close();
+		}
+	}
+	
+	
 	
 	
 /* supporter functions */	

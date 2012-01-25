@@ -267,6 +267,8 @@ var IsReadImage,
 
 - (CPString)sectionForAttachment:(CPArray)attachments
 {
+    // TODO: this shows attachemts as list of links, which not works. Need to show not links, but thumbnails or somethink like that.
+    
     // Build the list of attachments
     var attachmentSection = @"";
     for (var i = 0; i < [attachments count]; i++)
@@ -698,19 +700,24 @@ var IsReadImage,
 }
 
 
-- (void)imapServerMailContentDidReceived:(SMMailContent)mailContent
+- (void)imapServerMailContentDidReceived:(id)sender withParametersObject:parametersObject 
 {
     //CPLog.debug(@"%@%@", _cmd, mailContent);
-    if ([mailContent respondsToSelector:@selector(body)])
+    //if ([mailContent respondsToSelector:@selector(body)])
+    if (parametersObject.mailContent)
     {
-        [toContent setObjectValue:[mailContent toJoin]];
-        [dateContent setObjectValue:[[mailContent date] formattedDescription]];
-        [fromContent setObjectValue:[mailContent from]];
-        [subjectContent setObjectValue:[mailContent subject]];
+        [toContent setObjectValue:parametersObject.mailContent.to];
+        
+        var sd = parametersObject.mailContent.sentDate;
+        var date = [[CPDate alloc] initWithTimeIntervalSince1970:sd];    
+        [dateContent setObjectValue:[date formattedDescription]];
+        
+        [fromContent setObjectValue:parametersObject.mailContent.from];
+        [subjectContent setObjectValue:parametersObject.mailContent.subject];
 
-        var attachment = [self sectionForAttachment:[mailContent attachment]];
+        var attachment = ""; // TODO: there was used sectionForAttachment function but this way is not good (it just show not working links to attachments). In this way it was used: [self sectionForAttachment:[mailContent attachment]]
         // Build the whole message
-        [webView loadHTMLString:[[CPString alloc] initWithFormat:@"<html><head></head><body style='font-family: Helvetica, Verdana; font-size: 12px;'>%@%@</body></html>", [mailContent body], attachment]];
+        [webView loadHTMLString:[[CPString alloc] initWithFormat:@"<html><head></head><body style='font-family: Helvetica, Verdana; font-size: 12px;'>%@%@</body></html>", parametersObject.mailContent.body, attachment]];
         [loadingLabel setObjectValue:@"Mail Content Loaded."];
 
         // Issue #4
@@ -790,7 +797,7 @@ var IsReadImage,
     if ([aNotification object] == emailsHeaderView)
     {
         // Get the Delete and the Reply CPToolbarItem
-        deleteItem = [toolbar._items objectAtIndex:3];
+        deleteItem = [toolbar._items objectAtIndex:3];// TODO: make getting using getToobarItemViaIDentifier function in this class.
         replyItem = [toolbar._items objectAtIndex:4];
 
         // User selected one/another e-mail
@@ -804,12 +811,15 @@ var IsReadImage,
 
             var selectedMailboxName = [selectedMailbox name] || @"Inbox";
 
-            // TODO We should use an SMEmail (with only headers) and have it load its own data here.
+            
+            // (This is old todo) TODO We should use an SMEmail (with only headers) and have it load its own data here.
             // That way the results are cached, and the flow simpler.
-            [_serverConnection mailContentForMessageId:selectedEmail
-                                         folder:selectedMailboxName
-                                       delegate:@selector(imapServerMailContentDidReceived:)
-                                          error:nil];
+            [_serverConnection callRemoteFunction:@"mailContentForMessageId"
+                   withFunctionParametersAsObject:{ "messageId":selectedEmail, "folder":selectedMailboxName }
+                                         delegate:self
+                                   didEndSelector:@selector(imapServerMailContentDidReceived:withParametersObject:)
+                                            error:nil];
+            
             // Both Active
             [deleteItem setEnabled:YES];
             [replyItem setEnabled:YES];

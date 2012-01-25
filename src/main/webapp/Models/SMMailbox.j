@@ -133,7 +133,7 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
         else
             fromEmail = @"";
         
-        [mailHeader setFromName:fromName];
+        [mailHeader setFromName:fromName]; // TODO: wrong model. We should save pairs of name and email. But, where is this info used? To show table and column "from" ?
         [mailHeader setFromEmail:fromEmail];
         
         result = [result arrayByAddingObject:mailHeader];

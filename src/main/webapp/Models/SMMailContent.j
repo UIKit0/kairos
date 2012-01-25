@@ -5,16 +5,16 @@
  *  Author: Ignacio Cases
  *  Copyright 2011 Smartmobili. All rights reserved.
  */
-
+/*
 @import <Foundation/Foundation.j>
 
 @implementation SMMailContent : CPObject
-{
+{ 
     CPString from @accessors;
     CPString subject @accessors;
     CPDate date @accessors;
-    CPString to @accessors;
-    CPString toJoin @accessors;
+    CPString to @accessors; //replyTo
+    CPString toJoin @accessors; //to
     CPString cc @accessors;
     CPString bcc @accessors;
     CPString body @accessors;
@@ -56,4 +56,4 @@
     [aCoder encodeBool:self.isSeen forKey:@"isSeen"];
     [aCoder encodeObject:self.attachment forKey:@"attachment"];
 }
-@end
+@end*/
