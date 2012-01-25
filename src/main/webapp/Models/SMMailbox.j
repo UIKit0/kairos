@@ -86,16 +86,59 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
 {
     [self setMailHeaders:[]];
     
-    var str = pageToLoad.toString();
-    
-    [_serverConnection headersForFolder:[self name] pageToLoad:str
-                        delegate:@selector(imapServersHeadersDidLoad:)
-                           error:nil];
+    [_serverConnection callRemoteFunction:@"headersForFolder"
+           withFunctionParametersAsObject:{ "folder" : [self name], "pageToLoad" : pageToLoad }
+                                 delegate:self
+                           didEndSelector:@selector(imapServerHeadersDidLoad:withParametersObject:)
+                                    error:nil];
 }
 
-- (void)imapServersHeadersDidLoad:(CPArray)result
+- (void)imapServerHeadersDidLoad:(id)sender withParametersObject:parametersObject
 {
-    // Result is an array with SMMailHeader elements
+    var listOfMessagesHeaders = parametersObject.listOfHeaders;
+    
+    var result = [CPArray array]; // Result is an array with SMMailHeader elements
+    for (var i = 0; i < listOfMessagesHeaders.length; i++) 
+    {
+        var mailHeader= [[SMMailHeader alloc] init];
+        [mailHeader setSubject:listOfMessagesHeaders[i].subject];
+        
+        var sd = listOfMessagesHeaders[i].sentDate;
+        var date = [[CPDate alloc] initWithTimeIntervalSince1970:sd];
+        [mailHeader setDate:date];
+        
+        [mailHeader setMessageId:listOfMessagesHeaders[i].messageId];
+        [mailHeader setIsSeen:listOfMessagesHeaders[i].isSeen];
+        
+        [mailHeader setMd5:"undone"]; // TODO: why we need md5, where this field is used?
+        
+        var from_Array = listOfMessagesHeaders[i].from_Array;
+       
+        var fromName = @"";
+        var fromEmail = @"";
+       
+        for (var j = 0; j < from_Array.length; j++) 
+        {
+            fromName = fromName + ", " + from_Array[j].personal;
+            fromEmail = fromEmail + ", " + from_Array[j].address;
+        }
+        
+        // TODO: if lentgh > 0 remove first 2 chars in fromName,fromEmail
+        if (fromName.length > 2)
+            fromName = [fromName substringFromIndex:2];
+        else
+            fromName = @"";
+        if (fromEmail.length > 2)
+            fromEmail = [fromEmail substringFromIndex:2];
+        else
+            fromEmail = @"";
+        
+        [mailHeader setFromName:fromName];
+        [mailHeader setFromEmail:fromEmail];
+        
+        result = [result arrayByAddingObject:mailHeader];
+    }
+    
     [self setMailHeaders:result];
 }
 

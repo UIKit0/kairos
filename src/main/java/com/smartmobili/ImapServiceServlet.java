@@ -10,11 +10,14 @@ import java.lang.reflect.Method;
 import java.util.Properties;
 import org.apache.log4j.*;
 import com.sun.mail.imap.IMAPFolder;
+import com.sun.mail.imap.IMAPMessage;
+
 import net.sf.json.*;
 //import org.eclipse.jetty.websocket.*;
 
 @SuppressWarnings("serial")
 public class ImapServiceServlet extends HttpServlet {
+	private static final int messagesCountPerPage = 50; // NOTE: There is also settings for this at client side (to change, need change both client and server sides).
 	final int SessionMaxInactiveInterval = 10*60;
 	final boolean isDebuggingEnabled = true;
 	final String mailHost = "mail.smartmobili.com"; // TODO: in future mail host perhaps will be user-editable setting, so this constant will be removed and in-place somewhere settings will be used.
@@ -126,6 +129,57 @@ public class ImapServiceServlet extends HttpServlet {
 			}
 			JSONObject result = new JSONObject();
 			result.put("listOfFolders", jsonArrayOfFolders);
+			return result;
+		} finally {
+			imapStore.close();
+		}
+	}
+	
+	public JSONObject headersForFolder(JSONObject parameters, HttpSession httpSession) throws MessagingException {
+		Store imapStore = imapConnect(httpSession); // TODO: get cached opened
+													// and connected imapStore,
+													// or reconnect.
+		try {
+			// Get the specified folder
+			Folder folder = imapStore.getFolder(parameters.getString("folder"));
+	
+			// Folders are retrieved closed. To get the messages it is necessary to
+		    // open them (but not to rename them, for example)
+			folder.open(Folder.READ_ONLY);
+			
+			// With IMAP, getMessages does not download the mail: we get a pointer
+		    // to the actual message that it is in the server up to the moment
+		    // we access it (note that this is probably the reason why we can not
+		    // refactor the getting into teh messagesInFolder function)
+			
+			final int from = 1 + messagesCountPerPage * (parameters.getInt("pageToLoad") - 1);
+			
+			// TODO: what if will be requested page which not exists at IMAP, so from will be greater that messages count?
+		    int to = from + messagesCountPerPage;
+		    if (to > folder.getMessageCount())
+		    	to = folder.getMessageCount();
+			
+		    final Message[] messagesArr = folder.getMessages(from, to);
+		    	      FetchProfile fp = new FetchProfile();
+		    	      fp.add(FetchProfile.Item.ENVELOPE);
+		    	      fp.add(FetchProfile.Item.FLAGS);
+		    	      fp.add("Newsgroups");
+		    	      folder.fetch(messagesArr, fp);
+	      
+			JSONArray jsonArrayOfMessagesHeaders = new JSONArray();
+			for (Message msg : messagesArr) {
+				JSONObject messageHeaderAsJson = new JSONObject();			
+				final IMAPMessage imapMsg = (IMAPMessage)msg;
+				messageHeaderAsJson.put("messageId", imapMsg.getMessageID());
+				messageHeaderAsJson.put("from_Array", imapMsg.getFrom());
+				messageHeaderAsJson.put("subject", imapMsg.getSubject());			
+				messageHeaderAsJson.put("sentDate", (int)(imapMsg.getSentDate().getTime() / 1000));
+				messageHeaderAsJson.put("isSeen", imapMsg.isSet(Flags.Flag.SEEN));
+				jsonArrayOfMessagesHeaders.add(messageHeaderAsJson);
+			}
+			
+			JSONObject result = new JSONObject();
+			result.put("listOfHeaders", jsonArrayOfMessagesHeaders);
 			return result;
 		} finally {
 			imapStore.close();
