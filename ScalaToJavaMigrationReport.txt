@@ -4,6 +4,7 @@ List of broken things:
 *. In MailController.j disabled function refreshMailbox (called when user press Refresh button in toolbar). Not implemented porting of "synchronizeAll" function from scala to java. Because now No cardano/lift autoupdated objects anymore, so after refresh objects at server we need also reload screen or something like that).
 *. "Attachments" code for mail content is not ported because it was not worked properly and in future it will be coded in an another way.
 *. Mail subjects and mail body failed to show properly UTF8 characters (was fine when used with scala).
+*. When web-app started and working, if server reloaded, or session is time-outed, web-app remains in non-working state. Expected behavior (one of two): 1) Restart web-app asking to relogin 2) Automatically relogin (get new session ID using same previously entered password and email from memory of cappuccino) and make Refresh (update list of folders and mails). This can be done in "keep-alive" conenction, e.g.Comet, or just on place where will events requested from server every 3 seconds and etc. It can just get info from server in event that it is no authorized anymore and do relogining.
 
 Found bottlenecks:
 *. In ImapServiceServlet.java function listMailfolders is makes too much requests to IMAP server to get required attributes (count of messages and etc). Two solutions: 1) Try to find way to load all attributes with one request 2) Make separate functions: load folders list and load folder attributes. Then implement asynchronous folders list loading in GUI: it should load just folder names at first, then near each folder show loading icon and in background load all attributes and replaces loading icon to messages count or to empry place if no unread messages.
@@ -15,3 +16,6 @@ Ideas
 Notes:
 *. Model is simplified. For example SMMailContent.j is not used anymore.
 *. To transfer data between client and server JSON format is used. So now no cardano/lift and need to parse json and construct/fill Objj objects manually.
+
+Founded bugs:
+*. Failed to raname folder with UTF8 character, e.g. "UnnamedMy4kfу" (y here). It tells that folder is not exists.

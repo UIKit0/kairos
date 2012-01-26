@@ -39,8 +39,11 @@ public class ImapServiceServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) {
+		BufferedReader reader = null;
+		PrintWriter writer = null; 
 		try {
-			BufferedReader reader = request.getReader();
+		    reader = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF8"));
+			
 			StringBuilder sb = new StringBuilder();
 			String line = reader.readLine();
 			while (line != null) {
@@ -64,15 +67,32 @@ public class ImapServiceServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setMaxInactiveInterval(SessionMaxInactiveInterval); // TODO: need to test, if between requests is more time, what application will do withoout all attributes from session? It should reload/re-request user login? Or silently reconnect with same credentials and continue to work (show folders and etc).
 
-			Method method = ImapServiceServlet.class.getMethod(functionNameToCall,
-					JSONObject.class, HttpSession.class);
+			Method method = ImapServiceServlet.class.getMethod(
+					functionNameToCall, JSONObject.class, HttpSession.class);
 			JSONObject res = (JSONObject) method.invoke(this,
 					functionParametersAsJsonObject, session);
 
-			response.getOutputStream().print(res.toString());
-		} catch (Exception ex) {
+			response.setContentType("application/json; charset=UTF-8");
+
+			OutputStreamWriter osw = new OutputStreamWriter(
+					response.getOutputStream(), "UTF8");
+			writer = new PrintWriter(osw, true);
+			writer.print(res.toString());
+			writer.flush();
+		}
+		catch (Exception ex) {
 			log.error("Exception in doPost()", ex);
 			ex.printStackTrace(); 
+		}
+		finally {
+			if (writer != null)
+				writer.close();
+			if (reader != null)
+				try {
+					reader.close();
+				} catch (IOException e) {
+					/* nothing */
+				}
 		}
 	}
 
