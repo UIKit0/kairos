@@ -28,6 +28,8 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     CPString        name @accessors;
     CPNumber        count @accessors;
     CPNumber        unread @accessors;
+    
+    var             _lastRequestedPageToLoad;
 }
 
 // Designated initializer
@@ -85,6 +87,7 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
 - (void)loadHeadersAtPage:(int)pageToLoad
 {
     // [self setMailHeaders:[]];
+    _lastRequestedPageToLoad = pageToLoad;
     
     var serverConnection = [[ServerConnection alloc] init];
     [serverConnection callRemoteFunction:@"headersForFolder"
@@ -143,7 +146,10 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
         }
     }
     
-    [self setMailHeaders:result];
+    if (parametersObject.page == _lastRequestedPageToLoad) // if there many times clicked load page, it can load different pages simeltanously , but we need show only last requested page, other is dismissed.
+    {
+        [self setMailHeaders:result];
+    }
 }
 
 - (void)setFolderName:(CPString)aName withFolderEditMode:(FolderEditModes)folderEditMode

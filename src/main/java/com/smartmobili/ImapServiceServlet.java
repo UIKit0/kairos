@@ -216,6 +216,10 @@ public class ImapServiceServlet extends HttpServlet {
 			
 			JSONObject result = new JSONObject();
 			result.put("listOfHeaders", jsonArrayOfMessagesHeaders);
+			// pass back input parameters to idetificate this request.
+			result.put("folder", parameters.getString("folder")); 
+			result.put("page", parameters.getInt("pageToLoad"));
+			// return result
 			return result;
 		}
 		catch(Exception ex) {

@@ -18,3 +18,4 @@ Notes:
 
 Founded bugs:
 *. Failed to rename folder with UTF8 character at smartmobili mail server. When used gmail imap server, everything is works OK. Perhaps some settings at IMAP server is wrong?. It tells that folder is not exists.
+*. When switching pages fast, It still load all pages selected and loading pages become slow. Need to disable previous URL connection (stop it) before starting new one.  
