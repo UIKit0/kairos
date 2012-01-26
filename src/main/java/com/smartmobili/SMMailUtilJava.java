@@ -28,6 +28,10 @@ class SMMailUtilJava {
       if (p.isMimeType("text/*")) {
           String s = (String)p.getContent();
           textIsHtml = p.isMimeType("text/html");
+          if (textIsHtml == false) {
+        	  s = s.replace("\n", "<br>");
+        	  s = s.replace(" ", "&nbsp");
+          }
           //System.out.println("It is text");
           return s;
       }
@@ -45,7 +49,7 @@ class SMMailUtilJava {
 						if ((disposition != null) &&
 						    ((disposition.equals(Part.ATTACHMENT) || (disposition.equals(Part.INLINE))))) {
 						    //String filename = saveFile(part.getFileName(), part.getInputStream());
-						    File f = saveFile(part.getFileName(), part.getInputStream());
+						    File f = saveFile(part.getFileName(), part.getInputStream()); // TODO:
                 System.out.println(f.getPath());						    
 						  } else if (disposition == null) {
 								// Part is text
