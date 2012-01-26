@@ -106,6 +106,12 @@ public class ImapServiceServlet extends HttpServlet {
 		 * "authenticate" is called several times during app run (not only at
 		 * app start), then need to make same caching and re-check password only
 		 * in intervals (e.g. one time per 2 hours).
+		 * NOTE: with saved session (see TODO bellow) this above NOTE is not a 
+		 * problem, because authenticate will work as other functions - first
+		 * it will check saved IMAP session. If it still connected and alive,
+		 * just use it (in case of authenticate - immidiately return with success. 
+		 * NOTE: we need also check if username and password same as was when initial
+		 * connection. If not then re-authenticate and update saved imap session.
 		 */
 		session.setAttribute("authenticationUserName",
 				parameters.get("userName"));
