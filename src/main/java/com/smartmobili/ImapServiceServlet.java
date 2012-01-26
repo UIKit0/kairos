@@ -22,7 +22,8 @@ public class ImapServiceServlet extends HttpServlet {
 	private static final int messagesCountPerPage = 50; // NOTE: There is also settings for this at client side (to change, need change both client and server sides).
 	final int SessionMaxInactiveInterval = 10*60;
 	final boolean isDebuggingEnabled = true;
-	final String mailHost = "mail.smartmobili.com"; // TODO: in future mail host perhaps will be user-editable setting, so this constant will be removed and in-place somewhere settings will be used.
+	final String mailHost = "mail.smartmobili.com"; //"imap.gmail.com"; // TODO: in future mail host perhaps will be user-editable setting, so this constant will be removed and in-place somewhere settings will be used.
+	final String imapProtocol = "imap"; // "imaps"; 
 	
 	Logger log = Logger.getLogger(ImapServiceServlet.class);
 /*	public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol)
@@ -145,8 +146,21 @@ public class ImapServiceServlet extends HttpServlet {
 			for (Folder f : imapFolders) {
 				JSONObject folderAsJson = new JSONObject();
 				folderAsJson.put("label", f.toString());// f.getFullName());
-				folderAsJson.put("count", f.getMessageCount());
-				folderAsJson.put("unread", f.getUnreadMessageCount());
+				int msgCount = 0;
+				try
+				{
+					msgCount = f.getMessageCount();
+				}
+				catch(Exception ex){}
+				folderAsJson.put("count", msgCount);
+				
+				int unreadMsgCount = 0;
+				try
+				{
+					unreadMsgCount = f.getUnreadMessageCount();
+				}
+				catch(Exception ex){}
+				folderAsJson.put("unread", unreadMsgCount);
 				jsonArrayOfFolders.add(folderAsJson);
 			}
 			JSONObject result = new JSONObject();
@@ -399,7 +413,7 @@ public class ImapServiceServlet extends HttpServlet {
 
 			final Session imapSession = Session.getDefaultInstance(props);
 			imapSession.setDebug(isDebuggingEnabled);
-			store = imapSession.getStore("imap");
+			store = imapSession.getStore(imapProtocol);
 			store.connect(
 					/* credentials.host */mailHost,
 					(String) httpSession.getAttribute("authenticationUserName"),

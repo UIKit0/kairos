@@ -18,4 +18,4 @@ Notes:
 *. To transfer data between client and server JSON format is used. So now no cardano/lift and need to parse json and construct/fill Objj objects manually.
 
 Founded bugs:
-*. Failed to raname folder with UTF8 character, e.g. "UnnamedMy4kfу" (y here). It tells that folder is not exists.
+*. Failed to rename folder with UTF8 character at smartmobili mail server. When used gmail imap server, everything is works OK. Perhaps some settings at IMAP server is wrong?. It tells that folder is not exists.
