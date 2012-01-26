@@ -168,8 +168,18 @@ var DEBUG_BADGES = NO,
         [button setAutoresizingMask:CPViewMinXMargin];
         [self addSubview:button];
     }
+    else
+    {
+        // Make sure there is no button if we shouldn't have one.
+        [self selfRemoveButtons];
+    }
 
     [self setNeedsLayout];
+}
+
+- (void)selfRemoveButtons	
+{
+    [self setSubviews:[imageView, label, unread]];
 }
 
 - (BOOL)isKindOfClass:aClass
@@ -248,7 +258,11 @@ var DEBUG_BADGES = NO,
 
 - (void)encodeWithCoder:(CPCoder)aCoder
 {
+    // Don't encode the button. If needed, it will be added dynamically by setObjectValue:.
+    var subviews = [[self subviews] copy];
+    [self selfRemoveButtons];
     [super encodeWithCoder:aCoder];
+    [self setSubviews:subviews];
 
     [aCoder encodeObject:label forKey:@"label"];
     [aCoder encodeObject:imageView forKey:@"imageView"];
