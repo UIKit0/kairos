@@ -84,7 +84,7 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
 
 - (void)loadHeadersAtPage:(int)pageToLoad
 {
-    [self setMailHeaders:[]];
+    // [self setMailHeaders:[]];
     
     var serverConnection = [[ServerConnection alloc] init];
     [serverConnection callRemoteFunction:@"headersForFolder"
