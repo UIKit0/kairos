@@ -319,6 +319,12 @@ public class ImapServiceServlet extends HttpServlet {
 		} finally {
 			imapStore.close();
 		}
+		// transfer input parameters back to indicate which exactly folder was renamed.
+		result.put("oldFolderName", parameters
+				.getString("oldFolderName"));
+		result.put("toName", parameters
+				.getString("toName"));
+		// return result
 		return result;
 	}
 	

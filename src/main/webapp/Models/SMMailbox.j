@@ -20,7 +20,7 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     /*! The account the mailbox belongs to. */
     SMMailAccount   mailAccount @accessors;
 
-    ServerConnection _serverConnection @accessors;
+    //ServerConnection _serverConnection @accessors;
 
     // Headers of email within the box, if loaded.
     CPArray         mailHeaders @accessors;
@@ -86,7 +86,8 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
 {
     [self setMailHeaders:[]];
     
-    [_serverConnection callRemoteFunction:@"headersForFolder"
+    var serverConnection = [[ServerConnection alloc] init];
+    [serverConnection callRemoteFunction:@"headersForFolder"
            withFunctionParametersAsObject:{ "folder" : [self name], "pageToLoad" : pageToLoad }
                                  delegate:self
                            didEndSelector:@selector(imapServerHeadersDidLoad:withParametersObject:)
@@ -170,7 +171,8 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
         /*[_serverConnection renameFolder:oldName toName:aName
                         delegate:@selector(imapServerDidRenameFolder:)
                            error:nil];*/
-        [_serverConnection callRemoteFunction:@"renameFolder"
+        var serverConnection = [[ServerConnection alloc] init];
+        [serverConnection callRemoteFunction:@"renameFolder"
                withFunctionParametersAsObject:{"oldFolderName":oldName, "toName" : aName}
                                      delegate:self
                                didEndSelector:@selector(imapServerDidRenameFolder:withParametersObject:)
@@ -179,7 +181,8 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     else
     {
         // create
-        [_serverConnection callRemoteFunction:@"createFolder"
+        var serverConnection = [[ServerConnection alloc] init];
+        [serverConnection callRemoteFunction:@"createFolder"
                withFunctionParametersAsObject:{"folderNameToCreate":aName}
                                      delegate:self
                                didEndSelector:@selector(imapServerDidCreateFolder:withParametersObject:)
@@ -191,19 +194,23 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
 
 - (void)imapServerDidRenameFolder:(id)sender withParametersObject:parametersObject
 {
-    if (withParametersObject.err != "")
+    if (parametersObject.result != "")
     {
         // Output error to user
-        alert(withParametersObject.err);
+        
+        alert(parametersObject.result);
+        
+        [self setName:parametersObject.oldFolderName]; // (NOT WORKING) // TODO: need to pass event to list of folders (UI) and update it.
+        alert("UNDONE: (not yet implemented) folder on screen should return to name " + parametersObject.oldFolderName); // TODO: (see above todo).
     } 
 }
 
 - (void)imapServerDidCreateFolder:(id)sender withParametersObject:parametersObject
 { 
-    if (withParametersObject.err != "")
+    if (parametersObject.result != "")
     {
         // Output error to user
-        alert(withParametersObject.err);
+        alert(parametersObject.result);
         // remove folder from screen
         [self remove];
     } 
