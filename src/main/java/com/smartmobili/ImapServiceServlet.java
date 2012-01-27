@@ -1,3 +1,12 @@
+/*
+ *  ImapServiceServlet
+ *  Kairos Mail
+ *
+ *  Author: Victor Kazarinov <oobe@kzarinov.biz>
+ *
+ *  Copyright 2012 Smartmobili. All rights reserved.
+ */
+
 package com.smartmobili;
 
 import javax.mail.*;
@@ -21,9 +30,6 @@ import net.sf.json.*;
 public class ImapServiceServlet extends HttpServlet {
 	private static final int messagesCountPerPage = 50; // NOTE: There is also settings for this at client side (to change, need change both client and server sides).
 	final int SessionMaxInactiveInterval = 10*60;
-	final boolean isDebuggingEnabled = true;
-	final String mailHost = "mail.smartmobili.com"; //"imap.gmail.com"; // TODO: in future mail host perhaps will be user-editable setting, so this constant will be removed and in-place somewhere settings will be used.
-	final String imapProtocol = "imap"; // "imaps"; 
 	
 	Logger log = Logger.getLogger(ImapServiceServlet.class);
 /*	public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol)
@@ -67,7 +73,8 @@ public class ImapServiceServlet extends HttpServlet {
 
 			HttpSession session = request.getSession();
 			session.setMaxInactiveInterval(SessionMaxInactiveInterval); // TODO: need to test, if between requests is more time, what application will do withoout all attributes from session? It should reload/re-request user login? Or silently reconnect with same credentials and continue to work (show folders and etc).
-
+			// TODO: who setup session? Why this made here, and not there where is ImapSession initialized?
+			
 			Method method = ImapServiceServlet.class.getMethod(
 					functionNameToCall, JSONObject.class, HttpSession.class);
 			JSONObject res = (JSONObject) method.invoke(this,
@@ -124,7 +131,7 @@ public class ImapServiceServlet extends HttpServlet {
 
 		JSONObject res = new JSONObject();
 		
-		Store imapStore = imapConnect(session);
+		Store imapStore = ImapSession.imapConnect(session);
 		if (imapStore != null) {
 			res.put("status", "SMAuthenticationGranted");
 			session.setAttribute("authenticatated", true);
@@ -140,7 +147,7 @@ public class ImapServiceServlet extends HttpServlet {
 	}
 
 	public JSONObject listMailfolders(JSONObject parameters, HttpSession httpSession) throws MessagingException {
-		Store imapStore = imapConnect(httpSession); // TODO: get cached opened
+		Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
 													// and connected imapStore,
 													// or reconnect.
 		try {
@@ -178,7 +185,7 @@ public class ImapServiceServlet extends HttpServlet {
 	}
 	
 	public JSONObject headersForFolder(JSONObject parameters, HttpSession httpSession) throws MessagingException  {
-		Store imapStore = imapConnect(httpSession); // TODO: get cached opened
+		Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
 													// and connected imapStore,
 													// or reconnect.
 		try {
@@ -239,7 +246,7 @@ public class ImapServiceServlet extends HttpServlet {
 	}
 	
 	public JSONObject mailContentForMessageId(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
-		Store imapStore = imapConnect(httpSession); // TODO: get cached opened
+		Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
 		// and connected imapStore,
 		// or reconnect.
 
@@ -272,7 +279,8 @@ public class ImapServiceServlet extends HttpServlet {
 				mailContentInJson.put("sentDate", (int)(msg.getSentDate().getTime() / 1000));
 				
 				SMMailUtilJava javaUtil = new SMMailUtilJava();
-				mailContentInJson.put("body", javaUtil.getText(msg)); // TODO: need to send to cappucino not just "text" but separated multipart content as is (so it will show images and text properly). See more comments by Oobe in SMMailUtilJava regarding background downloading of attachements (images).
+				mailContentInJson.put("body", javaUtil.getText(parameters.getString("folder"), 
+						parameters.getString("messageId"), msg)); // TODO: need to send to cappucino not just "text" but separated multipart content as is (so it will show images and text properly). See more comments by Oobe in SMMailUtilJava regarding background downloading of attachements (images).
 				
 				mailContentInJson.put("isSeen", msg.isSet(Flags.Flag.SEEN));
 				
@@ -296,7 +304,7 @@ public class ImapServiceServlet extends HttpServlet {
 	 * error description. TODO: need add localization of return strings
 	 */
 	public JSONObject renameFolder(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
-		Store imapStore = imapConnect(httpSession); // TODO: get cached opened
+		Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
 		// and connected imapStore,
 		// or reconnect.
 
@@ -358,7 +366,7 @@ public class ImapServiceServlet extends HttpServlet {
 	   * TODO: need add localization of return strings
 	   */
 	public JSONObject createFolder(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
-		Store imapStore = imapConnect(httpSession); // TODO: get cached opened
+		Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
 		// and connected imapStore,
 		// or reconnect.
 
@@ -403,47 +411,5 @@ public class ImapServiceServlet extends HttpServlet {
 			imapStore.close();
 		}
 		return result;
-	}
-	
-	
-/* supporter functions */	
-	
-
-	public Store imapConnect(HttpSession httpSession) {
-		Store store = null;
-		try {
-			Properties props = new Properties();
-			/*
-			 * props.put("mail.imap.connectionpoolsize", imapConnectionPoolSize)
-			 * props.put("mail.imap.connectionpooltimeout",
-			 * imapConnectionPoolTimeout) props.put("mail.imap.timeout",
-			 * imapTimeout) props.put("mail.imap.connectiontimeout",
-			 * imapConnectionTimeout)
-			 */
-
-			final Session imapSession = Session.getDefaultInstance(props);
-			imapSession.setDebug(isDebuggingEnabled);
-			store = imapSession.getStore(imapProtocol);
-			store.connect(
-					/* credentials.host */mailHost,
-					(String) httpSession.getAttribute("authenticationUserName"),
-					(String) httpSession.getAttribute("authenticationPassword"));
-
-			// TODO: in future save opened session and re-use it later always
-			// (and re-connect if failed). and also disconnect somewhere when
-			// session time-outed or logged-out (Need find place - perhaps add
-			// thread which will check dead session via interval?)
-			return store;
-		} catch (MessagingException mex) {
-			if (store != null) {
-				try {
-					if (store.isConnected())
-						store.close();
-				} catch (MessagingException e) {
-					/*none*/
-				}
-			}
-			return null;
-		}
 	}
 }
