@@ -111,14 +111,22 @@ class SMMailUtilJava {
 		return null;
 	}
 	
+	/*
+	 * generateLinkToImage function. 
+	 * Author: Victor Kazarinov <oobe@kazarinov.biz>
+	 * 
+	 * Creates link to ImapAttachmentsServlet and passing all parameters to unique 
+	 * identificate folder, message and attachment in message
+	 */
 	private String generateLinkToImage(Part bp, 
 			String usedForLinkToAttachment_imapMailFolder,
 			String usedForLinkToAttachment_imapEmailId, 
 			boolean asThumbnail) 
 					throws UnsupportedEncodingException, MessagingException {
 		String encodedId = URLEncoder.encode(usedForLinkToAttachment_imapEmailId, "UTF8") ;
-		return "getAttachment?hash=" + bp.hashCode() + 
-				"&fileSize=" + bp.getSize() +
+		return "getAttachment" + 
+				//"?hash=" + bp.hashCode() + 
+				"?fileSize=" + bp.getSize() +
 				"&imapFolder=" + URLEncoder.encode(usedForLinkToAttachment_imapMailFolder, "UTF8") + 
 				"&imapMailId=" + encodedId + 
 				"&fileName=" + URLEncoder.encode(bp.getFileName(), "UTF8") + 

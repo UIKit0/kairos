@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 
 import com.sun.mail.imap.IMAPMessage;
+import com.sun.mail.util.BASE64DecoderStream;
 
 @SuppressWarnings("serial")
 public class ImapAttachmentsServlet extends HttpServlet {
@@ -71,21 +72,35 @@ public class ImapAttachmentsServlet extends HttpServlet {
 					
 					if(part.isMimeType("image/*")) {
 						// return image or thumbnail
-					    //InputStream is = part.getInputStream();
-						// UNDONE: set mimeType of output stream.
+						
 						if (asThumbnail) {
 							out.print("Here is image thumbnail"); // UNDONE:
+							// UNDONE: set mimeType of output stream.
 						}
 						else {
-							out.print("Here is image"); // UNDONE:
+							// Here is full-size image
+							BASE64DecoderStream stream = (BASE64DecoderStream)part.getContent();
+							byte[] buf = new byte[1024];
+							
+							resp.setContentType(part.getContentType());
+							resp.setContentLength(size);
+							while(true) {
+								int readed = stream.read(buf, 0, buf.length);
+								if (readed < 0)
+									break;
+								out.write(buf, 0, readed);
+							}
 						}
 					}
 					else {
-						if (asThumbnail)
+						if (asThumbnail) {
 							out.print("Not yet supported"); // TODO: (if need) if Thubmnail requested and filetype is an file, then show image via extension or an default image.
+							// UNDONE: set mimeType of output stream.
+						}
 						else {
 							// return whole file as is
 							// UNDONE: set mimeType of output stream.
+							out.print("Not yet supported");
 						}
 					}
 				}
