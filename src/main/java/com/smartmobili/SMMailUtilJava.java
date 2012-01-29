@@ -89,11 +89,11 @@ class SMMailUtilJava {
 				
 					String imgCell = "<a href=\"" + 
 							generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-									usedForLinkToAttachment_imapEmailId, false) +
+									usedForLinkToAttachment_imapEmailId, false, false) +
 									"\" target=\"_blank\""+">" +
 									"<img src=\"" + 
 									generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-											usedForLinkToAttachment_imapEmailId, true) + "\" />" +
+											usedForLinkToAttachment_imapEmailId, true, false) + "\" />" +
 									"</a>";
 					String secondCell = "<b>" + bp.getFileName() + "</b>" + 
 							"<br>" + 
@@ -101,11 +101,11 @@ class SMMailUtilJava {
 							
 							"<a href=\"" + 
 							generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-									usedForLinkToAttachment_imapEmailId, false) +
-									"\" target=\"_blank\""+">" + "View</a>" /*+ 
+									usedForLinkToAttachment_imapEmailId, false, false) +
+									"\" target=\"_blank\""+">" + "View</a>" + 
 							" <a href=\"" + 
 									generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-											usedForLinkToAttachment_imapEmailId, false) +"\">" + "Download</a>"*/;
+											usedForLinkToAttachment_imapEmailId, false, true) +"\">" + "Download</a>";
 					res = res + "<br>" +
 							"<table border=\"0\" width=\"0%\"><tr><td width=\"0%\">" + 
 							imgCell + "</td>" +
@@ -120,8 +120,32 @@ class SMMailUtilJava {
 					else
 						res = res + "Unknown type: " + bp.getContent(); // TODO: could this happen?
 				}
-				else
-					res = res + "<br>Unknown file type (" + bp.getFileName() + ") (" + bp.getContentType() + ")"; // TODO:
+				else {
+					String imgCell = ""; /*"<a href=\"" + 
+							generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+									usedForLinkToAttachment_imapEmailId, false) +
+									"\" target=\"_blank\""+">" +
+									"<img src=\"" + 
+									generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+											usedForLinkToAttachment_imapEmailId, true) + "\" />" +
+									"</a>"*/;
+					String secondCell = "<b>" + bp.getFileName() + "</b>" + 
+							"<br>" + 
+							bp.getSize() + " bytes " + // TODO: convert to visible by human size e.g. K  MB and etc.		
+							
+							"<a href=\"" + 
+							generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+									usedForLinkToAttachment_imapEmailId, false, true) +
+									"\">" + "Download</a>" /*+ 
+							" <a href=\"" + 
+									generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+											usedForLinkToAttachment_imapEmailId, false) +"\">" + "Download</a>"*/;
+					res = res + "<br>" +
+							"<table border=\"0\" width=\"0%\"><tr><td width=\"0%\">" + 
+							imgCell + "</td>" +
+									"<td align=\"left\">" + secondCell + "</td></tr></table>";
+					//res = res + "<br>Unknown file type (" + bp.getFileName() + ") (" + bp.getContentType() + ")"; // TODO:
+				}
 			}
 			if (res.length() == 0)
 				res = null;
@@ -140,7 +164,7 @@ class SMMailUtilJava {
 	private String generateLinkToImage(Part bp, 
 			String usedForLinkToAttachment_imapMailFolder,
 			String usedForLinkToAttachment_imapEmailId, 
-			boolean asThumbnail) 
+			boolean asThumbnail, boolean downloadMode) 
 					throws UnsupportedEncodingException, MessagingException {
 		String encodedId = URLEncoder.encode(usedForLinkToAttachment_imapEmailId, "UTF8") ;
 		return "getAttachment" + 
@@ -149,7 +173,8 @@ class SMMailUtilJava {
 				"&imapFolder=" + URLEncoder.encode(usedForLinkToAttachment_imapMailFolder, "UTF8") + 
 				"&imapMailId=" + encodedId + 
 				"&fileName=" + URLEncoder.encode(bp.getFileName(), "UTF8") + 
-				"&asThumbnail=" + String.valueOf(asThumbnail);
+				"&asThumbnail=" + String.valueOf(asThumbnail) +
+				"&downloadMode=" + String.valueOf(downloadMode) ;
 	}
 
 	/*

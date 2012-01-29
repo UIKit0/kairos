@@ -104,7 +104,6 @@ public class ImapAttachmentsServlet extends HttpServlet {
 										createThumbnail(byteArrWithImageContent, ThumbnailsWidth, ThumbnailsHeight, 70);
 									if (byteArrOfThumbnailImage != null) {
 										resp.setContentType(part.getContentType());
-										//resp.setContentLength(size);
 										
 										out.write(byteArrOfThumbnailImage);
 									}
@@ -122,6 +121,13 @@ public class ImapAttachmentsServlet extends HttpServlet {
 							resp.setContentType(part.getContentType());
 							resp.setContentLength(size);
 							
+							boolean downloadMode = Boolean.parseBoolean(req.getParameter("downloadMode"));
+							if (downloadMode) {
+								resp.setHeader( "Content-Disposition", "attachment; filename=\"" + fileName + "\"" );
+							}
+							else 
+								resp.setHeader( "Content-Disposition", "filename=\"" + fileName + "\"" );
+							
 							writeBASE64PartContentIntoStream(part, out);
 						}
 					}
@@ -131,10 +137,12 @@ public class ImapAttachmentsServlet extends HttpServlet {
 							// UNDONE: set mimeType of output stream.
 						}
 						else {
-							// return whole file as is
-							// UNDONE: set mimeType of output stream.
-							// USE writeBASE64PartContentIntoStream
-							out.print("Not yet supported");
+							// return whole file as-is
+							resp.setContentType(part.getContentType());
+							resp.setContentLength(size);
+							resp.setHeader( "Content-Disposition", "attachment; filename=\"" + fileName + "\"" );
+							
+							writeBASE64PartContentIntoStream(part, out);
 						}
 					}
 				}
