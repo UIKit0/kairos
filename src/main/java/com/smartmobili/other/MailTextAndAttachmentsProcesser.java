@@ -1,31 +1,29 @@
 /*
- *  SMMailUtilJava
- *  Mail
+ *  MailTextAndAttachmentsProcesser
+ *  Kairos Mail
  *
  *  Author: Ignacio Cases
+ *  Modifications: Victor Kazarinov <oobe@kazarinov.biz>
  *  Contains portions of free code from Sun Microsystems, Inc.
  *
- *  Copyright 2011 Smartmobili. All rights reserved.
+ *  Copyright 2012 Smartmobili. All rights reserved.
  */
 
-package com.smartmobili;
+package com.smartmobili.other;
 
 import javax.mail.*;
-import javax.mail.internet.*;
-import javax.mail.search.*;
 import com.sun.mail.imap.*;
 import java.io.*;
 import java.net.URLEncoder;
 
-class SMMailUtilJava {
-	//private boolean textIsHtml = false;
-
-	//public boolean isHtml = textIsHtml;
-
+public class MailTextAndAttachmentsProcesser {
 	/**
 	 * Return the text content of the message.
 	 * 
 	 * TODO: perhaps not all cases is processed here. Perhaps need rewrite this function to clearly pass all cases of all kinds of emails.
+	 *
+	 *  Author: Ignacio Cases
+	 *	Modifications: Victor Kazarinov <oobe@kazarinov.biz>
 	 */
 	public String getText(String usedForLinkToAttachment_imapMailFolder, 
 			String usedForLinkToAttachment_imapEmailId, Part p) throws MessagingException, IOException {
@@ -55,8 +53,8 @@ class SMMailUtilJava {
 								.equals(Part.INLINE))))) {
 					// String filename = saveFile(part.getFileName(),
 					// part.getInputStrea m());
-					File f = saveFile(part.getFileName(), part.getInputStream()); // TODO:
-					System.out.println(f.getPath());
+					//File f = saveFile(part.getFileName(), part.getInputStream()); // TODO:
+					//System.out.println(f.getPath());
 					if (text == null)
 						text = "(File " + part.getFileName() + " here. Not yet implemented attachements code).";// TODO
 				} else if (disposition == null) {
@@ -184,7 +182,7 @@ class SMMailUtilJava {
 	 * Searches in Part (p) the (sub)part satisfied the conditions such as size and fileName.
 	 * Return null if part is not found.
 	 */
-	Part getAttachmentPart(Part p, int size, String fileName, boolean findOnlyUsingFileName)
+	public Part getAttachmentPart(Part p, int size, String fileName, boolean findOnlyUsingFileName)
 			throws MessagingException {
 		if (findOnlyUsingFileName) {
 			if (p.getFileName() != null)
@@ -237,6 +235,7 @@ class SMMailUtilJava {
 	// return filename;
 	// }
 
+	/*
 	public static void handleMultipart_UNUSED(Multipart multipart)
 			throws MessagingException, IOException {
 		for (int i = 0, n = multipart.getCount(); i < n; i++) {
@@ -301,4 +300,5 @@ class SMMailUtilJava {
 		bis.close();
 		return file;
 	}
+	*/
 }

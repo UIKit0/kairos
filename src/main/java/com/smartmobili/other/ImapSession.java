@@ -7,7 +7,7 @@
  *  Copyright 2012 Smartmobili. All rights reserved.
  */
 
-package com.smartmobili;
+package com.smartmobili.other;
 
 import java.util.Properties;
 

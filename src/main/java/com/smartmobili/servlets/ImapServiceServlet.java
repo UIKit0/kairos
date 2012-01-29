@@ -7,7 +7,7 @@
  *  Copyright 2012 Smartmobili. All rights reserved.
  */
 
-package com.smartmobili;
+package com.smartmobili.servlets;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -18,8 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.lang.reflect.Method;
-import java.util.Properties;
 import org.apache.log4j.*;
+
+import com.smartmobili.other.MailTextAndAttachmentsProcesser;
+import com.smartmobili.other.ImapSession;
 import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPMessage;
 
@@ -278,7 +280,7 @@ public class ImapServiceServlet extends HttpServlet {
 				mailContentInJson.put("subject", msg.getSubject());	
 				mailContentInJson.put("sentDate", (int)(msg.getSentDate().getTime() / 1000));
 				
-				SMMailUtilJava javaUtil = new SMMailUtilJava();
+				MailTextAndAttachmentsProcesser javaUtil = new MailTextAndAttachmentsProcesser();
 				mailContentInJson.put("body", javaUtil.getText(parameters.getString("folder"), 
 						parameters.getString("messageId"), msg)); // TODO: need to send to cappucino not just "text" but separated multipart content as is (so it will show images and text properly). See more comments by Oobe in SMMailUtilJava regarding background downloading of attachements (images).
 				

@@ -7,34 +7,28 @@
  *  Copyright 2012 Smartmobili. All rights reserved.
  */
 
-package com.smartmobili;
+package com.smartmobili.servlets;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 
-import javax.mail.Flags;
 import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Part;
 import javax.mail.Store;
-import javax.mail.internet.InternetAddress;
 import javax.mail.search.MessageIDTerm;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
+import com.smartmobili.other.MailTextAndAttachmentsProcesser;
+import com.smartmobili.other.ImapSession;
 import com.sun.image.codec.jpeg.JPEGCodec;
 import com.sun.image.codec.jpeg.JPEGEncodeParam;
 import com.sun.image.codec.jpeg.JPEGImageEncoder;
@@ -76,7 +70,7 @@ public class ImapAttachmentsServlet extends HttpServlet {
 			if (arr.length > 0)
 			{
 				IMAPMessage msg = (IMAPMessage)arr[0];
-				SMMailUtilJava util = new SMMailUtilJava();
+				MailTextAndAttachmentsProcesser util = new MailTextAndAttachmentsProcesser();
 				int size = Integer.parseInt(req.getParameter("fileSize"));
 				String fileName = req.getParameter("fileName");
 				Part part = util.getAttachmentPart(msg, size, fileName, false);
