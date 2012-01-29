@@ -86,11 +86,30 @@ class SMMailUtilJava {
 							usedForLinkToAttachment_imapEmailId, bp);
 				else if (bp.isMimeType("image/*")) {					
 					// TODO: perhaps need also pass contentID to link, but always when I tested it was null. Here is code: IMAPBodyPart ibp = (IMAPBodyPart)bp;String contentId = ibp.getContentID();
-					res = res + "<br>" + "<b>" + "<a href=\"" + 
+				
+					String imgCell = "<a href=\"" + 
 							generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-									usedForLinkToAttachment_imapEmailId, false) + 
-							"\">" + bp.getFileName() + " " + bp.getSize() + " bytes" + // TODO: convert to visible by human size e.g. K  MB and etc.
-							"</a>"+ "</b>" + " <a href=\"URL1\">View</a> <a href=\"URL2\">Download</a>";
+									usedForLinkToAttachment_imapEmailId, false) +
+									"\" target=\"_blank\""+">" +
+									"<img src=\"" + 
+									generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+											usedForLinkToAttachment_imapEmailId, true) + "\" />" +
+									"</a>";
+					String secondCell = "<b>" + bp.getFileName() + "</b>" + 
+							"<br>" + 
+							bp.getSize() + " bytes " + // TODO: convert to visible by human size e.g. K  MB and etc.		
+							
+							"<a href=\"" + 
+							generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+									usedForLinkToAttachment_imapEmailId, false) +
+									"\" target=\"_blank\""+">" + "View</a>" /*+ 
+							" <a href=\"" + 
+									generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+											usedForLinkToAttachment_imapEmailId, false) +"\">" + "Download</a>"*/;
+					res = res + "<br>" +
+							"<table border=\"0\" width=\"0%\"><tr><td width=\"0%\">" + 
+							imgCell + "</td>" +
+									"<td align=\"left\">" + secondCell + "</td></tr></table>";
 				} else if (bp.isMimeType("message/rfc822")) {
 					if (bp.getContent() instanceof IMAPNestedMessage) {
 						IMAPNestedMessage msg = (IMAPNestedMessage)bp.getContent();
@@ -110,7 +129,7 @@ class SMMailUtilJava {
 		} 
 		return null;
 	}
-	
+
 	/*
 	 * generateLinkToImage function. 
 	 * Author: Victor Kazarinov <oobe@kazarinov.biz>

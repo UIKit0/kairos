@@ -104,7 +104,7 @@ public class ImapAttachmentsServlet extends HttpServlet {
 										createThumbnail(byteArrWithImageContent, ThumbnailsWidth, ThumbnailsHeight, 70);
 									if (byteArrOfThumbnailImage != null) {
 										resp.setContentType(part.getContentType());
-										resp.setContentLength(size);
+										//resp.setContentLength(size);
 										
 										out.write(byteArrOfThumbnailImage);
 									}

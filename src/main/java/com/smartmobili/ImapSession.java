@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 
 public class ImapSession {
 		
-	final static boolean isDebuggingEnabled = true;
+	final static boolean isDebuggingEnabled = false;
 	final static String mailHost = "mail.smartmobili.com"; //"imap.gmail.com"; // TODO: in future mail host perhaps will be user-editable setting, so this constant will be removed and in-place somewhere settings will be used.
 	final static String imapProtocol = "imap"; // "imaps"; 
 
