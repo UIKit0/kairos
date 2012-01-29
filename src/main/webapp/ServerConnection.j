@@ -53,7 +53,7 @@
     _delegate = aDelegate;
     _didEndSelector = aSelector;
     
-    var request = [[CPURLRequest alloc] initWithURL:@"/postRequest"]; // TODO: need add random subparameter to avoid caching ?
+    var request = [[CPURLRequest alloc] initWithURL:@"postRequest"]; // TODO: need add random subparameter to avoid caching ?
     [request setHTTPMethod:@"POST"];
     
     var functionParametersInJSON = nil;
