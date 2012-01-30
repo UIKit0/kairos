@@ -68,7 +68,8 @@ public class ImapAttachmentsServlet extends HttpServlet {
 				MailTextAndAttachmentsProcesser util = new MailTextAndAttachmentsProcesser();
 				int size = Integer.parseInt(req.getParameter("fileSize"));
 				String fileName = req.getParameter("fileName");
-				Part part = util.getAttachmentPart(msg, size, fileName, false);
+				String contentIdOrEmptyNotNullString = req.getParameter("contentIdOrEmptyNotNullString");
+				Part part = util.getAttachmentPart(msg, size, fileName, contentIdOrEmptyNotNullString, false);
 				if (part == null)
 					out.print("Not found requested attachment in message"); // TODO: perhaps show image icon with erroror something else?
 				else {
