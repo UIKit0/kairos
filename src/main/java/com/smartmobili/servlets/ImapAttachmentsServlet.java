@@ -13,6 +13,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLDecoder;
 
@@ -29,12 +30,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.smartmobili.other.MailTextAndAttachmentsProcesser;
 import com.smartmobili.other.ImapSession;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import com.sun.mail.imap.IMAPMessage;
-import com.sun.mail.util.BASE64DecoderStream;
-
 
 @SuppressWarnings("serial")
 public class ImapAttachmentsServlet extends HttpServlet {
@@ -69,7 +64,7 @@ public class ImapAttachmentsServlet extends HttpServlet {
 			Message[] arr = folder.search(mIdTerm);
 			if (arr.length > 0)
 			{
-				IMAPMessage msg = (IMAPMessage)arr[0];
+				Message msg = arr[0]; //actually here is com.sun.mail.imap.IMAPMessage
 				MailTextAndAttachmentsProcesser util = new MailTextAndAttachmentsProcesser();
 				int size = Integer.parseInt(req.getParameter("fileSize"));
 				String fileName = req.getParameter("fileName");
@@ -181,7 +176,7 @@ public class ImapAttachmentsServlet extends HttpServlet {
 	private void writeBASE64PartContentIntoStream(
 			Part part, OutputStream writeToThisStream)
 			throws IOException, MessagingException {
-		BASE64DecoderStream stream = (BASE64DecoderStream)part.getContent();
+		InputStream stream = (InputStream)part.getContent(); // actually here is com.sun.mail.util.BASE64DecoderStream
 		byte[] buf = new byte[1024];	
 		
 		while(true) {
@@ -202,6 +197,10 @@ public class ImapAttachmentsServlet extends HttpServlet {
 	 * something will goes wrong
 	 * 
 	 * TODO: check this function for memory leaks.
+	 * TODO: many simultaneous requests for image attachments and conversion to create Thumbnail can overload
+	 * memory. Perhaps need to create pool and separate conversion thread. There will be a processing queue.
+	 * It will process images for DB and for requests (or everything will be trough DB). So, for example,
+	 * it will be configured to not convert more than 5 images simultaneously. 
 	 * 
 	 * Returns byte array of result thumbnail image or null if some error occured.
 	 */
@@ -255,13 +254,15 @@ public class ImapAttachmentsServlet extends HttpServlet {
 		try {
 			b = new ByteArrayOutputStream();
 
-			JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(b);
+			/*JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(b);
 			JPEGEncodeParam param = encoder
 					.getDefaultJPEGEncodeParam(thumbImage);
 			quality = Math.max(0, Math.min(quality, 100));
 			param.setQuality((float) quality / 100.0f, false);
 			encoder.setJPEGEncodeParam(param);
-			encoder.encode(thumbImage);
+			encoder.encode(thumbImage);*/
+			if (javax.imageio.ImageIO.write(thumbImage, "JPG", b) == false)
+				return null;
 
 			return b.toByteArray();
 		} catch (Exception ex) {

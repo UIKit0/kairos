@@ -22,7 +22,7 @@ import org.apache.log4j.*;
 
 import com.smartmobili.other.MailTextAndAttachmentsProcesser;
 import com.smartmobili.other.ImapSession;
-import com.sun.mail.imap.IMAPFolder;
+//import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPMessage;
 
 import net.sf.json.*;
@@ -153,7 +153,7 @@ public class ImapServiceServlet extends HttpServlet {
 													// and connected imapStore,
 													// or reconnect.
 		try {
-			IMAPFolder defaultFolder = (IMAPFolder)imapStore.getDefaultFolder();
+			Folder defaultFolder = imapStore.getDefaultFolder(); // Actually here is IMAPFolder
 			Folder[] imapFolders = defaultFolder.list(); 
 
 			// TODO: find way to speedup gettin attributes. Somekind of "fetch" for all folders from list. Perhaps "Fetch" command will work? If no, then split getting list of folder names and gettin folder attributes. And then in GUI first show list of folders, then show "loading" icon near each folder, and then load attributes for each folder in background, replacing loading icon with number of unread messages. Worse way: use some kind of cache, but it will show not actual information which can confuse user, and still we need show progress icon and reload attributes in background. So better way to not use cache.
