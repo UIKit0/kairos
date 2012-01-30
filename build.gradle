@@ -32,7 +32,9 @@ dependencies {
     compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4', classifier: 'jdk15'
 }
 
-
+war {
+    exclude '.xCodeSupport'
+}
 
 /*sourceSets {
     main {
