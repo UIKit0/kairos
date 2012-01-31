@@ -203,12 +203,16 @@ public class ImapServiceServlet extends HttpServlet {
 		    // we access it (note that this is probably the reason why we can not
 		    // refactor the getting into teh messagesInFolder function)
 			
-			final int from = 1 + messagesCountPerPage * (parameters.getInt("pageToLoad") - 1);
+		    int fromT = 1 + messagesCountPerPage * (parameters.getInt("pageToLoad") - 1);
 			
 			// TODO: what if will be requested page which not exists at IMAP, so from will be greater that messages count?
-		    int to = from + messagesCountPerPage;
-		    if (to > folder.getMessageCount())
-		    	to = folder.getMessageCount();
+		    int toT = fromT + messagesCountPerPage - 1;
+		    if (toT > folder.getMessageCount())
+		    	toT = folder.getMessageCount();
+		    
+		    // inverse "from" and "to" to get reverse order
+		    final int to = folder.getMessageCount() - fromT+1;
+		    final int from = folder.getMessageCount() - toT+1;
 			
 		    final Message[] messagesArr = folder.getMessages(from, to);
 		    	      FetchProfile fp = new FetchProfile();
@@ -226,7 +230,7 @@ public class ImapServiceServlet extends HttpServlet {
 				messageHeaderAsJson.put("subject", imapMsg.getSubject());			
 				messageHeaderAsJson.put("sentDate", (int)(imapMsg.getSentDate().getTime() / 1000));
 				messageHeaderAsJson.put("isSeen", imapMsg.isSet(Flags.Flag.SEEN));
-				jsonArrayOfMessagesHeaders.add(messageHeaderAsJson);
+				jsonArrayOfMessagesHeaders.add(0, messageHeaderAsJson); // inserting to begin of list to get reverse order of mails (from new to old).
 			}
 			
 			JSONObject result = new JSONObject();
