@@ -26,7 +26,9 @@ dependencies {
             'org.mortbay.jetty:jetty-util:6.1.22', 
             'org.mortbay.jetty:jetty-management:6.1.22',
             'log4j:log4j:1.2.16',
-            'javax.mail:mail:1.4.4'
+            'javax.mail:mail:1.4.4',
+            'commons-fileupload:commons-fileupload:1.2',
+            'commons-io:commons-io:2.1'
             //'net.sf.json-lib:json-lib:2.4'
     providedCompile 'javax.servlet:servlet-api:2.5' //, 'org.eclipse.jetty:jetty-websocket:7.4.4.v20110707'
     compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4', classifier: 'jdk15'

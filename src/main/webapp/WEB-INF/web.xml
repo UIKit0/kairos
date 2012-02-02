@@ -16,6 +16,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	<servlet-name>KairosImapAttachmentsServlet</servlet-name>
 	<servlet-class>com.smartmobili.servlets.ImapAttachmentsServlet</servlet-class>
 </servlet>
+<servlet>
+	<servlet-name>UploadAttachmentServlet</servlet-name>
+	<servlet-class>com.smartmobili.servlets.UploadAttachmentServlet</servlet-class>
+</servlet>
 
 <servlet-mapping>
 	<servlet-name>KairosImapServiceServlet</servlet-name>
@@ -25,5 +29,10 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
 	<servlet-name>KairosImapAttachmentsServlet</servlet-name>
 	<url-pattern>/getAttachment</url-pattern>
 </servlet-mapping>
+<servlet-mapping>
+	<servlet-name>UploadAttachmentServlet</servlet-name>
+	<url-pattern>/uploadAttachment</url-pattern>
+</servlet-mapping>
+
 
 </web-app>
