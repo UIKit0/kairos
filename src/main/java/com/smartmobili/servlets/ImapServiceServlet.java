@@ -418,4 +418,43 @@ public class ImapServiceServlet extends HttpServlet {
 		}
 		return result;
 	}
+	
+	/*
+	 * Return new events from server to client such as "changed list of visible headers with folders
+	 * list and unread messages" (this is UNDONE yet). 
+	 * Other thing is check if session is still valid (see TODOs bellow. Currently it works by checking 
+	 * IMAP credentials from imap server (this is bad, because it will connect to server often for this).
+	 */
+	public JSONObject getEventsAndTestSessionValidSoKeepAlive(JSONObject parameters, HttpSession httpSession) throws MessagingException  {
+		// TODO: // UNDONE: this is temporary solution. It should be replaced to keep IMAP connection alive.
+		// !!!!!!!!!!Currently it re-connects each 3 seconds and this is bad!!!!!!!!!!
+		// How it should work (again, because described in this file several times in TODOs):
+		// It should get imap session (saved once at authenticate) and re-use it. 
+		// Here we SHOULD check if "saved imap" is exists in session. If exists, check if it connected. 
+		// If all fine, return OK. If imap connection is not exists - means that session is ended its life in 
+		// keep-alive cycle so all variables reset, then return NOT OK means that need to re-authenticate. 
+		// If session is exists but offline - remote/close it and re-authenticate.
+		//
+		// The one thing which is a little hard - there is need think out when and who will close imap connection.
+		// Especially if session is ended its life. 
+		Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
+																// and connected imapStore,
+																// or reconnect.
+
+		// If ImapStore is null, this means that saved in httpSession IMAP credentaials is invalid or NULL.
+		JSONObject result = new JSONObject();
+		if (imapStore != null) {
+			imapStore.close();
+			result.put("credentialsIsValidInSession", true);
+		}
+		else {
+			result.put("credentialsIsValidInSession", false); 
+			// This means that client (Cappuccino) should re-authenticate. It
+			// should first try silently do this, and if old credentials is
+			// invalid too, then reload app asking user to re-enter login and
+			// password (or just show authentication dialog).
+		}
+
+		return result;
+	}
 }

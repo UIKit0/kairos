@@ -21,6 +21,7 @@
 @import "../Views/SMPagerView.j"
 @import "../Controllers/HNAuthController.j"
 @import "../Categories/CPDate+Formatting.j"
+@import "../EventsFromServerReceiver.j"
 
 SMEmailTableViewRowHeightParallelView = 40;
 SMEmailTableViewRowHeightTraditionalView = 23;
@@ -78,6 +79,10 @@ var IsReadImage,
     // This should be moved to the App Controller
     CPString                displayedViewKey @accessors;
     @outlet CPView          logoView;
+    
+    EventsFromServerReceiver    _eventsFromServerReceiver;
+    var _connectionErrorWholeScreenWindow;
+    var _connectionErrorFloatingWindow;
 }
 
 + (void)initialize
@@ -209,6 +214,14 @@ var IsReadImage,
 
         [self setMailAccount:[SMMailAccount new]];
         [mailAccount load];
+        
+        // TODO: when COMET will be used perhaps _eventsFromServerReceiver should connect to server even before login? Or not.
+        _eventsFromServerReceiver = [[EventsFromServerReceiver alloc]
+                                     initWithAuthenticationController:authenticationController
+                                     withDelegate:nil 
+                                     withEventOccurredSelector: nil
+                                     withMailController:self];
+        [_eventsFromServerReceiver start];
     }
     [self showWindow:sender];
 }
@@ -1012,6 +1025,67 @@ var IsReadImage,
     [sender setDelegate:nil];
     [sender resizeSubviewsWithOldSize:oldSize];
     [sender setDelegate:self];
+}
+
+#pragma mark -
+#pragma mark Other
+
+- (void)setErrorInConnectionFloatingWindowVisible:(bool)visible
+{
+    if (visible == true)
+    {
+        if (!_connectionErrorWholeScreenWindow)
+        {
+            // This is invisible window in whole screen, to avoid user clicking on components of main app while connections is lost.
+            _connectionErrorWholeScreenWindow = [[CPWindow alloc]
+                     initWithContentRect:CGRectMakeZero() 
+                     styleMask:CPBorderlessBridgeWindowMask],
+            contentView = [_connectionErrorWholeScreenWindow contentView];
+    
+            [_connectionErrorWholeScreenWindow orderFront:self];
+    
+            //  [contentView setBackgroundColor:[CPColor blackColor]];
+    
+            _connectionErrorFloatingWindow = [[CPPanel alloc] 
+                    initWithContentRect:CGRectMake(0, 0, 225, 50)
+                    styleMask:CPHUDBackgroundWindowMask];
+    
+            [_connectionErrorFloatingWindow setFloatingPanel:NO];
+    
+            [_connectionErrorFloatingWindow orderFront:self];
+    
+            [_connectionErrorFloatingWindow setTitle:"Connection error"];
+            [_connectionErrorFloatingWindow center];
+    
+            var panelContentView = [_connectionErrorFloatingWindow contentView];
+            var scaleStartLabel = [CPTextField labelWithTitle:"Trying to reconnect..."];
+            // TODO: perhaps add seconds counting (or connections trying count) to show user that it really trying. Also ajax-loader icon will be usefull.
+            [scaleStartLabel setFrameOrigin:CGPointMake(45, 10)];
+            [scaleStartLabel setTextColor:[CPColor grayColor]];
+        
+            [scaleStartLabel sizeToFit];
+            [panelContentView addSubview:scaleStartLabel];
+        }
+        else
+        { 
+             if([_connectionErrorWholeScreenWindow isVisible] == false)
+             {
+                 [_connectionErrorWholeScreenWindow orderFront:self];
+                 [_connectionErrorFloatingWindow orderFront:self];
+             }
+        }
+    }
+    else
+    {
+        if (_connectionErrorWholeScreenWindow)
+        {
+            if([_connectionErrorWholeScreenWindow isVisible])
+            {
+                [_connectionErrorWholeScreenWindow close];
+                [_connectionErrorFloatingWindow close];
+            }
+        }
+    }
 }
 
 @end

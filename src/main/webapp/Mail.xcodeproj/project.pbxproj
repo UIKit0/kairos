@@ -22,7 +22,8 @@
 
 /* Begin PBXFileReference section */
 		0146B0E314BBFD7E0020764E /* MailSourceViewController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = MailSourceViewController.j; path = Controllers/MailSourceViewController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		01A0970214C9E9F800948818 /* ServerConnection.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; path = ServerConnection.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		01A08D7314D84B02000D35C8 /* EventsFromServerReceiver.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; path = EventsFromServerReceiver.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		01A9208E14D88FB700829D17 /* ServerConnection.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; path = ServerConnection.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		01BA4EBC14BC038B00CD27F6 /* SMMailAccount.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = SMMailAccount.j; path = Models/SMMailAccount.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		01D1A56A14C0B368007E19BE /* SMPagerView.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = SMPagerView.j; path = Views/SMPagerView.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2422B4C113DF3A3B0095B5A5 /* AboutPanelController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = AboutPanelController.j; path = Controllers/AboutPanelController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -146,7 +147,8 @@
 		64200DB90FD42540005D41CE /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				01A0970214C9E9F800948818 /* ServerConnection.j */,
+				01A9208E14D88FB700829D17 /* ServerConnection.j */,
+				01A08D7314D84B02000D35C8 /* EventsFromServerReceiver.j */,
 				64200A4D0FD4250F005D41CE /* AppController.j */,
 				B058F3241322D6B1002DE6C0 /* TNLocalizationCenter.j */,
 				B058F3C41322DB1D002DE6C0 /* language_registry.js */,

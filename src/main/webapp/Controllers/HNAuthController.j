@@ -22,6 +22,9 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
 
 @implementation HNAuthController : CPObject
 {
+    CPString    lastUsedUserName @accessors;
+    CPString    lastUsedPassword @accessors;
+    
     CPString    username  @accessors;
     CPString    firstName @accessors;
     CPString    password  @accessors;
@@ -102,6 +105,8 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
 
 - (void)authenticateWithUsername:(CPString)userName password:(CPString)password
 {
+    lastUsedUserName = userName;
+    lastUsedPassword = password;
     var email = [username lowercaseString],
     serverConnection = [[ServerConnection alloc] init];
 
