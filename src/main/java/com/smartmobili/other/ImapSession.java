@@ -37,7 +37,7 @@ public class ImapSession {
 			 * imapConnectionTimeout)
 			 */
 
-			final Session imapSession = Session.getDefaultInstance(props);
+			final Session imapSession = Session.getInstance(props); // TODO: reuse imapSession (opened and connected) from httpSession.
 			imapSession.setDebug(isDebuggingEnabled);
 			store = imapSession.getStore(imapProtocol);
 			store.connect(
