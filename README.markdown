@@ -11,6 +11,7 @@ The following prerequisites are necessary to get started :
 * Scala >= 2.9.1
 * Sbt(Scala Build Tool) >= 0.11.x
 * Cappuccino >= 0.9.5
+* mongodb >= 2.0.2
 * IntelliJ IDEA (Optional)
 
 1) Java 
@@ -76,7 +77,11 @@ and follow the installer instructions.
 At the end of install, please add cappuccino to your shell path :  
     export PATH=/usr/local/narwhal/bin:${PATH}  
 
-5) IntelliJ Idea  
+5) MongoDB
+Download, install and run mongodb with default configuration. Check that it is working (run "mongo" client from console and ensure that it successfully can connect to localhost).
+No need to create and pre-fill DB collections and etc, later when you will start and use server part of kairos, it will create all needed data automatically on-demand in mongo DB. So default configuration of mongodb is enough to begin.
+
+6) IntelliJ Idea  
 Download and install.  
 Add install location to your path :  
     #IntelliJ  

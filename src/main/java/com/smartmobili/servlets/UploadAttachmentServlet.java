@@ -17,6 +17,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
  
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -28,6 +29,10 @@ import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import com.mongodb.DB;
+import com.mongodb.Mongo;
+import com.mongodb.MongoException;
  
 @SuppressWarnings("serial")
 public class UploadAttachmentServlet extends HttpServlet {
@@ -41,6 +46,19 @@ public class UploadAttachmentServlet extends HttpServlet {
 		if(!destinationDir.isDirectory()) {
 			throw new ServletException(DESTINATION_DIR_PATH+" is not a directory");
 		}
+		
+		Mongo m = null;
+		try {
+			m = new Mongo( "localhost" );
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+			throw new ServletException("Error acessing DB. Err: " + e.toString());
+		} catch (MongoException e) {
+			e.printStackTrace();
+			throw new ServletException("Error acessing DB. Err: " + e.toString());
+		}
+		
+		DB db = m.getDB( "mailComposingAttachmentsDb" );
 	}
  
 	protected void doPost(HttpServletRequest request,
