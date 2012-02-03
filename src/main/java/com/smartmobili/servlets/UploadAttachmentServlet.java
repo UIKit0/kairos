@@ -56,6 +56,7 @@ public class UploadAttachmentServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		FileOutputStream fos = null;
 		try {
 			//while (iter.hasNext()) {
 				FileItemStream item = iter.next();
@@ -63,7 +64,7 @@ public class UploadAttachmentServlet extends HttpServlet {
 				InputStream streamOfFile = item.openStream();
 
 				File file = new File(destinationDir, fileName);
-				FileOutputStream fos = new FileOutputStream(file);
+				fos = new FileOutputStream(file);
 				byte[] buf = new byte[1024];
 				while (true) {
 					int j = streamOfFile.read(buf);
@@ -71,12 +72,15 @@ public class UploadAttachmentServlet extends HttpServlet {
 						break;
 					fos.write(buf, 0, j);
 				}
-				fos.close();
 				System.out.println("Received file " + fileName);
 			//}
 		} catch (FileUploadException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		finally {
+			if (fos != null)
+				fos.close();
 		}
 
 		PrintWriter out = response.getWriter();
