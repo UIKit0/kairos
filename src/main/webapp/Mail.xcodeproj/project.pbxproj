@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXFileReference section */
+		013FA08214DB4BE900C9E65D /* FileUpload.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = FileUpload.j; path = Components/FileUpload.j; sourceTree = "<group>"; };
 		0146B0E314BBFD7E0020764E /* MailSourceViewController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = MailSourceViewController.j; path = Controllers/MailSourceViewController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		01A08D7314D84B02000D35C8 /* EventsFromServerReceiver.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; path = EventsFromServerReceiver.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		01A9208E14D88FB700829D17 /* ServerConnection.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; path = ServerConnection.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -123,6 +124,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		013FA08114DB4BD400C9E65D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				013FA08214DB4BE900C9E65D /* FileUpload.j */,
+			);
+			name = Components;
+			sourceTree = "<group>";
+		};
 		64200A3A0FD424DD005D41CE = {
 			isa = PBXGroup;
 			children = (
@@ -295,6 +304,7 @@
 		BFB90FA413831EFD00F049CA /* Client */ = {
 			isa = PBXGroup;
 			children = (
+				013FA08114DB4BD400C9E65D /* Components */,
 				24B6ACA813B900D100709912 /* Resources */,
 				641D44E00FD437FB00EACBFF /* Frameworks */,
 				64200A470FD4250F005D41CE /* Resources */,

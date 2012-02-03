@@ -8,6 +8,7 @@
 
 @import <AppKit/AppKit.j>
 @import <Foundation/Foundation.j>
+@import "../Components/FileUpload.j" // UploadButton component.
 
 
 
@@ -19,6 +20,7 @@ var CPAlertSaveAsDraft							= 0,
 @implementation ComposeController: CPWindowController
 {
     @outlet CPWindow		theWindow;
+    @outlet id		customView1;
 //	@outlet CPWebView		webView;
 
 //	id						_prevDelegate;
@@ -30,7 +32,25 @@ var CPAlertSaveAsDraft							= 0,
 {
 	[theWindow center];
 
-	//[CPApp runModalForWindow:theWindow];
+	// TODO: this is not working (strange). We need modal window, but this making windows non-respondable:
+    // [CPApp runModalForWindow:theWindow];
+    
+    //var contentView = [theWindow contentView];
+  
+    var urlString = "http://127.0.0.1:8080/uploadAttachment";        
+    
+    if (customView1)
+    {
+        var customView1Frame = customView1._bounds.size;  //CGFrame  
+        var fileUploadButton = [[UploadButton alloc] initWithFrame:CGRectMake(0, 0, customView1Frame.width, customView1Frame.height)];
+        [fileUploadButton setTitle:"Upload File1"];
+        [fileUploadButton setBordered:YES];
+        [fileUploadButton allowsMultipleFiles:YES];
+        [fileUploadButton setURL:urlString];
+        [fileUploadButton setDelegate:self];
+    
+        [customView1 addSubview:fileUploadButton];
+    }
 }
 
 
