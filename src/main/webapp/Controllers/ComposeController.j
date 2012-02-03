@@ -21,12 +21,16 @@ var CPAlertSaveAsDraft							= 0,
 {
     @outlet CPWindow		theWindow;
     @outlet id		customView1;
+    TextDisplay statusDisplay;
 //	@outlet CPWebView		webView;
 
 //	id						_prevDelegate;
 //	Imap					_imap;
 	//CPString				_messageID;
 }
+
+#pragma mark -
+#pragma mark Window handlers
 
 - (void) awakeFromCib
 {
@@ -35,7 +39,7 @@ var CPAlertSaveAsDraft							= 0,
 	// TODO: this is not working (strange). We need modal window, but this making windows non-respondable:
     // [CPApp runModalForWindow:theWindow];
     
-    //var contentView = [theWindow contentView];
+    var contentView = [theWindow contentView];
   
     var urlString = "http://127.0.0.1:8080/uploadAttachment";        
     
@@ -50,33 +54,11 @@ var CPAlertSaveAsDraft							= 0,
         [fileUploadButton setDelegate:self];
     
         [customView1 addSubview:fileUploadButton];
+        
+        statusDisplay = [[TextDisplay alloc] initWithFrame:CGRectMake(10, 180, 500, 100)];
+        [contentView addSubview:statusDisplay];
     }
 }
-
-
-- (void) gotMailContent:(Imap) aImap
-{
-	CPLog.trace(@"ComposeController - gotMailContent");
-	/* we restore the main window as a delaget for the imap object */
-	_imap.delegate = _prevDelegate;
-
-	/* we display email content */
-	[webView loadHTMLString:[[CPString alloc] initWithFormat:@"<html><body style='font-family: Helvetica, Verdana; font-size: 12px;'>%@</body></html>", aImap.mailContent.HTMLBody]];
-}
-
-
-- (void) setImap:(CPImap)aImap prevDelegate:(id)delegate
-{
-	_prevDelegate = delegate;
-	_imap = aImap;
-}
-
-
-- (void) setMessageID:(CPString)messageID
-{
-	_messageID = messageID;
-}
-
 
 -(BOOL)windowShouldClose:(id)window;
 {
@@ -104,8 +86,101 @@ var CPAlertSaveAsDraft							= 0,
 	}
 }
 
+#pragma mark -
+#pragma mark Actions
+
 - (IBAction)testAction1:(id)sender
 {
     alert("asdf");
 }
+
+#pragma mark -
+#pragma mark UploadButton Handlers
+
+-(void) uploadButton:(UploadButton)button didChangeSelection:(CPArray)selection
+{
+    [statusDisplay clearDisplay];
+    [statusDisplay appendString:"Selection has been made: " + selection];
+    
+    [button submit];
+}
+
+-(void) uploadButton:(UploadButton)button didFailWithError:(CPString)anError
+{
+    [statusDisplay appendString:"Upload failed with this error: " + anError];
+}
+
+-(void) uploadButton:(UploadButton)button didFinishUploadWithData:(CPString)response
+{
+    [statusDisplay appendString:"Upload finished with this response: " + response];
+	alert("finished");
+    [button resetSelection];
+}
+
+-(void) uploadButtonDidBeginUpload:(UploadButton)button
+{
+    [statusDisplay appendString:"Upload has begun with selection: " + [button selection]];
+}
+
+
+#pragma mark -
+#pragma mark Old
+
+//- (void) gotMailContent:(Imap) aImap
+//{
+//	CPLog.trace(@"ComposeController - gotMailContent");
+//	/* we restore the main window as a delaget for the imap object */
+//	_imap.delegate = _prevDelegate;
+//
+//	/* we display email content */
+//	[webView loadHTMLString:[[CPString alloc] initWithFormat:@"<html><body style='font-family: Helvetica, Verdana; font-size: 12px;'>%@</body></html>", aImap.mailContent.HTMLBody]];
+//}
+/*
+ 
+ - (void) setImap:(CPImap)aImap prevDelegate:(id)delegate
+ {
+ _prevDelegate = delegate;
+ _imap = aImap;
+ }
+ 
+ 
+ - (void) setMessageID:(CPString)messageID
+ {
+ _messageID = messageID;
+ }*/
+
+@end
+
+#pragma mark -
+#pragma mark TextDisplay class implementation
+
+@implementation TextDisplay: CPWebView
+{
+    CPString currentString;
+}
+
+- (id)initWithFrame:(CPRect)aFrame
+{
+    self = [super initWithFrame:aFrame];
+    if(self)
+    {
+        currentString = "";
+    }
+    
+    return self;
+}
+
+- (void)appendString:(CPString)aString
+{
+    currentString = currentString + "<pre>" + aString + "</pre>";
+    [self loadHTMLString: currentString];
+}
+
+
+-(void)clearDisplay
+{
+    currentString = "";
+    [self loadHTMLString:""];
+}
+
 @end
