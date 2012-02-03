@@ -19,10 +19,10 @@ var CPAlertSaveAsDraft							= 0,
 @implementation ComposeController: CPWindowController
 {
     @outlet CPWindow		theWindow;
-	@outlet CPWebView		webView;
+//	@outlet CPWebView		webView;
 
-	id						_prevDelegate;
-	Imap					_imap;
+//	id						_prevDelegate;
+//	Imap					_imap;
 	//CPString				_messageID;
 }
 
@@ -30,11 +30,7 @@ var CPAlertSaveAsDraft							= 0,
 {
 	[theWindow center];
 
-
-
-
-
-	[CPApp runModalForWindow:theWindow];
+	//[CPApp runModalForWindow:theWindow];
 }
 
 
@@ -88,4 +84,8 @@ var CPAlertSaveAsDraft							= 0,
 	}
 }
 
+- (IBAction)testAction1:(id)sender
+{
+    alert("asdf");
+}
 @end

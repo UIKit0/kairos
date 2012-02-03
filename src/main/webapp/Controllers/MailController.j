@@ -23,6 +23,7 @@
 @import "../Categories/CPDate+Formatting.j"
 @import "../EventsFromServerReceiver.j"
 
+
 SMEmailTableViewRowHeightParallelView = 40;
 SMEmailTableViewRowHeightTraditionalView = 23;
 SMSubjectTableColumnWidthParallelView = 440;
@@ -330,7 +331,11 @@ var IsReadImage,
 #pragma mark Actions
 - (IBAction)composeMail:(id)sender
 {
-    var indexesSelectedEmail = emailsHeaderView._selectedRowIndexes;
+     _composeController = [[ComposeController alloc] init];
+        var cib = [[CPCib alloc] initWithContentsOfURL:[[CPBundle mainBundle] pathForResource:@"Compose.cib"]];
+        [cib instantiateCibWithExternalNameTable:[CPDictionary dictionaryWithObject:_composeController forKey:CPCibOwner]];
+    
+    /*var indexesSelectedEmail = emailsHeaderView._selectedRowIndexes;
     if ([indexesSelectedEmail count] == 1)
     {
         var row = [emailsHeaderView selectedRow],
@@ -342,7 +347,7 @@ var IsReadImage,
         _composeController = [[ComposeController alloc] init];
         var cib = [[CPCib alloc] initWithContentsOfURL:[[CPBundle mainBundle] pathForResource:@"Compose.cib"]];
         [cib instantiateCibWithExternalNameTable:[CPDictionary dictionaryWithObject:_composeController forKey:CPCibOwner]];
-    }
+    }*/
 }
 
 - (void)setDisplayedViewKey:(CPString)viewOption
