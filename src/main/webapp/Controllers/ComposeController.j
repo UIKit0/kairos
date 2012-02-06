@@ -27,6 +27,7 @@ var CPAlertSaveAsDraft							= 0,
 //	id						_prevDelegate;
 //	Imap					_imap;
 	//CPString				_messageID;
+    ServerConnection    _serverConnection;
 }
 
 #pragma mark -
@@ -41,7 +42,7 @@ var CPAlertSaveAsDraft							= 0,
     
     var contentView = [theWindow contentView];
   
-    var urlString = "http://127.0.0.1:8080/uploadAttachment";        
+    var urlString = "http://localhost:8080/uploadAttachment";
     
     if (customView1)
     {
@@ -58,6 +59,8 @@ var CPAlertSaveAsDraft							= 0,
         statusDisplay = [[TextDisplay alloc] initWithFrame:CGRectMake(10, 180, 500, 100)];
         [contentView addSubview:statusDisplay];
     }
+    
+    _serverConnection = [[ServerConnection alloc] init];
 }
 
 -(BOOL)windowShouldClose:(id)window;
@@ -99,29 +102,57 @@ var CPAlertSaveAsDraft							= 0,
 
 -(void) uploadButton:(UploadButton)button didChangeSelection:(CPArray)selection
 {
-    [statusDisplay clearDisplay];
-    [statusDisplay appendString:"Selection has been made: " + selection];
-    
     [button submit];
 }
 
 -(void) uploadButton:(UploadButton)button didFailWithError:(CPString)anError
 {
-    [statusDisplay appendString:"Upload failed with this error: " + anError];
+    alert("Upload failed with this error: " + anError);
+    [self reDownloadListOfAttachments];
+     // TODO: hide loading indicator (e.g. ajax-loader.gif)
 }
 
 -(void) uploadButton:(UploadButton)button didFinishUploadWithData:(CPString)response
 {
-    [statusDisplay appendString:"Upload finished with this response: " + response];
-	alert("finished");
     [button resetSelection];
+    [self reDownloadListOfAttachments];
+    // TODO: hide loading indicator (e.g. ajax-loader.gif)
 }
 
 -(void) uploadButtonDidBeginUpload:(UploadButton)button
 {
-    [statusDisplay appendString:"Upload has begun with selection: " + [button selection]];
+    // TODO: show loading indicator (e.g. ajax-loader.gif)
 }
 
+
+-(void) reDownloadListOfAttachments
+{
+   [_serverConnection callRemoteFunction:@"currentlyComposingEmailGetListOfAttachments"
+           withFunctionParametersAsObject:nil
+                                 delegate:self
+                           didEndSelector:@selector(reDownloadListOfAttachmentsDidReceived:withParametersObject:)
+                                    error:nil];
+}
+
+- (void)reDownloadListOfAttachmentsDidReceived:(id)sender withParametersObject:parametersObject 
+{
+    // TODO: UNDONE: replace this with GUI showing list of attachments, where each attachment clickable to view it. (it should go to link of attachment to view/download it).
+    [statusDisplay clearDisplay];
+    [statusDisplay appendString:@"List of attachments"];
+    for(var i = 0; i < parametersObject.listOfAttachments.length; i++)
+    {
+        [statusDisplay appendString:parametersObject.listOfAttachments[i].fileName + " size: " + parametersObject.listOfAttachments[i].sizeInBytes];
+        
+        // UNDONE  NOTE: bellow notes for future, not yet implemented at server side!!
+        // TODO: to create downloadable link, use parametersObject.listOfAttachments[i].webServerAttachmentId field as "webServerAttachmentId" parameter in link GetComposingAttachment?webServerAttachmentId=webServerAttachmentId, e.g. http://anHost.com/GetComposingAttachment?webServerAttachmentId=123456asdf where in example webServerAttachmentId has value 123456asdf. 
+        // Additional URL parameters &mode=view or &mode=download.  When view it will return usual attachment, when download it will respond to download it. (Better to test to understand what I mean).
+        // Another additional URL parameter &getThumbnail=true
+        // Available fields in listOfAttachments[i] object:
+        // 1. fileName (String)
+        // 2. sizeInBytes (long)
+        // 3. webServerAttachmentId (String)
+    }
+}
 
 #pragma mark -
 #pragma mark Old

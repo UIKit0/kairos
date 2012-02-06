@@ -24,21 +24,30 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.bson.types.ObjectId;
 
 import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
+import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSInputFile;
+import com.smartmobili.httpSessionAttributes.CurrentComposingEmailProperties;
  
 @SuppressWarnings("serial")
 public class UploadAttachmentServlet extends HttpServlet {
 	private static final String DESTINATION_DIR_PATH ="/tmp";
 	private File destinationDir;
  
+	DB db;
+	
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		
@@ -49,7 +58,7 @@ public class UploadAttachmentServlet extends HttpServlet {
 		
 		Mongo m = null;
 		try {
-			m = new Mongo( "localhost" );
+			m = new Mongo( "127.0.0.1" );
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			throw new ServletException("Error acessing DB. Err: " + e.toString());
@@ -58,11 +67,14 @@ public class UploadAttachmentServlet extends HttpServlet {
 			throw new ServletException("Error acessing DB. Err: " + e.toString());
 		}
 		
-		DB db = m.getDB( "mailComposingAttachmentsDb" );
+		this.db = m.getDB( "mailComposingAttachmentsDb" );
 	}
  
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		// TODO: UNDONE: check if current session is valid (using saved IMAPsession?). It should not allow to send for not-authorized users!
+		HttpSession httpSession = request.getSession();
+		
 		// Create a new file upload handler
 		ServletFileUpload upload = new ServletFileUpload();
 
@@ -76,22 +88,27 @@ public class UploadAttachmentServlet extends HttpServlet {
 		}
 		FileOutputStream fos = null;
 		try {
-			//while (iter.hasNext()) {
-				FileItemStream item = iter.next();
-				String fileName = item.getName();
-				InputStream streamOfFile = item.openStream();
+			FileItemStream item = iter.next();
+			String fileName = item.getName();
 
-				File file = new File(destinationDir, fileName);
-				fos = new FileOutputStream(file);
-				byte[] buf = new byte[1024];
-				while (true) {
-					int j = streamOfFile.read(buf);
-					if (j < 0)
-						break;
-					fos.write(buf, 0, j);
-				}
-				System.out.println("Received file " + fileName);
-			//}
+			InputStream streamOfFile = item.openStream();
+
+			GridFS gfsFileAttachment = new GridFS(db, "attachmentsFiles");
+			GridFSInputFile gfsIf = gfsFileAttachment.createFile(streamOfFile);
+			gfsIf.setFilename(fileName);
+			gfsIf.save();
+			long fileSize = gfsIf.getLength();
+			ObjectId id = (ObjectId) gfsIf.getId();
+
+			CurrentComposingEmailProperties
+					.getFromHttpSessionOrCreateNewDefaultInIt(httpSession)
+					.newAttachmentAddedToTheDb(id, fileSize, fileName);
+
+			// TODO: think and make removing attachments not associated with any
+			// session (e.g. cleanup) somewhere (not here) in code of
+			// web-server!
+
+			System.out.println("Received file " + fileName);
 		} catch (FileUploadException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -105,6 +122,6 @@ public class UploadAttachmentServlet extends HttpServlet {
 		response.setContentType("text/plain");
 		out.println("File Upload OK");
 		out.println();
-		out.close();
+		//out.close();
 	}
 }

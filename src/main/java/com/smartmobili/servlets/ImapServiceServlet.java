@@ -18,8 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import org.apache.log4j.*;
 
+import com.smartmobili.httpSessionAttributes.CurrentComposingEmailProperties;
 import com.smartmobili.other.MailTextAndAttachmentsProcesser;
 import com.smartmobili.other.ImapSession;
 //import com.sun.mail.imap.IMAPFolder;
@@ -455,6 +457,34 @@ public class ImapServiceServlet extends HttpServlet {
 			// password (or just show authentication dialog).
 		}
 
+		return result;
+	}
+	
+	public JSONObject currentlyComposingEmailGetListOfAttachments(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
+		//Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
+		// and connected imapStore,
+		// or reconnect.
+
+		JSONObject result = new JSONObject();
+		
+		try {
+			CurrentComposingEmailProperties ccep = CurrentComposingEmailProperties.getFromHttpSessionOrCreateNewDefaultInIt(httpSession);
+			ArrayList<CurrentComposingEmailProperties.OneAttachmentProperty> listOfAttachemnts = 
+					ccep.getCopyOfListOfAttachments();
+			JSONArray jsonList = new JSONArray();
+			for(CurrentComposingEmailProperties.OneAttachmentProperty webServerAttachmentProperty : listOfAttachemnts)
+			{
+				JSON obj = net.sf.json.JSONSerializer.toJSON(webServerAttachmentProperty);
+				//Address a = InternetAddress.parse("127.0.0.2")[0];
+				jsonList.add(obj);
+			}
+			
+			result.put("listOfAttachments", jsonList);
+		} catch (Exception ex) {
+			log.info("Exception in currentlyComposingEmailGetListOfAttachments, details=" + ex.toString());
+			result.put("result",
+					"Error exception raised: Failed to create folder.");
+		} 
 		return result;
 	}
 }
