@@ -2,7 +2,7 @@
  *  ImapAttachmentsServlet
  *  Kairos Mail
  *
- *  Author: Victor Kazarinov <oobe@kzarinov.biz>
+ *  Author: Victor Kazarinov <oobe@kazarinov.biz>
  *
  *  Copyright 2012 Smartmobili. All rights reserved.
  */
