@@ -1,6 +1,15 @@
+/*
+ *  CurrentComposingEmailProperties
+ *  Kairos Mail
+ *
+ *  Author: Victor Kazarinov <oobe@kzarinov.biz>
+ *
+ *  Copyright 2012 Smartmobili. All rights reserved.
+ *  
+ */
+
 package com.smartmobili.httpSessionAttributes;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -12,11 +21,6 @@ import org.bson.types.ObjectId;
 public class CurrentComposingEmailProperties {
 	public class OneAttachmentProperty
 	{
-		/**
-		 * 
-		 */
-		//private static final long serialVersionUID = 1633908922694616566L;
-
 		public boolean thisAttachmentFromExistingImapMessage;
 		// id of attachment from imap
 		// UNDONE:
@@ -136,16 +140,11 @@ public class CurrentComposingEmailProperties {
 		}
 	}
 
-	// NOTE: elements is not copyied, only reference to it is used.
+	// NOTE: elements is not copied, only reference to it is used.
 	public ArrayList<OneAttachmentProperty> getCopyOfListOfAttachments() {
-		/*ArrayList<OneAttachmentProperty> res
-		synchronized (listOfAttachmentProperties_useSynchronized) {
-			for(OneAttachmentProperty oap : listOfAttachmentProperties_useSynchronized) {
-				
-			}
-		} */
 		@SuppressWarnings("unchecked")
-		ArrayList<OneAttachmentProperty> clone = (ArrayList<OneAttachmentProperty>)listOfAttachmentProperties_useSynchronized.clone();
+		ArrayList<OneAttachmentProperty> clone = 
+			(ArrayList<OneAttachmentProperty>)listOfAttachmentProperties_useSynchronized.clone();
 		return clone;
 	}
 }
