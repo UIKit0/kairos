@@ -539,5 +539,39 @@ public class ImapServiceServlet extends HttpServlet {
 			//		"Error exception raised: Failed to create folder.");
 		} 
 		return null;
+	}	
+	
+	public JSONObject currentlyComposingEmailDeleteAttachment(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
+		//Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
+		// and connected imapStore,
+		// or reconnect.
+
+		JSONObject result = new JSONObject();
+		
+		try {
+			
+			String webServerAttachmentIdToDelete = (String)parameters.get("webServerAttachmentId");
+			
+			CurrentComposingEmailProperties ccep = CurrentComposingEmailProperties.getFromHttpSessionOrCreateNewDefaultInIt(httpSession);
+			CurrentComposingEmailProperties.OneAttachmentProperty deletingAttachmentProperty =
+					ccep.getAttachmentProperty(webServerAttachmentIdToDelete);
+			boolean deleted = ccep.deleteAttachment(webServerAttachmentIdToDelete);
+			
+			// delete file from DB (it it is in DB).
+			if (deletingAttachmentProperty != null)
+				if (deletingAttachmentProperty.isThisAttachmentFromExistingImapMessage() == false) {
+					GridFS gfsFileAttachment = DbCommon.getGridFSforAttachmentsFiles(this.attachmentsDb);
+					gfsFileAttachment.remove(deletingAttachmentProperty.getDbAttachmentId());
+				}
+			
+			result.put("deletedWebServerAttachmentId", webServerAttachmentIdToDelete);
+			result.put("deletedSuccessfully", deleted);
+			result.put("error", "");
+		} catch (Exception ex) {
+			log.info("Exception in currentlyComposingEmailDeleteAttachment, details=" + ex.toString());
+			result.put("error",
+					"Error exception raised: " + ex.toString());
+		} 
+		return result;
 	}
 }
