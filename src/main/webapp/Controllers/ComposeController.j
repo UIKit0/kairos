@@ -61,6 +61,13 @@ var CPAlertSaveAsDraft							= 0,
     }
     
     _serverConnection = [[ServerConnection alloc] init];
+        
+    // Call this clear when starting to compose new email to clear. 
+    [_serverConnection callRemoteFunction:@"currentlyComposingEmailClearAll"
+           withFunctionParametersAsObject:nil
+                                 delegate:self
+                           didEndSelector:nil
+                                    error:nil];
 }
 
 -(BOOL)windowShouldClose:(id)window;

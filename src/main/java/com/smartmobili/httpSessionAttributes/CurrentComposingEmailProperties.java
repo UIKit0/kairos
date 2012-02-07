@@ -134,6 +134,10 @@ public class CurrentComposingEmailProperties {
 			res = (CurrentComposingEmailProperties) obj;
 		return res;
 	}
+	
+	public static void clearItFromSession(HttpSession httpSession) {
+		httpSession.removeAttribute("currentComposingEmail");
+	}
 
 	public void newAttachmentAddedToTheDb(ObjectId dbAttachmentId, long sizeInBytes, String fileName,
 			String contentType) {

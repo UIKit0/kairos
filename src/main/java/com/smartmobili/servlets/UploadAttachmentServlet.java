@@ -17,7 +17,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.net.UnknownHostException;
  
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -33,13 +32,10 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.bson.types.ObjectId;
 
 import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
-import com.mongodb.MongoException;
 import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSInputFile;
 import com.smartmobili.httpSessionAttributes.CurrentComposingEmailProperties;
+import com.smartmobili.other.DbCommon;
  
 @SuppressWarnings("serial")
 public class UploadAttachmentServlet extends HttpServlet {
@@ -56,18 +52,7 @@ public class UploadAttachmentServlet extends HttpServlet {
 			throw new ServletException(DESTINATION_DIR_PATH+" is not a directory");
 		}
 		
-		Mongo m = null;
-		try {
-			m = new Mongo( "127.0.0.1" );
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-			throw new ServletException("Error acessing DB. Err: " + e.toString());
-		} catch (MongoException e) {
-			e.printStackTrace();
-			throw new ServletException("Error acessing DB. Err: " + e.toString());
-		}
-		
-		this.db = m.getDB( "mailComposingAttachmentsDb" );
+		this.db = DbCommon.connectToAttachmentsDb();
 	}
  
 	protected void doPost(HttpServletRequest request,
@@ -94,7 +79,8 @@ public class UploadAttachmentServlet extends HttpServlet {
 			
 			InputStream streamOfFile = item.openStream();
 
-			GridFS gfsFileAttachment = new GridFS(db, "attachmentsFiles");
+			GridFS gfsFileAttachment = DbCommon.getGridFSforAttachmentsFiles(this.db);
+			
 			GridFSInputFile gfsIf = gfsFileAttachment.createFile(streamOfFile);
 			gfsIf.setFilename(fileName);
 			gfsIf.save();

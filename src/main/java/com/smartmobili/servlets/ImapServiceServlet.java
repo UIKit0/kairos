@@ -12,6 +12,8 @@ package com.smartmobili.servlets;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.search.MessageIDTerm;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,8 +22,12 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import org.apache.log4j.*;
+import org.bson.types.ObjectId;
 
+import com.mongodb.DB;
+import com.mongodb.gridfs.GridFS;
 import com.smartmobili.httpSessionAttributes.CurrentComposingEmailProperties;
+import com.smartmobili.other.DbCommon;
 import com.smartmobili.other.MailTextAndAttachmentsProcesser;
 import com.smartmobili.other.ImapSession;
 //import com.sun.mail.imap.IMAPFolder;
@@ -36,10 +42,19 @@ public class ImapServiceServlet extends HttpServlet {
 	final int SessionMaxInactiveInterval = 10*60;
 	
 	Logger log = Logger.getLogger(ImapServiceServlet.class);
+	
+	DB attachmentsDb;
+	
 /*	public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol)
     {
         return null;//new ChatWebSocket();
     }*/
+	
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+
+		this.attachmentsDb = DbCommon.connectToAttachmentsDb();
+	}
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
 		try {
@@ -89,8 +104,10 @@ public class ImapServiceServlet extends HttpServlet {
 			OutputStreamWriter osw = new OutputStreamWriter(
 					response.getOutputStream(), "UTF8");
 			writer = new PrintWriter(osw, true);
-			writer.print(res.toString());
-			writer.flush();
+			if (res != null) {
+				writer.print(res.toString());
+				writer.flush();
+			}
 		}
 		catch (Exception ex) {
 			log.error("Exception in doPost()", ex);
@@ -475,7 +492,6 @@ public class ImapServiceServlet extends HttpServlet {
 			for(CurrentComposingEmailProperties.OneAttachmentProperty webServerAttachmentProperty : listOfAttachemnts)
 			{
 				JSON obj = net.sf.json.JSONSerializer.toJSON(webServerAttachmentProperty);
-				//Address a = InternetAddress.parse("127.0.0.2")[0];
 				jsonList.add(obj);
 			}
 			
@@ -486,5 +502,42 @@ public class ImapServiceServlet extends HttpServlet {
 					"Error exception raised: Failed to create folder.");
 		} 
 		return result;
+	}
+	
+	/*
+	 * Removes CurrentComposingEmailProperties from session, clears DB and etc. This prepares all for
+	 * creation of new email (composing). Should be called by client before starting to compose new mail.
+	 */
+	public JSONObject currentlyComposingEmailClearAll(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
+		//Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
+		// and connected imapStore,
+		// or reconnect.
+
+		//JSONObject result = new JSONObject();
+		
+		try {
+			CurrentComposingEmailProperties ccep = CurrentComposingEmailProperties.getFromHttpSessionOrCreateNewDefaultInIt(httpSession);
+			ArrayList<CurrentComposingEmailProperties.OneAttachmentProperty> listOfAttachemnts = 
+					ccep.getCopyOfListOfAttachments();
+			
+			GridFS gfsFileAttachment = DbCommon.getGridFSforAttachmentsFiles(this.attachmentsDb);
+			
+			for(CurrentComposingEmailProperties.OneAttachmentProperty webServerAttachmentProperty : listOfAttachemnts)
+			{
+				if (webServerAttachmentProperty.isThisAttachmentFromExistingImapMessage() == false) {
+					ObjectId idOfDbAttachmentToDelete = webServerAttachmentProperty.getDbAttachmentId();
+					gfsFileAttachment.remove(idOfDbAttachmentToDelete);
+				}
+			}
+			
+			CurrentComposingEmailProperties.clearItFromSession(httpSession);
+			
+			//result.put("listOfAttachments", jsonList);
+		} catch (Exception ex) {
+			log.info("Exception in currentlyComposingEmailClearAll, details=" + ex.toString());
+			//result.put("result",
+			//		"Error exception raised: Failed to create folder.");
+		} 
+		return null;
 	}
 }
