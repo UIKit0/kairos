@@ -21,12 +21,19 @@ import org.bson.types.ObjectId;
 public class CurrentComposingEmailProperties {
 	public class OneAttachmentProperty
 	{
-		public boolean thisAttachmentFromExistingImapMessage;
+		private boolean thisAttachmentFromExistingImapMessage;
 		// id of attachment from imap
 		// UNDONE:
 		
 		// id of attachment in DB
-		public ObjectId dbAttachmentId;
+		private ObjectId dbAttachmentId;
+		
+		private String webServerAttachmentId;
+		
+		private String fileName;
+		private long sizeInBytes;
+		private String contentType;
+			
 		public boolean isThisAttachmentFromExistingImapMessage() {
 			return thisAttachmentFromExistingImapMessage;
 		}
@@ -60,7 +67,6 @@ public class CurrentComposingEmailProperties {
 			this.sizeInBytes = sizeInBytes;
 		}
 
-		public String webServerAttachmentId;
 		public String getWebServerAttachmentId() {
 			return webServerAttachmentId;
 		}
@@ -68,10 +74,14 @@ public class CurrentComposingEmailProperties {
 		public void setWebServerAttachmentId(String webServerAttachmentId) {
 			this.webServerAttachmentId = webServerAttachmentId;
 		}
+		
+		public String getContentType() {
+			return contentType;
+		}
 
-		public String fileName;
-
-		public long sizeInBytes;
+		public void setContentType(String contentType) {
+			this.contentType = contentType;
+		}
 	}
 	
 	boolean currentlyEditingAnExistingImapMessage;
@@ -125,7 +135,8 @@ public class CurrentComposingEmailProperties {
 		return res;
 	}
 
-	public void newAttachmentAddedToTheDb(ObjectId dbAttachmentId, long sizeInBytes, String fileName) {
+	public void newAttachmentAddedToTheDb(ObjectId dbAttachmentId, long sizeInBytes, String fileName,
+			String contentType) {
 		synchronized (listOfAttachmentProperties_useSynchronized) {
 			OneAttachmentProperty oap = new OneAttachmentProperty();
 			oap.thisAttachmentFromExistingImapMessage = false;
@@ -135,6 +146,7 @@ public class CurrentComposingEmailProperties {
 			
 			oap.sizeInBytes = sizeInBytes;
 			oap.fileName = fileName;
+			oap.contentType = contentType;
 			
 			listOfAttachmentProperties_useSynchronized.add(oap);
 		}

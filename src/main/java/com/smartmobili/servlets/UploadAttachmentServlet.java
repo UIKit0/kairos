@@ -90,7 +90,8 @@ public class UploadAttachmentServlet extends HttpServlet {
 		try {
 			FileItemStream item = iter.next();
 			String fileName = item.getName();
-
+			String contentType = item.getContentType();
+			
 			InputStream streamOfFile = item.openStream();
 
 			GridFS gfsFileAttachment = new GridFS(db, "attachmentsFiles");
@@ -102,7 +103,7 @@ public class UploadAttachmentServlet extends HttpServlet {
 
 			CurrentComposingEmailProperties
 					.getFromHttpSessionOrCreateNewDefaultInIt(httpSession)
-					.newAttachmentAddedToTheDb(id, fileSize, fileName);
+					.newAttachmentAddedToTheDb(id, fileSize, fileName, contentType);
 
 			// TODO: think and make removing attachments not associated with any
 			// session (e.g. cleanup) somewhere (not here) in code of

@@ -139,6 +139,7 @@ var CPAlertSaveAsDraft							= 0,
     // TODO: UNDONE: replace this with GUI showing list of attachments, where each attachment clickable to view it. (it should go to link of attachment to view/download it).
     [statusDisplay clearDisplay];
     [statusDisplay appendString:@"List of attachments"];
+
     for(var i = 0; i < parametersObject.listOfAttachments.length; i++)
     {
         [statusDisplay appendString:parametersObject.listOfAttachments[i].fileName + " size: " + parametersObject.listOfAttachments[i].sizeInBytes];
@@ -151,6 +152,7 @@ var CPAlertSaveAsDraft							= 0,
         // 1. fileName (String)
         // 2. sizeInBytes (long)
         // 3. webServerAttachmentId (String)
+        // 4. contentType (String)
     }
 }
 
