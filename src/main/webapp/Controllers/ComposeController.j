@@ -42,7 +42,7 @@ var CPAlertSaveAsDraft							= 0,
     
     var contentView = [theWindow contentView];
   
-    var urlString = "http://localhost:8080/uploadAttachment";
+    var urlString = "uploadAttachment"; //"http://localhost:8080/uploadAttachment"
     
     if (customView1)
     {
