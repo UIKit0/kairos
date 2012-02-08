@@ -150,13 +150,26 @@ var CPAlertSaveAsDraft							= 0,
     
     for(var i = 0; i < parametersObject.listOfAttachments.length; i++)
     {
-        [statusDisplay appendString:parametersObject.listOfAttachments[i].fileName + " size: " + parametersObject.listOfAttachments[i].sizeInBytes + " " + 
-         "webServerAttachmentId=" + parametersObject.listOfAttachments[i].webServerAttachmentId];
+        var link = [[CPString alloc] initWithString:@"<a href=\"" + 
+                    "GetComposingAttachment?webServerAttachmentId=" +
+                    parametersObject.listOfAttachments[i].webServerAttachmentId + 
+                    "&downloadMode=false\"" + " target=\"_blank\"" +
+                    ">View</a>" + " " + 
+                    "<a href=\"" + 
+                    "GetComposingAttachment?webServerAttachmentId=" +
+                    parametersObject.listOfAttachments[i].webServerAttachmentId + 
+                    "&downloadMode=true\"" + " target=\"_blank\"" +
+                    ">Download</a>"];
+        
+        [statusDisplay appendHtml:parametersObject.listOfAttachments[i].fileName + " size: " + parametersObject.listOfAttachments[i].sizeInBytes + 
+         //" " + "webServerAttachmentId=" + parametersObject.listOfAttachments[i].webServerAttachmentId + 
+         " " + link];
         
         // UNDONE  NOTE: bellow notes for future, not yet implemented at server side!!
         // TODO for GUI developer: to create downloadable link, use parametersObject.listOfAttachments[i].webServerAttachmentId field as "webServerAttachmentId" parameter in link GetComposingAttachment?webServerAttachmentId=webServerAttachmentId, e.g. http://anHost.com/GetComposingAttachment?webServerAttachmentId=123456asdf where in example webServerAttachmentId has value 123456asdf. 
-        // Additional URL parameters &mode=view or &mode=download.  When view it will return usual attachment, when download it will respond to download it. (Better to test to understand what I mean).
-        // Another additional URL parameter &getThumbnail=true
+        // Additional URL parameters &downloadMode=true When "false" it will return usual attachment, when "true" it will respond to download it (in Content-Disposition header in response will be "attachment" keyword).
+        // Another additional URL parameter &asThumbnail=true If "true" returned image will be small thumbnail (converted at server side). For files it will fail, will work only for images. (THINK: Perhaps in future it can return icons of files by file extension?)
+        // ---
         // Available fields in listOfAttachments[i] object:
         // 1. fileName (String)
         // 2. sizeInBytes (long)
@@ -245,6 +258,13 @@ var CPAlertSaveAsDraft							= 0,
     [self loadHTMLString: currentString];
 }
 
+- (void)appendHtml:(CPString)aString
+{
+    currentString = currentString  + "<br>" +  aString;
+    //[self loadHTMLString: currentString];
+    [self loadHTMLString:[[CPString alloc] initWithFormat:@"<html><head></head><body style='font-family: Helvetica, Verdana; font-size: 12px;'>%@%@</body></html>", currentString, ""]];
+
+}
 
 -(void)clearDisplay
 {
