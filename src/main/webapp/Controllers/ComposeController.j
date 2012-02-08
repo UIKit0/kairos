@@ -20,7 +20,8 @@ var CPAlertSaveAsDraft							= 0,
 @implementation ComposeController: CPWindowController
 {
     @outlet CPWindow		theWindow;
-    @outlet id		customView1;
+    @outlet id              customView1;
+    @outlet id		textField1; //CPTextField
     TextDisplay statusDisplay;
 //	@outlet CPWebView		webView;
 
@@ -37,7 +38,7 @@ var CPAlertSaveAsDraft							= 0,
 {
 	[theWindow center];
 
-	// TODO: this is not working (strange). We need modal window, but this making windows non-respondable:
+	// TODO for GUI developer: this is not working (strange). We need modal window, but this making windows non-respondable:
     // [CPApp runModalForWindow:theWindow];
     
     var contentView = [theWindow contentView];
@@ -63,6 +64,7 @@ var CPAlertSaveAsDraft							= 0,
     _serverConnection = [[ServerConnection alloc] init];
         
     // Call this clear when starting to compose new email to clear. 
+    // TODO: use this only when creatin new email. (not yet possible to DO).
     [_serverConnection callRemoteFunction:@"currentlyComposingEmailClearAll"
            withFunctionParametersAsObject:nil
                                  delegate:self
@@ -105,6 +107,65 @@ var CPAlertSaveAsDraft							= 0,
 }
 
 #pragma mark -
+#pragma mark Client-Server API
+
+// TODO for GUI developer: UNDONE: use this deleteAttachment function to delete attachments from list when user want to delete selected attachment from list. Also please handle "currentlyComposingEmailDeleteAttachmentDidReceived" function where is shown alert for user 
+- (void)deleteAttachment:(CPString)webServerAttachmentIdToDelete
+{
+    //var value = [textField1 objectValue];
+    var value = webServerAttachmentIdToDelete;
+    [_serverConnection callRemoteFunction:@"currentlyComposingEmailDeleteAttachment"
+           withFunctionParametersAsObject:{ webServerAttachmentId:value }
+                             delegate:self
+                       didEndSelector:@selector(currentlyComposingEmailDeleteAttachmentDidReceived:withParametersObject:)
+                                error:nil];
+}
+
+- (void)currentlyComposingEmailDeleteAttachmentDidReceived:(id)sender withParametersObject:parametersObject 
+{
+    // TODO for GUI developer:
+    alert("Attachment deleted:\n deletedWebServerAttachmentId=" + 
+          parametersObject.deletedWebServerAttachmentId + "\n" +
+          "deletedSuccessfully=" + parametersObject.deletedSuccessfully + "\n" +
+          "error=" + parametersObject.error);
+    
+    // update list of attachments.
+    [self reDownloadListOfAttachments];
+}
+
+-(void)reDownloadListOfAttachments
+{
+    [_serverConnection callRemoteFunction:@"currentlyComposingEmailGetListOfAttachments"
+           withFunctionParametersAsObject:nil
+                                 delegate:self
+                           didEndSelector:@selector(reDownloadListOfAttachmentsDidReceived:withParametersObject:)
+                                    error:nil];
+}
+
+- (void)reDownloadListOfAttachmentsDidReceived:(id)sender withParametersObject:parametersObject 
+{
+    // TODO for GUI developer: UNDONE: replace this with GUI showing list of attachments, where each attachment clickable to view it. (it should go to link of attachment to view/download it).
+    [statusDisplay clearDisplay];
+    [statusDisplay appendString:@"List of attachments"];
+    
+    for(var i = 0; i < parametersObject.listOfAttachments.length; i++)
+    {
+        [statusDisplay appendString:parametersObject.listOfAttachments[i].fileName + " size: " + parametersObject.listOfAttachments[i].sizeInBytes + " " + 
+         "webServerAttachmentId=" + parametersObject.listOfAttachments[i].webServerAttachmentId];
+        
+        // UNDONE  NOTE: bellow notes for future, not yet implemented at server side!!
+        // TODO for GUI developer: to create downloadable link, use parametersObject.listOfAttachments[i].webServerAttachmentId field as "webServerAttachmentId" parameter in link GetComposingAttachment?webServerAttachmentId=webServerAttachmentId, e.g. http://anHost.com/GetComposingAttachment?webServerAttachmentId=123456asdf where in example webServerAttachmentId has value 123456asdf. 
+        // Additional URL parameters &mode=view or &mode=download.  When view it will return usual attachment, when download it will respond to download it. (Better to test to understand what I mean).
+        // Another additional URL parameter &getThumbnail=true
+        // Available fields in listOfAttachments[i] object:
+        // 1. fileName (String)
+        // 2. sizeInBytes (long)
+        // 3. webServerAttachmentId (String)
+        // 4. contentType (String)
+    }
+}
+
+#pragma mark -
 #pragma mark UploadButton Handlers
 
 -(void) uploadButton:(UploadButton)button didChangeSelection:(CPArray)selection
@@ -116,51 +177,19 @@ var CPAlertSaveAsDraft							= 0,
 {
     alert("Upload failed with this error: " + anError);
     [self reDownloadListOfAttachments];
-     // TODO: hide loading indicator (e.g. ajax-loader.gif)
+     // TODO for GUI developer: hide loading indicator (e.g. ajax-loader.gif)
 }
 
 -(void) uploadButton:(UploadButton)button didFinishUploadWithData:(CPString)response
 {
     [button resetSelection];
     [self reDownloadListOfAttachments];
-    // TODO: hide loading indicator (e.g. ajax-loader.gif)
+    // TODO for GUI developer: hide loading indicator (e.g. ajax-loader.gif)
 }
 
--(void) uploadButtonDidBeginUpload:(UploadButton)button
+-(void)uploadButtonDidBeginUpload:(UploadButton)button
 {
-    // TODO: show loading indicator (e.g. ajax-loader.gif)
-}
-
-
--(void) reDownloadListOfAttachments
-{
-   [_serverConnection callRemoteFunction:@"currentlyComposingEmailGetListOfAttachments"
-           withFunctionParametersAsObject:nil
-                                 delegate:self
-                           didEndSelector:@selector(reDownloadListOfAttachmentsDidReceived:withParametersObject:)
-                                    error:nil];
-}
-
-- (void)reDownloadListOfAttachmentsDidReceived:(id)sender withParametersObject:parametersObject 
-{
-    // TODO: UNDONE: replace this with GUI showing list of attachments, where each attachment clickable to view it. (it should go to link of attachment to view/download it).
-    [statusDisplay clearDisplay];
-    [statusDisplay appendString:@"List of attachments"];
-
-    for(var i = 0; i < parametersObject.listOfAttachments.length; i++)
-    {
-        [statusDisplay appendString:parametersObject.listOfAttachments[i].fileName + " size: " + parametersObject.listOfAttachments[i].sizeInBytes];
-        
-        // UNDONE  NOTE: bellow notes for future, not yet implemented at server side!!
-        // TODO: to create downloadable link, use parametersObject.listOfAttachments[i].webServerAttachmentId field as "webServerAttachmentId" parameter in link GetComposingAttachment?webServerAttachmentId=webServerAttachmentId, e.g. http://anHost.com/GetComposingAttachment?webServerAttachmentId=123456asdf where in example webServerAttachmentId has value 123456asdf. 
-        // Additional URL parameters &mode=view or &mode=download.  When view it will return usual attachment, when download it will respond to download it. (Better to test to understand what I mean).
-        // Another additional URL parameter &getThumbnail=true
-        // Available fields in listOfAttachments[i] object:
-        // 1. fileName (String)
-        // 2. sizeInBytes (long)
-        // 3. webServerAttachmentId (String)
-        // 4. contentType (String)
-    }
+    // TODO for GUI developer: show loading indicator (e.g. ajax-loader.gif)
 }
 
 #pragma mark -

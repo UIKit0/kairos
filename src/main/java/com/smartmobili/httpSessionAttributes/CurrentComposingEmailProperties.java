@@ -17,6 +17,9 @@ import javax.servlet.http.HttpSession;
 
 import org.bson.types.ObjectId;
 
+import com.smartmobili.httpSessionAttributes.CurrentComposingEmailProperties.OneAttachmentProperty;
+import com.sun.swing.internal.plaf.synth.resources.synth;
+
 
 public class CurrentComposingEmailProperties {
 	public class OneAttachmentProperty
@@ -157,10 +160,42 @@ public class CurrentComposingEmailProperties {
 	}
 
 	// NOTE: elements is not copied, only reference to it is used.
-	public ArrayList<OneAttachmentProperty> getCopyOfListOfAttachments() {
-		@SuppressWarnings("unchecked")
-		ArrayList<OneAttachmentProperty> clone = 
-			(ArrayList<OneAttachmentProperty>)listOfAttachmentProperties_useSynchronized.clone();
-		return clone;
+	public ArrayList<OneAttachmentProperty> getCopyOfListOfAttachments() {		
+		synchronized(listOfAttachmentProperties_useSynchronized) {
+			@SuppressWarnings("unchecked")
+			ArrayList<OneAttachmentProperty> clone = 
+					(ArrayList<OneAttachmentProperty>)listOfAttachmentProperties_useSynchronized.clone();
+			return clone;
+		}
+	}
+
+	public boolean deleteAttachment(String webServerAttachmentIdToDelete) {
+		synchronized(listOfAttachmentProperties_useSynchronized) {
+			OneAttachmentProperty foundOap = null;
+			for(OneAttachmentProperty oap : listOfAttachmentProperties_useSynchronized) {
+				if (oap.webServerAttachmentId.contentEquals(webServerAttachmentIdToDelete)) {
+					foundOap = oap;
+					break;
+				}
+			}
+			if (foundOap != null) {
+				listOfAttachmentProperties_useSynchronized.remove(foundOap);
+				return true;
+			}
+			else
+				return false;
+		}
+	}
+
+	public OneAttachmentProperty getAttachmentProperty(
+			String webServerAttachmentId) {
+		synchronized(listOfAttachmentProperties_useSynchronized) {
+			for(OneAttachmentProperty oap : listOfAttachmentProperties_useSynchronized) {
+				if (oap.webServerAttachmentId.contentEquals(webServerAttachmentId)) {
+					return oap;
+				}
+			}
+		}
+		return null;
 	}
 }
