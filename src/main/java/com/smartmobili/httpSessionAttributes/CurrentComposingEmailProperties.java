@@ -12,14 +12,8 @@ package com.smartmobili.httpSessionAttributes;
 
 import java.util.ArrayList;
 import java.util.UUID;
-
 import javax.servlet.http.HttpSession;
-
 import org.bson.types.ObjectId;
-
-import com.smartmobili.httpSessionAttributes.CurrentComposingEmailProperties.OneAttachmentProperty;
-import com.sun.swing.internal.plaf.synth.resources.synth;
-
 
 public class CurrentComposingEmailProperties {
 	public class OneAttachmentProperty
