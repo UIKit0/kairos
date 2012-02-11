@@ -106,6 +106,20 @@ var CPAlertSaveAsDraft							= 0,
     alert("asdf");
 }
 
+- (IBAction)sendButtonClickedAction:(id)sender
+{
+    [_serverConnection callRemoteFunction:@"currentlyComposingEmailSend"
+           withFunctionParametersAsObject:nil
+                                 delegate:self
+                           didEndSelector:@selector(currentlyComposingEmailSendDidReceived:withParametersObject:)
+                                    error:nil];
+}
+
+- (void)currentlyComposingEmailSendDidReceived:(id)sender withParametersObject:parametersObject 
+{
+    alert("Recieved response: " + parametersObject.emailIsSent);
+}
+
 #pragma mark -
 #pragma mark Client-Server API
 
