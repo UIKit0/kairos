@@ -71,7 +71,6 @@ public class UploadAttachmentServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		FileOutputStream fos = null;
 		try {
 			FileItemStream item = iter.next();
 			String fileName = item.getName();
@@ -99,10 +98,6 @@ public class UploadAttachmentServlet extends HttpServlet {
 		} catch (FileUploadException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		finally {
-			if (fos != null)
-				fos.close();
 		}
 
 		PrintWriter out = response.getWriter();
