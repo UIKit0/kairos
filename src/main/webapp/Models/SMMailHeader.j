@@ -16,6 +16,7 @@
     CPString fromName @accessors;
     CPString fromEmail @accessors;
     CPDate date @accessors;
+    BOOL dateExists @accessors;
     BOOL isSeen @accessors;
     CPString md5 @accessors;
 }

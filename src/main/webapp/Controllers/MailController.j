@@ -697,7 +697,8 @@ var IsReadImage,
                     var email = [SMEmail new];
                     [email setFrom:[[mailHeaders objectAtIndex:aRow] fromEmail]];
                     [email setSubject:[[mailHeaders objectAtIndex:aRow] subject]];
-                    [email setDate:[[mailHeaders objectAtIndex:aRow] date]];
+                    var dte = [[mailHeaders objectAtIndex:aRow] date]; // CPDate
+                    [email setDate:[mailHeaders objectAtIndex:aRow]]; // where is this used?
                     result = email;
                     break;
                 default:
@@ -706,7 +707,15 @@ var IsReadImage,
         }
         else if ([aTableColumn._identifier isEqualToString:@"Date"])
         {
-            result = [[[mailHeaders objectAtIndex:aRow] date] formattedDescription];
+            var mh = [mailHeaders objectAtIndex:aRow];
+            if (mh.dateExists == true)
+            {
+                result = [[[mailHeaders objectAtIndex:aRow] date] formattedDescription];
+            }
+            else
+            {
+                result = "No Date"; // TODO: add localization
+            }
         }
         else if ([[aTableColumn identifier] isEqualToString:@"SMUnreadTableColumn"])
         {
@@ -726,9 +735,16 @@ var IsReadImage,
     {
         [toContent setObjectValue:parametersObject.mailContent.to];
         
-        var sd = parametersObject.mailContent.sentDate;
-        var date = [[CPDate alloc] initWithTimeIntervalSince1970:sd];    
-        [dateContent setObjectValue:[date formattedDescription]];
+        if (parametersObject.mailContent.sentDate.length > 0)
+        {
+            var sd = parametersObject.mailContent.sentDate;
+            var date = [[CPDate alloc] initWithTimeIntervalSince1970:sd];    
+            [dateContent setObjectValue:[date formattedDescription]];
+        }
+        else
+        {
+            [dateContent setObjectValue:@"No Date"]; // TODO: use localization
+        }
         
         [fromContent setObjectValue:parametersObject.mailContent.from];
         [subjectContent setObjectValue:parametersObject.mailContent.subject];

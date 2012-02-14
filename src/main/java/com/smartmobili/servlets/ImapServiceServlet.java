@@ -242,14 +242,31 @@ public class ImapServiceServlet extends HttpServlet {
 	      
 			JSONArray jsonArrayOfMessagesHeaders = new JSONArray();
 			for (Message msg : messagesArr) {
-				JSONObject messageHeaderAsJson = new JSONObject();			
-				final IMAPMessage imapMsg = (IMAPMessage)msg;
-				messageHeaderAsJson.put("messageId", imapMsg.getMessageID());
-				messageHeaderAsJson.put("from_Array", imapMsg.getFrom());
-				messageHeaderAsJson.put("subject", imapMsg.getSubject());			
-				messageHeaderAsJson.put("sentDate", (int)(imapMsg.getSentDate().getTime() / 1000));
-				messageHeaderAsJson.put("isSeen", imapMsg.isSet(Flags.Flag.SEEN));
-				jsonArrayOfMessagesHeaders.add(0, messageHeaderAsJson); // inserting to begin of list to get reverse order of mails (from new to old).
+				boolean expunded = msg.isExpunged();
+
+				if (expunded == false) {
+					JSONObject messageHeaderAsJson = new JSONObject();
+					final IMAPMessage imapMsg = (IMAPMessage) msg;
+
+					messageHeaderAsJson
+							.put("messageId", imapMsg.getMessageID());
+					messageHeaderAsJson.put("from_Array", imapMsg.getFrom());
+
+					messageHeaderAsJson.put("subject", imapMsg.getSubject());
+					Date sentDate = imapMsg.getSentDate();
+					if (sentDate != null)
+						messageHeaderAsJson.put("sentDate",
+								(int) (sentDate.getTime() / 1000));
+					else
+						messageHeaderAsJson.put("sentDate", "");
+
+					messageHeaderAsJson.put("isSeen",
+							imapMsg.isSet(Flags.Flag.SEEN));
+
+					// inserting to begin of list to get reverse order of mails
+					// (from new to old).
+					jsonArrayOfMessagesHeaders.add(0, messageHeaderAsJson);
+				}
 			}
 			
 			JSONObject result = new JSONObject();
@@ -301,7 +318,12 @@ public class ImapServiceServlet extends HttpServlet {
 				mailContentInJson.put("cc_Array", msg.getRecipients(Message.RecipientType.CC));
 				mailContentInJson.put("bcc_Array", msg.getRecipients(Message.RecipientType.BCC));
 				mailContentInJson.put("subject", msg.getSubject());	
-				mailContentInJson.put("sentDate", (int)(msg.getSentDate().getTime() / 1000));
+				if (msg.getSentDate() != null) {
+					mailContentInJson.put("sentDate", (int)(msg.getSentDate().getTime() / 1000));
+				}
+				else {
+					mailContentInJson.put("sentDate", "");
+				}
 				
 				MailTextAndAttachmentsProcesser javaUtil = new MailTextAndAttachmentsProcesser();
 				mailContentInJson.put("body", javaUtil.getText(parameters.getString("folder"), 

@@ -110,8 +110,17 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
             [mailHeader setSubject:listOfMessagesHeaders[i].subject];
         
             var sd = listOfMessagesHeaders[i].sentDate;
-            var date = [[CPDate alloc] initWithTimeIntervalSince1970:sd];
-            [mailHeader setDate:date];
+            if (sd.length!= 0)
+            {
+                var date = [[CPDate alloc] initWithTimeIntervalSince1970:sd];
+                mailHeader.dateExists = true;
+                [mailHeader setDate:date];
+            }
+            else
+            {
+                mailHeader.dateExists = false;
+            }        
+
         
             [mailHeader setMessageId:listOfMessagesHeaders[i].messageId];
             [mailHeader setIsSeen:listOfMessagesHeaders[i].isSeen];
