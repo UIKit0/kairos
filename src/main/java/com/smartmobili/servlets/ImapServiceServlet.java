@@ -9,8 +9,13 @@
 
 package com.smartmobili.servlets;
 
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 import javax.mail.search.MessageIDTerm;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -23,15 +28,18 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
+
 import org.apache.log4j.*;
 import org.bson.types.ObjectId;
 
 import com.mongodb.DB;
 import com.mongodb.gridfs.GridFS;
+import com.mongodb.gridfs.GridFSDBFile;
 import com.smartmobili.httpSessionAttributes.CurrentComposingEmailProperties;
 import com.smartmobili.other.DbCommon;
 import com.smartmobili.other.MailTextAndAttachmentsProcesser;
 import com.smartmobili.other.ImapSession;
+import com.smartmobili.other.MongoDbImapDataSource;
 //import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPMessage;
 
@@ -41,7 +49,22 @@ import net.sf.json.*;
 @SuppressWarnings("serial")
 public class ImapServiceServlet extends HttpServlet {
 	private static final int messagesCountPerPage = 50; // NOTE: There is also settings for this at client side (to change, need change both client and server sides).
-	final int SessionMaxInactiveInterval = 10*60;
+	private static final int SessionMaxInactiveInterval = 10*60;
+	
+	// TODO: static final settings should be from user settings from DB later
+	private static final boolean useGmail = false;
+	private static final String SMTP_HOST_NAME_gmail = "smtp.gmail.com";
+    private static final int SMTP_HOST_PORT_gmail = 465;
+    private static final String SMTP_AUTH_USER_gmail = ""; // UPDATE: always update this part of code
+    private static final String SMTP_AUTH_PWD_gmail  = ""; // UPDATE: always update this part of code
+    
+    private static final String SMTP_HOST_NAME_smartmobili = "mail.smartmobili.com";
+    private static final int SMTP_HOST_PORT_smartmobili = 25;
+    private static final String SMTP_AUTH_USER_smartmobili = "webguest@smartmobili.com";
+    private static final String SMTP_AUTH_PWD_smartmobili  = "webguest78";
+    private static final boolean debugSmtp = false;
+    
+    private static final String FromAddress = "webguest@smartmobili.com";
 	
 	Logger log = Logger.getLogger(ImapServiceServlet.class);
 	
@@ -597,5 +620,149 @@ public class ImapServiceServlet extends HttpServlet {
 					"Error exception raised: " + ex.toString());
 		} 
 		return result;
+	}
+	  
+	public JSONObject currentlyComposingEmailSend(JSONObject parameters,
+			HttpSession httpSession) {
+		JSONObject res = new JSONObject();
+		try {
+			Properties props = new Properties();
+			if (useGmail) {
+				props.put("mail.transport.protocol", "smtps");
+			} else {
+				props.put("mail.transport.protocol", "smtp");
+			}
+			props.put("mail.smtp.auth", "true");
+
+			InternetAddress props_from = new InternetAddress();
+			InternetAddress props_to = new InternetAddress();
+
+			props_from.setPersonal(FromAddress); // TODO: here
+																	// should be
+																	// name
+			props_from.setAddress(FromAddress);
+			props_to.setPersonal(parameters.getString("to")); // TODO: here
+																// should be
+																// name
+			props_to.setAddress(parameters.getString("to"));
+
+			Session mailSession = Session.getDefaultInstance(props);
+			mailSession.setDebug(debugSmtp);
+
+			MimeMessage message = new MimeMessage(mailSession);
+
+			message.setFrom(props_from); // From
+
+			message.addRecipient(Message.RecipientType.TO, props_to); // To
+			message.setSubject((String) parameters.get("subject"), "utf-8"); // Subject
+
+			Multipart multipart = new MimeMultipart();
+
+			// text message part
+			{
+				// Create the message part
+				BodyPart messageBodyPart = new MimeBodyPart();
+
+				messageBodyPart.setContent(
+						(String) parameters.get("htmlOfEmail"),
+						"text/html; charset=\"utf-8\"");
+
+				// Add part one
+				multipart.addBodyPart(messageBodyPart);
+			}
+
+			// Add next parts which is attachments
+			{
+				CurrentComposingEmailProperties ccep = CurrentComposingEmailProperties
+						.getFromHttpSessionOrCreateNewDefaultInIt(httpSession);
+				GridFS gfsFileAttachment = DbCommon
+						.getGridFSforAttachmentsFiles(this.attachmentsDb);
+				
+				for (CurrentComposingEmailProperties.OneAttachmentProperty oap : ccep
+						.getCopyOfListOfAttachments()) {
+					if (oap.isThisAttachmentFromExistingImapMessage() == false) {
+						ObjectId dbIdOfAttachment = oap.getDbAttachmentId();
+						GridFSDBFile file = gfsFileAttachment
+								.findOne(dbIdOfAttachment);
+
+						currentlyComposingEmailSend_AddAttachmentToComposingMessage(
+								multipart, file, oap.getContentType(),
+								oap.getFileName());
+
+						// TODO: should we close "inputStreamOfAttachmentFromDb"
+						// ?
+						// Or perhaps not here but after sending message bellow,
+						// so
+						// it should accumulate opened streams in list and then
+						// close all at once.
+					} else {
+						// TODO:
+						throw new MessagingException(
+								"Sending email with attachments from imap (e.g. from draft) is not yet supported");
+					}
+				}
+			}
+
+			// Put parts in message
+			message.setContent(multipart);
+
+			// Sending
+			Transport transport = mailSession.getTransport();
+			try {
+				if (useGmail) {
+					transport.connect(SMTP_HOST_NAME_gmail,
+							SMTP_HOST_PORT_gmail, SMTP_AUTH_USER_gmail,
+							SMTP_AUTH_PWD_gmail);
+				} else {
+					transport.connect(SMTP_HOST_NAME_smartmobili,
+							SMTP_HOST_PORT_smartmobili,
+							SMTP_AUTH_USER_smartmobili,
+							SMTP_AUTH_PWD_smartmobili);
+				}
+				transport.sendMessage(message,
+						message.getRecipients(Message.RecipientType.TO));
+			} catch (Exception sendEx) {
+				throw sendEx;
+			} finally {
+				transport.close(); // Closing session
+			}
+
+			res.put("emailIsSent", true);
+		} catch (Exception ex) {
+			res.put("emailIsSent", false);
+			res.put("errorDetails", ex.toString());
+		}
+		return res;
+	}
+
+	/**
+	 * Adds to multipart a new part with file attachment.
+	 * 
+	 * @param multipart A part to which is add newly created part with file attachment as content.
+	 * @param file
+	 * @param contentType
+	 * @param fileName
+	 * @throws MessagingException
+	 */
+	private void currentlyComposingEmailSend_AddAttachmentToComposingMessage(Multipart multipart,
+			GridFSDBFile file, String contentType,
+			String fileName) throws MessagingException {
+		// Create body part for storing one file attachment
+		BodyPart messageFilePart = new MimeBodyPart();
+
+		// Get the attachment
+		DataSource source = new MongoDbImapDataSource(
+				file, contentType, fileName);
+
+		// Set the data handler to the attachment
+		DataHandler dh = new DataHandler(source);
+		messageFilePart.setDataHandler(dh);
+
+		// Set the filename
+		messageFilePart.setFileName(fileName);
+
+		// Add part two
+		multipart.addBodyPart(messageFilePart);
+
 	}
 }

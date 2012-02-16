@@ -21,7 +21,11 @@ var CPAlertSaveAsDraft							= 0,
 {
     @outlet CPWindow		theWindow;
     @outlet id              customView1;
-    @outlet id		textField1; //CPTextField
+    @outlet id              textField1; //CPTextField  This is email body currently. Should be replaced to rich text editor
+    @outlet id              textFieldToAddress; //CPTextField
+    @outlet id              textFieldCCAddress; //CPTextField
+
+    @outlet id              textFieldSubject; //CPTextField
     TextDisplay statusDisplay;
 //	@outlet CPWebView		webView;
 
@@ -72,9 +76,9 @@ var CPAlertSaveAsDraft							= 0,
                                     error:nil];
 }
 
--(BOOL)windowShouldClose:(id)window;
+// TODO: this is not working (not called at all)
+-(BOOL)windowShouldClose:(id)window
 {
-
     var confirmBox = [[CPAlert alloc] init];
 	[confirmBox setTitle:nil];
 	[confirmBox setAlertStyle:CPInformationalAlertStyle];
@@ -108,8 +112,14 @@ var CPAlertSaveAsDraft							= 0,
 
 - (IBAction)sendButtonClickedAction:(id)sender
 {
+    // TODO: for GUI developer: replace htmlOfEmail value with full html text of email from rich text editor.
+    var htmlOfEmailVar = [self.textField1 objectValue];
+    
     [_serverConnection callRemoteFunction:@"currentlyComposingEmailSend"
-           withFunctionParametersAsObject:nil
+           withFunctionParametersAsObject: { "htmlOfEmail":htmlOfEmailVar,
+                                             "subject":[self.textFieldSubject objectValue],
+                                             "to":[self.textFieldToAddress objectValue],
+                                             "cc":[self.textFieldCCAddress objectValue] }
                                  delegate:self
                            didEndSelector:@selector(currentlyComposingEmailSendDidReceived:withParametersObject:)
                                     error:nil];
@@ -117,7 +127,16 @@ var CPAlertSaveAsDraft							= 0,
 
 - (void)currentlyComposingEmailSendDidReceived:(id)sender withParametersObject:parametersObject 
 {
-    alert("Recieved response: " + parametersObject.emailIsSent);
+    // TODO: for GUI developer: THINK: how it should work when email is sent - should window be closed or not and etc.
+    if (parametersObject.emailIsSent == true) 
+    {
+        alert("Email is sent successfully");
+        [theWindow close];
+    }
+    else
+    {
+        alert("Failed to send email. Error details: " + parametersObject.errorDetails);
+    }
 }
 
 #pragma mark -

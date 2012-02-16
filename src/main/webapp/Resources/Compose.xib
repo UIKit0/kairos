@@ -384,6 +384,30 @@
 					</object>
 					<int key="connectionID">54</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">textFieldSubject</string>
+						<reference key="source" ref="790731037"/>
+						<reference key="destination" ref="372125407"/>
+					</object>
+					<int key="connectionID">55</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">textFieldToAddress</string>
+						<reference key="source" ref="790731037"/>
+						<reference key="destination" ref="711656869"/>
+					</object>
+					<int key="connectionID">56</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">textFieldCCAddress</string>
+						<reference key="source" ref="790731037"/>
+						<reference key="destination" ref="655237238"/>
+					</object>
+					<int key="connectionID">57</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -681,7 +705,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">54</int>
+			<int key="maxID">57</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -727,10 +751,16 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>customView1</string>
 							<string>textField1</string>
+							<string>textFieldCCAddress</string>
+							<string>textFieldSubject</string>
+							<string>textFieldToAddress</string>
 							<string>theWindow</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>NSWindow</string>
@@ -742,6 +772,9 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>customView1</string>
 							<string>textField1</string>
+							<string>textFieldCCAddress</string>
+							<string>textFieldSubject</string>
+							<string>textFieldToAddress</string>
 							<string>theWindow</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -752,6 +785,18 @@
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">textField1</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">textFieldCCAddress</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">textFieldSubject</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">textFieldToAddress</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBToOneOutletInfo">
