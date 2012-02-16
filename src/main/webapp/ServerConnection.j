@@ -20,7 +20,33 @@
     int             _responsesCount;
     CPTimer         _timerTimeoutWaitingResponse;
     var             _urlConnection;
+    var             _timeoutInSeconds;
 }
+
+- (id)init
+{
+    if (self = [super init])
+    {
+        [self setDefaultTimeout];
+    }
+    return self;
+}
+
+#pragma mark -
+#pragma mark Other
+
+// works only for new requests. Old processing will use old value.
+-(void)setTimeout:(int)timoutInSeconds
+{
+    _timeoutInSeconds = timoutInSeconds;
+}
+
+-(void)setDefaultTimeout
+{
+    _timeoutInSeconds = 35;
+}
+
+
 
 #pragma mark -
 #pragma mark CPURLConnecion 
@@ -111,7 +137,7 @@
     _urlConnection = [CPURLConnection connectionWithRequest:request delegate:self];
     
     // This require a lot of memory - a new timer for each request! But there is no good way to solve Firefox issue with URLConnection and POST command which is not return responce 200 from first time, which can be 0 (NS_BINDING_ABORTED). (See more comments in function connectionDidFinishLoading above).
-    _timerTimeoutWaitingResponse = [CPTimer scheduledTimerWithTimeInterval:35  // timeout 35 seconds to raise timeout (_errorSelector).
+    _timerTimeoutWaitingResponse = [CPTimer scheduledTimerWithTimeInterval:_timeoutInSeconds  // timeout in seconds to raise timeout (_errorSelector).
                                      target:self
                                    selector:@selector(timerTimeoutWaitingResponseTick:)
                                    userInfo:nil
