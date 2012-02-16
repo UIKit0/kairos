@@ -636,15 +636,18 @@ public class ImapServiceServlet extends HttpServlet {
 
 			InternetAddress props_from = new InternetAddress();
 			InternetAddress props_to = new InternetAddress();
-
-			props_from.setPersonal(FromAddress); // TODO: here
-																	// should be
-																	// name
+			InternetAddress props_cc_canBeNull = null;
+			
+			props_from.setPersonal(FromAddress); // TODO: here should be name
 			props_from.setAddress(FromAddress);
-			props_to.setPersonal(parameters.getString("to")); // TODO: here
-																// should be
-																// name
+			props_to.setPersonal(parameters.getString("to")); // TODO: here should be name
 			props_to.setAddress(parameters.getString("to"));
+			
+			if (parameters.getString("to").length() > 0) {
+				props_cc_canBeNull = new InternetAddress();
+				props_cc_canBeNull.setPersonal(parameters.getString("cc")); // TODO: here should be name
+				props_cc_canBeNull.setAddress(parameters.getString("cc"));
+			}
 
 			Session mailSession = Session.getDefaultInstance(props);
 			mailSession.setDebug(debugSmtp);
@@ -655,6 +658,8 @@ public class ImapServiceServlet extends HttpServlet {
 
 			message.addRecipient(Message.RecipientType.TO, props_to); // To
 			message.setSubject((String) parameters.get("subject"), "utf-8"); // Subject
+			if (props_cc_canBeNull != null)
+				message.addRecipient(Message.RecipientType.CC, props_cc_canBeNull); // CC
 
 			Multipart multipart = new MimeMultipart();
 
