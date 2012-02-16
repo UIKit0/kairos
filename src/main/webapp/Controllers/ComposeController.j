@@ -107,7 +107,7 @@ var CPAlertSaveAsDraft							= 0,
 
 - (IBAction)testAction1:(id)sender
 {
-    alert("asdf");
+    alert("This button used for tests during development of compose window.");
 }
 
 - (IBAction)sendButtonClickedAction:(id)sender
