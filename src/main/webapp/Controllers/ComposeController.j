@@ -66,7 +66,8 @@ var CPAlertSaveAsDraft							= 0,
     }
     
     _serverConnection = [[ServerConnection alloc] init];
-        
+    
+    [_serverConnection setDefaultTimeout]; 
     // Call this clear when starting to compose new email to clear. 
     // TODO: use this only when creatin new email. (not yet possible to DO).
     [_serverConnection callRemoteFunction:@"currentlyComposingEmailClearAll"
@@ -114,7 +115,7 @@ var CPAlertSaveAsDraft							= 0,
 {
     // TODO: for GUI developer: replace htmlOfEmail value with full html text of email from rich text editor.
     var htmlOfEmailVar = [self.textField1 objectValue];
-    
+    [_serverConnection setTimeout:60];
     [_serverConnection callRemoteFunction:@"currentlyComposingEmailSend"
            withFunctionParametersAsObject: { "htmlOfEmail":htmlOfEmailVar,
                                              "subject":[self.textFieldSubject objectValue],
@@ -122,9 +123,15 @@ var CPAlertSaveAsDraft							= 0,
                                              "cc":[self.textFieldCCAddress objectValue] }
                                  delegate:self
                            didEndSelector:@selector(currentlyComposingEmailSendDidReceived:withParametersObject:)
-                                    error:nil];
+                                    error:@selector(currentlyComposingEmailSendTimeOutOrError:)];
 }
 
+- (void)currentlyComposingEmailSendTimeOutOrError:(id)sender
+{  
+     // TODO: for GUI developer: THINK: how it should work when email is failed to send by timeout. 
+    alert("Error sending email: timeout");
+}
+                                                    
 - (void)currentlyComposingEmailSendDidReceived:(id)sender withParametersObject:parametersObject 
 {
     // TODO: for GUI developer: THINK: how it should work when email is sent - should window be closed or not and etc.
@@ -135,6 +142,7 @@ var CPAlertSaveAsDraft							= 0,
     }
     else
     {
+        // TODO: how to show error for user?
         alert("Failed to send email. Error details: " + parametersObject.errorDetails);
     }
 }
@@ -147,6 +155,7 @@ var CPAlertSaveAsDraft							= 0,
 {
     //var value = [textField1 objectValue];
     var value = webServerAttachmentIdToDelete;
+    [_serverConnection setDefaultTimeout]; 
     [_serverConnection callRemoteFunction:@"currentlyComposingEmailDeleteAttachment"
            withFunctionParametersAsObject:{ webServerAttachmentId:value }
                              delegate:self
@@ -168,6 +177,7 @@ var CPAlertSaveAsDraft							= 0,
 
 -(void)reDownloadListOfAttachments
 {
+    [_serverConnection setDefaultTimeout]; 
     [_serverConnection callRemoteFunction:@"currentlyComposingEmailGetListOfAttachments"
            withFunctionParametersAsObject:nil
                                  delegate:self
