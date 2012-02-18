@@ -104,8 +104,8 @@ var SharedLoginWindow = nil;
     [super orderFront:sender];
     // FIXME: these values are for development only
     // change these values to none and defaultButton visibility to NO
-    [usernameField setStringValue:@"webguest@smartmobili.com"];
-    [passwordField setStringValue:@"webguest78"];
+    [usernameField setStringValue:@"login"];
+    [passwordField setStringValue:@"password"];
     [defaultButton setEnabled:YES];
 }
 
