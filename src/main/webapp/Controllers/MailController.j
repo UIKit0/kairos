@@ -697,8 +697,19 @@ var IsReadImage,
                     var email = [SMEmail new];
                     [email setFrom:[[mailHeaders objectAtIndex:aRow] fromEmail]];
                     [email setSubject:[[mailHeaders objectAtIndex:aRow] subject]];
-                    var dte = [[mailHeaders objectAtIndex:aRow] date]; // CPDate
-                    [email setDate:[mailHeaders objectAtIndex:aRow]]; // where is this used?
+                   // var dte = [[mailHeaders objectAtIndex:aRow] date]; // CPDate
+                    var dte = nil;
+                    var mh = [mailHeaders objectAtIndex:aRow];
+                    if (mh.dateExists == true)
+                    {
+                        dte = [[[mailHeaders objectAtIndex:aRow] date] formattedDescription];
+                    }
+                    else
+                    {
+                        dte = "No Date"; // TODO: add localization
+                    }
+                    
+                    [email setDate:dte]; // where is this used?
                     result = email;
                     break;
                 default:
@@ -735,7 +746,7 @@ var IsReadImage,
     {
         [toContent setObjectValue:parametersObject.mailContent.to];
         
-        if (parametersObject.mailContent.sentDate.length > 0)
+        if (parametersObject.mailContent.sentDate > 0) // if sentdate = "" (string) means no date there. If sentdate is number greater than 0 this means that there is valid date.
         {
             var sd = parametersObject.mailContent.sentDate;
             var date = [[CPDate alloc] initWithTimeIntervalSince1970:sd];    

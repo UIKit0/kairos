@@ -27,7 +27,7 @@
 
     [emailFrom setStringValue:[anEmail from]];
     [emailSubject setStringValue:[anEmail subject]];
-    [emailDate setStringValue:[[anEmail date] formattedDescription]];
+    [emailDate setStringValue:[anEmail date]];
 
 //    [emailFrom setValue:[CPColor colorWithHexString:@"929496"] forThemeAttribute:@"text-color"];
 //    [emailFrom setValue:[CPColor whiteColor] forThemeAttribute:@"text-color" inState:CPThemeStateSelectedDataView];
