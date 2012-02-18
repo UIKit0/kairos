@@ -38,18 +38,10 @@ import com.smartmobili.other.DbCommon;
  
 @SuppressWarnings("serial")
 public class UploadAttachmentServlet extends HttpServlet {
-	private static final String DESTINATION_DIR_PATH ="/tmp";
-	private File destinationDir;
- 
 	DB db;
 	
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
-		
-		destinationDir = new File(DESTINATION_DIR_PATH);
-		if(!destinationDir.isDirectory()) {
-			throw new ServletException(DESTINATION_DIR_PATH+" is not a directory");
-		}
 		
 		this.db = DbCommon.connectToAttachmentsDb();
 	}
