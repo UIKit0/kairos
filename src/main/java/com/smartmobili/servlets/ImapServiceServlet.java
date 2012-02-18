@@ -58,10 +58,10 @@ public class ImapServiceServlet extends HttpServlet {
     private static final String SMTP_AUTH_USER_gmail = ""; // UPDATE: always update this part of code
     private static final String SMTP_AUTH_PWD_gmail  = ""; // UPDATE: always update this part of code
     
-    private static final String SMTP_HOST_NAME_smartmobili = "mail.smartmobili.com";
+    private static final String SMTP_HOST_NAME_smartmobili = "";
     private static final int SMTP_HOST_PORT_smartmobili = 25;
-    private static final String SMTP_AUTH_USER_smartmobili = "webguest@smartmobili.com";
-    private static final String SMTP_AUTH_PWD_smartmobili  = "webguest78";
+    private static final String SMTP_AUTH_USER_smartmobili = "";
+    private static final String SMTP_AUTH_PWD_smartmobili  = "";
     private static final boolean debugSmtp = false;
     
     private static final String FromAddress = "webguest@smartmobili.com";
