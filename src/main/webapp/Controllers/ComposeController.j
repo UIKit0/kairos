@@ -26,6 +26,9 @@ var CPAlertSaveAsDraft							= 0,
     @outlet id              textFieldCCAddress; //CPTextField
 
     @outlet id              textFieldSubject; //CPTextField
+    
+    @outlet id              buttonSend;
+    
     TextDisplay statusDisplay;
 //	@outlet CPWebView		webView;
 
@@ -114,8 +117,11 @@ var CPAlertSaveAsDraft							= 0,
 - (IBAction)sendButtonClickedAction:(id)sender
 {
     // TODO: for GUI developer: replace htmlOfEmail value with full html text of email from rich text editor.
+    [self.buttonSend setEnabled:false];
+    
     var htmlOfEmailVar = [self.textField1 objectValue];
     [_serverConnection setTimeout:60];
+
     [_serverConnection callRemoteFunction:@"currentlyComposingEmailSend"
            withFunctionParametersAsObject: { "htmlOfEmail":htmlOfEmailVar,
                                              "subject":[self.textFieldSubject objectValue],
@@ -129,12 +135,14 @@ var CPAlertSaveAsDraft							= 0,
 - (void)currentlyComposingEmailSendTimeOutOrError:(id)sender
 {  
      // TODO: for GUI developer: THINK: how it should work when email is failed to send by timeout. 
+    [self.buttonSend setEnabled:true];
     alert("Error sending email: timeout");
 }
                                                     
 - (void)currentlyComposingEmailSendDidReceived:(id)sender withParametersObject:parametersObject 
 {
     // TODO: for GUI developer: THINK: how it should work when email is sent - should window be closed or not and etc.
+    [self.buttonSend setEnabled:true];
     if (parametersObject.emailIsSent == true) 
     {
         alert("Email is sent successfully");
