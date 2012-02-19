@@ -62,8 +62,8 @@ var IsReadImage,
     IBOutlet CPTableColumn  subjectTableColumn;
     IBOutlet CPTableColumn  dateTableColumn;
 
-    CPView originalSubjectTableColumnView;
-    int originalSubjectTableColumnWidth;
+    CPView                  originalSubjectTableColumnView;
+    int                     originalSubjectTableColumnWidth;
 
     IBOutlet CPImageView    testImageView;
     ComposeController       _composeController;
@@ -82,8 +82,8 @@ var IsReadImage,
     @outlet CPView          logoView;
 
     EventsFromServerReceiver    _eventsFromServerReceiver;
-    var _connectionErrorWholeScreenWindow;
-    var _connectionErrorFloatingWindow;
+    CPWindow                _connectionErrorWholeScreenWindow;
+    CPPanel                 _connectionErrorFloatingWindow;
 }
 
 + (void)initialize
