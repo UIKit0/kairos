@@ -91,6 +91,8 @@
 
         }
     }
+
+    [_urlConnection cancel]; // didn't help in firefox, still twice called connectionDidFinishLoading.
 }
 
 - (void)timerTimeoutWaitingResponseTick:(var)anParam
@@ -134,8 +136,6 @@
     
     [request setHTTPBody:[CPString JSONFromObject:jsonObjectToPost]];
     
-    _urlConnection = [CPURLConnection connectionWithRequest:request delegate:self];
-    
     // This require a lot of memory - a new timer for each request! But there is no good way to solve Firefox issue with URLConnection and POST command which is not return responce 200 from first time, which can be 0 (NS_BINDING_ABORTED). (See more comments in function connectionDidFinishLoading above).
     _timerTimeoutWaitingResponse = [CPTimer scheduledTimerWithTimeInterval:_timeoutInSeconds  // timeout in seconds to raise timeout (_errorSelector).
                                      target:self
@@ -143,7 +143,9 @@
                                    userInfo:nil
                                     repeats:NO];
     
-    [_urlConnection start];
+    _urlConnection = [CPURLConnection connectionWithRequest:request delegate:self];
+
+   // [_urlConnection start]; // No need to call start, it is already started after creation
 }
 
 @end
