@@ -24,7 +24,7 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
 {
     CPString    lastUsedUserName @accessors;
     CPString    lastUsedPassword @accessors;
-    
+
     CPString    username  @accessors;
     CPString    firstName @accessors;
     CPString    password  @accessors;
@@ -103,16 +103,16 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
 @implementation HNAuthController (HNConnection)
 
 
-- (void)authenticateWithUsername:(CPString)userName password:(CPString)password
+- (void)authenticateWithUsername:(CPString)aUserName password:(CPString)aPassword
 {
-    lastUsedUserName = userName;
-    lastUsedPassword = password;
+    lastUsedUserName = aUserName;
+    lastUsedPassword = aPassword;
     var email = [username lowercaseString],
-    serverConnection = [[ServerConnection alloc] init];
+        serverConnection = [[ServerConnection alloc] init];
 
     //     host = @"mail.smartmobili.com"
     [serverConnection callRemoteFunction:@"authenticate"
-     withFunctionParametersAsObject: { "userName" : userName, "password" : password }
+     withFunctionParametersAsObject: { "userName" : aUserName, "password" : aPassword }
                         delegate:self
                   didEndSelector:@selector(imapServerAuthenticationDidChange:withParametersObject:)
                            error:nil];
