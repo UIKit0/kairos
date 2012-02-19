@@ -104,8 +104,8 @@ var SharedLoginWindow = nil;
     [super orderFront:sender];
     // FIXME: these values are for development only
     // change these values to none and defaultButton visibility to NO
-    [usernameField setStringValue:@"login"];
-    [passwordField setStringValue:@"password"];
+    [usernameField setStringValue:@"webguest@smartmobili.com"];
+    [passwordField setStringValue:@""];
     [defaultButton setEnabled:YES];
 }
 
@@ -187,7 +187,7 @@ var SharedLoginWindow = nil;
 -(BOOL)validateEmail:(CPString)email compliantRFC2822:(BOOL)compliant
 { 
     var emailRegExp;
-    var isValid = NO;
+    var isValid = YES;
     
     if (compliant) {
         // RFC2822 compliant 
