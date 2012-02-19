@@ -194,6 +194,9 @@ var IsReadImage,
     // TODO The details header view should have its own controller.
     [[fromLabel superview] setBackgroundColor:[CPColor colorWithHexString:@"D6DDE3"]];
 
+    // Give the activity area the same background colour as the source view.
+    // TODO The activity area should have its own controller.
+    [[loadingLabel superview] setBackgroundColor:[CPColor colorWithHexString:@"D6DDE3"]];
 
     // Localize
     [fromLabel setObjectValue:[[CPString alloc] initWithFormat:@"%@:", [[TNLocalizationCenter defaultCenter] localize:@"From"]]];
