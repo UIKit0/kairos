@@ -80,7 +80,7 @@ var IsReadImage,
     // This should be moved to the App Controller
     CPString                displayedViewKey @accessors;
     @outlet CPView          logoView;
-    
+
     EventsFromServerReceiver    _eventsFromServerReceiver;
     var _connectionErrorWholeScreenWindow;
     var _connectionErrorFloatingWindow;
@@ -110,7 +110,7 @@ var IsReadImage,
         SharedMailController = self;
     }
 
-    
+
     [theWindow setFullBridge:YES];
 
     var bundle      = [CPBundle mainBundle],
@@ -215,11 +215,11 @@ var IsReadImage,
 
         [self setMailAccount:[SMMailAccount new]];
         [mailAccount load];
-        
+
         // TODO: when COMET will be used perhaps _eventsFromServerReceiver should connect to server even before login? Or not.
         _eventsFromServerReceiver = [[EventsFromServerReceiver alloc]
                                      initWithAuthenticationController:authenticationController
-                                     withDelegate:nil 
+                                     withDelegate:nil
                                      withEventOccurredSelector: nil
                                      withMailController:self];
         [_eventsFromServerReceiver start];
@@ -254,23 +254,23 @@ var IsReadImage,
     selectedMailbox = aMailbox;
 
     if (!selectedMailbox)
-        return; 
-    
+        return;
+
     // get count of mails in folder and convert to pages count
     var pages = Math.floor([selectedMailbox count] / 50 + 1);
-    [[self getPagerControlFromToolbar] setPages:pages]; 
-    
+    [[self getPagerControlFromToolbar] setPages:pages];
+
     [self reLoadHeadersListForMailbox:aMailbox andPage:1];
 }
 
 - (void)reLoadHeadersListForMailbox:(SMMailbox)aMailbox andPage:(int)page
 {
     [loadingLabel setObjectValue:[[CPString alloc] initWithFormat:@"Loading Headers for %@...", [aMailbox name]]];
-    
+
     [[self getPagerControlFromToolbar] setPage:page];
-    
+
     [emailsHeaderView deselectAll]; // TODO: perhaps need disable emails view or make it nonclickable etc.
-    
+
     [aMailbox loadHeadersAtPage:page];
 }
 
@@ -282,7 +282,7 @@ var IsReadImage,
 - (CPString)sectionForAttachment:(CPArray)attachments
 {
     // TODO: this shows attachemts as list of links, which not works. Need to show not links, but thumbnails or somethink like that.
-    
+
     // Build the list of attachments
     var attachmentSection = @"";
     for (var i = 0; i < [attachments count]; i++)
@@ -315,7 +315,7 @@ var IsReadImage,
             [loadingLabel setObjectValue:@"No Mailbox Selected."];
         else
         {
-           
+
              [loadingLabel setObjectValue:@"Mail headers loaded"];
             // FIXME: The selected mail should be the most recent
             [emailsHeaderView selectRowIndexes:[CPIndexSet indexSetWithIndex:0] byExtendingSelection:NO];
@@ -334,7 +334,7 @@ var IsReadImage,
      _composeController = [[ComposeController alloc] init];
         var cib = [[CPCib alloc] initWithContentsOfURL:[[CPBundle mainBundle] pathForResource:@"Compose.cib"]];
         [cib instantiateCibWithExternalNameTable:[CPDictionary dictionaryWithObject:_composeController forKey:CPCibOwner]];
-    
+
     /*var indexesSelectedEmail = emailsHeaderView._selectedRowIndexes;
     if ([indexesSelectedEmail count] == 1)
     {
@@ -577,7 +577,7 @@ var IsReadImage,
 
 - (void)refreshMailbox:(id)sender
 {
-    /* disabled during porting from scala to java. Because now No cardano/lift autoupdated objects anymore, so after refresh 
+    /* disabled during porting from scala to java. Because now No cardano/lift autoupdated objects anymore, so after refresh
      objects at server we need also realod screen or something like that).
      *
     CPLog.debug(@"%@", _cmd);
@@ -601,8 +601,8 @@ var IsReadImage,
 
 - (SMPagerView)getPagerControlFromToolbar
 {
-    var toolbarItem = [self getToolBarItemViaIdentifier:@"pagerControl"];
-    var smPagerView = toolbarItem._view;
+    var toolbarItem = [self getToolBarItemViaIdentifier:@"pagerControl"],
+        smPagerView = toolbarItem._view;
     return smPagerView;
 }
 
@@ -698,8 +698,8 @@ var IsReadImage,
                     [email setFrom:[[mailHeaders objectAtIndex:aRow] fromEmail]];
                     [email setSubject:[[mailHeaders objectAtIndex:aRow] subject]];
                    // var dte = [[mailHeaders objectAtIndex:aRow] date]; // CPDate
-                    var dte = nil;
-                    var mh = [mailHeaders objectAtIndex:aRow];
+                    var dte = nil,
+                        mh = [mailHeaders objectAtIndex:aRow];
                     if (mh.dateExists == true)
                     {
                         dte = [[[mailHeaders objectAtIndex:aRow] date] formattedDescription];
@@ -708,7 +708,7 @@ var IsReadImage,
                     {
                         dte = "No Date"; // TODO: add localization
                     }
-                    
+
                     [email setDate:dte]; // where is this used?
                     result = email;
                     break;
@@ -738,25 +738,25 @@ var IsReadImage,
 }
 
 
-- (void)imapServerMailContentDidReceived:(id)sender withParametersObject:parametersObject 
+- (void)imapServerMailContentDidReceived:(id)sender withParametersObject:parametersObject
 {
     //CPLog.debug(@"%@%@", _cmd, mailContent);
     //if ([mailContent respondsToSelector:@selector(body)])
     if (parametersObject.mailContent)
     {
         [toContent setObjectValue:parametersObject.mailContent.to];
-        
+
         if (parametersObject.mailContent.sentDate > 0) // if sentdate = "" (string) means no date there. If sentdate is number greater than 0 this means that there is valid date.
         {
-            var sd = parametersObject.mailContent.sentDate;
-            var date = [[CPDate alloc] initWithTimeIntervalSince1970:sd];    
+            var sd = parametersObject.mailContent.sentDate,
+                date = [[CPDate alloc] initWithTimeIntervalSince1970:sd];
             [dateContent setObjectValue:[date formattedDescription]];
         }
         else
         {
             [dateContent setObjectValue:@"No Date"]; // TODO: use localization
         }
-        
+
         [fromContent setObjectValue:parametersObject.mailContent.from];
         [subjectContent setObjectValue:parametersObject.mailContent.subject];
 
@@ -856,7 +856,7 @@ var IsReadImage,
 
             var selectedMailboxName = [selectedMailbox name] || @"Inbox";
 
-            
+
             // (This is old todo) TODO We should use an SMEmail (with only headers) and have it load its own data here.
             // That way the results are cached, and the flow simpler.
             [_serverConnection callRemoteFunction:@"mailContentForMessageId"
@@ -864,7 +864,7 @@ var IsReadImage,
                                          delegate:self
                                    didEndSelector:@selector(imapServerMailContentDidReceived:withParametersObject:)
                                             error:nil];
-            
+
             // Both Active
             [deleteItem setEnabled:YES];
             [replyItem setEnabled:YES];
@@ -1070,37 +1070,37 @@ var IsReadImage,
         {
             // This is invisible window in whole screen, to avoid user clicking on components of main app while connections is lost.
             _connectionErrorWholeScreenWindow = [[CPWindow alloc]
-                     initWithContentRect:CGRectMakeZero() 
+                     initWithContentRect:CGRectMakeZero()
                      styleMask:CPBorderlessBridgeWindowMask],
             contentView = [_connectionErrorWholeScreenWindow contentView];
-    
+
             [_connectionErrorWholeScreenWindow orderFront:self];
-    
+
             //  [contentView setBackgroundColor:[CPColor blackColor]];
-    
-            _connectionErrorFloatingWindow = [[CPPanel alloc] 
+
+            _connectionErrorFloatingWindow = [[CPPanel alloc]
                     initWithContentRect:CGRectMake(0, 0, 225, 50)
                     styleMask:CPHUDBackgroundWindowMask];
-    
+
             [_connectionErrorFloatingWindow setFloatingPanel:NO];
-    
+
             [_connectionErrorFloatingWindow orderFront:self];
-    
+
             [_connectionErrorFloatingWindow setTitle:"Connection error"];
             [_connectionErrorFloatingWindow center];
-    
-            var panelContentView = [_connectionErrorFloatingWindow contentView];
-            var scaleStartLabel = [CPTextField labelWithTitle:"Trying to reconnect..."];
+
+            var panelContentView = [_connectionErrorFloatingWindow contentView],
+                scaleStartLabel = [CPTextField labelWithTitle:"Trying to reconnect..."];
             // TODO: perhaps add seconds counting (or connections trying count) to show user that it really trying. Also ajax-loader icon will be usefull.
             [scaleStartLabel setFrameOrigin:CGPointMake(45, 10)];
             [scaleStartLabel setTextColor:[CPColor grayColor]];
-        
+
             [scaleStartLabel sizeToFit];
             [panelContentView addSubview:scaleStartLabel];
         }
         else
-        { 
-             if([_connectionErrorWholeScreenWindow isVisible] == false)
+        {
+             if ([_connectionErrorWholeScreenWindow isVisible] == false)
              {
                  [_connectionErrorWholeScreenWindow orderFront:self];
                  [_connectionErrorFloatingWindow orderFront:self];
@@ -1111,7 +1111,7 @@ var IsReadImage,
     {
         if (_connectionErrorWholeScreenWindow)
         {
-            if([_connectionErrorWholeScreenWindow isVisible])
+            if ([_connectionErrorWholeScreenWindow isVisible])
             {
                 [_connectionErrorWholeScreenWindow close];
                 [_connectionErrorFloatingWindow close];
