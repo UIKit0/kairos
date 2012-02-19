@@ -190,6 +190,11 @@ var IsReadImage,
 
     [toolbar validateVisibleItems];
 
+    // Give the email details header the same background colour as the source view.
+    // TODO The details header view should have its own controller.
+    [[fromLabel superview] setBackgroundColor:[CPColor colorWithHexString:@"D6DDE3"]];
+
+
     // Localize
     [fromLabel setObjectValue:[[CPString alloc] initWithFormat:@"%@:", [[TNLocalizationCenter defaultCenter] localize:@"From"]]];
     [toLabel setObjectValue:[[CPString alloc] initWithFormat:@"%@:", [[TNLocalizationCenter defaultCenter] localize:@"To"]]];
