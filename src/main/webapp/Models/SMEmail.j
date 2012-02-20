@@ -11,6 +11,9 @@
 
 @import "SMRemoteObject.j"
 
+/* Comment by Victor Kazarinov: SMEmail is used to show headers list in Vertical View, where
+ * each line in table show several fields such as from, subject, date.
+ */
 @implementation SMEmail : SMRemoteObject
 {
     /*! The mailbox the email belongs to. */
