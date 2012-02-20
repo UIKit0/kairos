@@ -62,4 +62,12 @@ public class ImapSession {
 			return null;
 		}
 	}
+	
+	public static boolean isWebGuestAccountSoNeedFakeAllNames(HttpSession httpSession) {
+		String aun = (String) httpSession.getAttribute("authenticationUserName");
+		if (aun.contentEquals("webguest@smartmobili.com"))
+			return true;
+		else
+			return false;
+	}
 }
