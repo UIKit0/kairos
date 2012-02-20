@@ -676,6 +676,8 @@ var IsReadImage,
         {
             //CPLog.debug(@"Mail headers %@", [mailHeaders objectAtIndex:aRow]);
             result = [[mailHeaders objectAtIndex:aRow] fromName];
+            if (result.length == 0)
+                result = [[mailHeaders objectAtIndex:aRow] fromEmail];
         }
         else if ([[aTableColumn identifier] isEqualToString:@"Subject"])
         {
