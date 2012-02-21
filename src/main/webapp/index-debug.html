@@ -27,32 +27,7 @@
             OBJJ_INCLUDE_PATHS = ["Frameworks/Debug", "Frameworks"];
         </script>
 
-        <script type="text/javascript" src="Frameworks/Debug/Objective-J/Objective-J.js" charset="UTF-8"></script>
-
-        <script type="text/javascript">
-            objj_msgSend_reset();
-
-            // DEBUG OPTIONS:
-
-            // Uncomment to enable printing of backtraces on exceptions:
-            //objj_msgSend_decorate(objj_backtrace_decorator);
-
-            // Uncomment to supress exceptions that take place inside a message
-            //objj_msgSend_decorate(objj_supress_exceptions_decorator)
-
-            // Uncomment to enable runtime type checking:
-            //objj_msgSend_decorate(objj_typecheck_decorator);
-
-            // Uncomment (along with both above) to print backtraces on type check errors:
-            //objj_typecheck_prints_backtrace = true;
-
-            // Uncomment to disable the default logger (CPLogConsole if window.console exists, CPLogPopup otherwise):
-            //CPLogUnregister(CPLogDefault);
-
-            // Uncomment to enable a specific logger:
-            //CPLogRegister(CPLogConsole);
-            //CPLogRegister(CPLogPopup);
-        </script>
+        <!--<script type="text/javascript" src="Frameworks/Debug/Objective-J/Objective-J.js" charset="UTF-8"></script>-->
 
         <style type="text/css">
             body{margin:0; padding:0; background-color: rgb(211, 218, 223);}
@@ -112,7 +87,7 @@
                         var head= document.getElementsByTagName('head')[0];
                         var script= document.createElement('script');
                         script.type= 'text/javascript';
-                        script.src= 'Frameworks/Objective-J/Objective-J.js';
+                        script.src= 'Frameworks/Debug/Objective-J/Objective-J.js';
                         script.charset="UTF-8";
                         //document.write("ALL OK - now site can be loaded.");
                         head.appendChild(script);
@@ -129,6 +104,32 @@
                         }
                     }
                     }
+                </script>
+
+                <script type="text/javascript">
+                    // FIXME This needs to be dynamically activated in the script that loads ObjJ above.
+                    // objj_msgSend_reset();
+
+                    // DEBUG OPTIONS:
+
+                    // Uncomment to enable printing of backtraces on exceptions:
+                    //objj_msgSend_decorate(objj_backtrace_decorator);
+
+                    // Uncomment to supress exceptions that take place inside a message
+                    //objj_msgSend_decorate(objj_supress_exceptions_decorator)
+
+                    // Uncomment to enable runtime type checking:
+                    //objj_msgSend_decorate(objj_typecheck_decorator);
+
+                    // Uncomment (along with both above) to print backtraces on type check errors:
+                    //objj_typecheck_prints_backtrace = true;
+
+                    // Uncomment to disable the default logger (CPLogConsole if window.console exists, CPLogPopup otherwise):
+                    //CPLogUnregister(CPLogDefault);
+
+                    // Uncomment to enable a specific logger:
+                    //CPLogRegister(CPLogConsole);
+                    //CPLogRegister(CPLogPopup);
                 </script>
 
                 <noscript>
