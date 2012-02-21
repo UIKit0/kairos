@@ -28,8 +28,8 @@ APPLICATION_VERSION_NUMBER = 0.1;
 
 @implementation AppController : CPObject
 {
-    MailController mailController;
-    HNAuthController authenticationController;
+    MailController      mailController;
+    HNAuthController    authenticationController;
     IBOutlet CPMenuItem viewMenu;
     IBOutlet CPMenuItem readingPaneMenuItem;
     IBOutlet CPMenuItem rightMenuItem;
