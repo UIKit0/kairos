@@ -37,6 +37,7 @@ import com.mongodb.gridfs.GridFS;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.smartmobili.httpSessionAttributes.CurrentComposingEmailProperties;
 import com.smartmobili.other.DbCommon;
+import com.smartmobili.other.DemoContentReplacer;
 import com.smartmobili.other.MailTextAndAttachmentsProcesser;
 import com.smartmobili.other.ImapSession;
 import com.smartmobili.other.MongoDbImapDataSource;
@@ -69,6 +70,8 @@ public class ImapServiceServlet extends HttpServlet {
 	Logger log = Logger.getLogger(ImapServiceServlet.class);
 	
 	DB attachmentsDb;
+	
+	private static DemoContentReplacer demoContentReplacer = new DemoContentReplacer();
 	
 /*	public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol)
     {
@@ -275,7 +278,18 @@ public class ImapServiceServlet extends HttpServlet {
 
 					messageHeaderAsJson
 							.put("messageId", imapMsg.getMessageID());
-					messageHeaderAsJson.put("from_Array", imapMsg.getFrom());
+					
+					
+					Address[] fromArr = imapMsg.getFrom();
+					if (ImapSession.isWebGuestAccountSoNeedFakeAllNames(httpSession)) {
+						for(Address a : fromArr) {
+							InternetAddress ia = (InternetAddress)a;
+							ia.setAddress(demoContentReplacer.replaceAllToFakeInAddress(ia.getAddress()));
+							if (ia.getPersonal() != null)
+								ia.setPersonal(demoContentReplacer.replaceAllToFakeInPersonal(ia.getPersonal(), ia.getAddress()));
+						}
+					}
+					messageHeaderAsJson.put("from_Array", fromArr);
 
 					messageHeaderAsJson.put("subject", imapMsg.getSubject());
 					Date sentDate = imapMsg.getSentDate();
@@ -311,7 +325,7 @@ public class ImapServiceServlet extends HttpServlet {
 			imapStore.close();
 		}
 	}
-	
+
 	public JSONObject mailContentForMessageId(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
 		Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
 		// and connected imapStore,
@@ -342,6 +356,13 @@ public class ImapServiceServlet extends HttpServlet {
 				mailContentInJson.put("to", InternetAddress.toString(msg.getRecipients(Message.RecipientType.TO)));
 				mailContentInJson.put("cc_Array", msg.getRecipients(Message.RecipientType.CC));
 				mailContentInJson.put("bcc_Array", msg.getRecipients(Message.RecipientType.BCC));
+				
+				if (ImapSession.isWebGuestAccountSoNeedFakeAllNames(httpSession)) {
+					mailContentInJson.put("from", demoContentReplacer.addressToString(msg.getFrom()));
+					mailContentInJson.put("to", demoContentReplacer.addressToString(msg.getRecipients(Message.RecipientType.TO)));
+					// TODO: if need, also use demoContentReplacer.addressToFake to replace all "from, to, cc, bcc" _Arrays.
+				}
+				
 				mailContentInJson.put("subject", msg.getSubject());	
 				if (msg.getSentDate() != null) {
 					mailContentInJson.put("sentDate", (int)(msg.getSentDate().getTime() / 1000));
@@ -351,8 +372,12 @@ public class ImapServiceServlet extends HttpServlet {
 				}
 				
 				MailTextAndAttachmentsProcesser javaUtil = new MailTextAndAttachmentsProcesser();
-				mailContentInJson.put("body", javaUtil.getText(parameters.getString("folder"), 
-						parameters.getString("messageId"), msg)); // TODO: need to send to cappucino not just "text" but separated multipart content as is (so it will show images and text properly). See more comments by Oobe in SMMailUtilJava regarding background downloading of attachements (images).
+				
+				String body = javaUtil.getText(parameters.getString("folder"), 
+						parameters.getString("messageId"), msg);
+				if (ImapSession.isWebGuestAccountSoNeedFakeAllNames(httpSession))
+					body = DemoContentReplacer.explicitlyReplaceContent(body);
+				mailContentInJson.put("body", body); // TODO: need to send to cappucino not just "text" but separated multipart content as is (so it will show images and text properly). See more comments by Oobe in SMMailUtilJava regarding background downloading of attachements (images).
 				
 				mailContentInJson.put("isSeen", msg.isSet(Flags.Flag.SEEN));
 				
