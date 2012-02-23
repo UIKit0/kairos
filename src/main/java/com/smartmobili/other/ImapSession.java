@@ -28,24 +28,17 @@ public class ImapSession {
 	public static Store imapConnect(HttpSession httpSession) {
 		Store store = null;
 		try {
-			Properties props = new Properties();
-			/*
-			 * props.put("mail.imap.connectionpoolsize", imapConnectionPoolSize)
-			 * props.put("mail.imap.connectionpooltimeout",
-			 * imapConnectionPoolTimeout) props.put("mail.imap.timeout",
-			 * imapTimeout) props.put("mail.imap.connectiontimeout",
-			 * imapConnectionTimeout)
-			 */
+			
 
-			final Session imapSession = Session.getInstance(props); // TODO: reuse imapSession (opened and connected) from httpSession.
+			final Session imapSession = getImapSession(httpSession);
 			imapSession.setDebug(isDebuggingEnabled);
 			store = imapSession.getStore(imapProtocol);
 			store.connect(
 					/* credentials.host */mailHost,
 					(String) httpSession.getAttribute("authenticationUserName"),
 					(String) httpSession.getAttribute("authenticationPassword"));
-
-			// TODO: in future save opened session and re-use it later always
+			
+			// TODO: in future save opened session and store and re-use it later always
 			// (and re-connect if failed). and also disconnect somewhere when
 			// session time-outed or logged-out (Need find place - perhaps add
 			// thread which will check dead session via interval?)
@@ -69,5 +62,18 @@ public class ImapSession {
 			return true;
 		else
 			return false;
+	}
+
+	public static Session getImapSession(HttpSession httpSession_notYetUsed_TODO) {
+		Properties props = new Properties();
+		/*
+		 * props.put("mail.imap.connectionpoolsize", imapConnectionPoolSize)
+		 * props.put("mail.imap.connectionpooltimeout",
+		 * imapConnectionPoolTimeout) props.put("mail.imap.timeout",
+		 * imapTimeout) props.put("mail.imap.connectiontimeout",
+		 * imapConnectionTimeout)
+		 */
+		final Session imapSession = Session.getInstance(props); // TODO: reuse imapSession (opened and connected) from httpSession.
+		return imapSession;
 	}
 }

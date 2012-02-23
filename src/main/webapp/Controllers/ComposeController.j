@@ -28,6 +28,7 @@ var CPAlertSaveAsDraft							= 0,
     @outlet id              textFieldSubject; //CPTextField
     
     @outlet id              buttonSend;
+    @outlet id              buttonSaveAsDraft;
     
     TextDisplay statusDisplay;
 //	@outlet CPWebView		webView;
@@ -114,6 +115,48 @@ var CPAlertSaveAsDraft							= 0,
     alert("This button used for tests during development of compose window.");
 }
 
+- (IBAction)saveAsDraftButtonClickedAction:(id)sender
+{
+    // TODO: for GUI developer: replace htmlOfEmail value with full html text of email from rich text editor.
+    [self.buttonSaveAsDraft setEnabled:false];
+    
+    var htmlOfEmailVar = [self.textField1 objectValue];
+    [_serverConnection setTimeout:60];
+    
+    // parameters is same as for "send email" function.
+    [_serverConnection callRemoteFunction:@"currentlyComposingEmailSaveAsDraft"
+           withFunctionParametersAsObject: { "htmlOfEmail":htmlOfEmailVar,
+               "subject":[self.textFieldSubject objectValue],
+               "to":[self.textFieldToAddress objectValue],
+               "cc":[self.textFieldCCAddress objectValue] }
+                                 delegate:self
+                           didEndSelector:@selector(currentlyComposingEmailSaveAsDraftDidReceived:withParametersObject:)
+                                    error:@selector(currentlyComposingEmailSaveAsDraftTimeOutOrError:)];
+}
+
+- (void)currentlyComposingEmailSaveAsDraftTimeOutOrError:(id)sender
+{  
+    // TODO: for GUI developer: THINK: how it should work when email is failed to send by timeout. 
+    [self.buttonSaveAsDraft setEnabled:true];
+    alert("Error saving email as draft: timeout");
+}
+
+- (void)currentlyComposingEmailSaveAsDraftDidReceived:(id)sender withParametersObject:parametersObject 
+{
+    // TODO: for GUI developer: THINK: how it should work when email is sent - should window be closed or not and etc.
+    [self.buttonSaveAsDraft setEnabled:true];
+    if (parametersObject.emailIsSavedAsDraft == true) 
+    {
+        alert("Email is saved as draft successfully");
+        [theWindow close];
+    }
+    else
+    {
+        // TODO: how to show error for user?
+        alert("Failed to save email as draft. Error details: " + parametersObject.errorDetails);
+    }
+}
+
 - (IBAction)sendButtonClickedAction:(id)sender
 {
     // TODO: for GUI developer: replace htmlOfEmail value with full html text of email from rich text editor.
@@ -122,6 +165,7 @@ var CPAlertSaveAsDraft							= 0,
     var htmlOfEmailVar = [self.textField1 objectValue];
     [_serverConnection setTimeout:60];
 
+    // parameters is same as for "save email as draft" function.
     [_serverConnection callRemoteFunction:@"currentlyComposingEmailSend"
            withFunctionParametersAsObject: { "htmlOfEmail":htmlOfEmailVar,
                                              "subject":[self.textFieldSubject objectValue],

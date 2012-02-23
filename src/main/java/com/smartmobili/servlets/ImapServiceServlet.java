@@ -658,83 +658,12 @@ public class ImapServiceServlet extends HttpServlet {
 				props.put("mail.transport.protocol", "smtp");
 			}
 			props.put("mail.smtp.auth", "true");
-
-			InternetAddress props_from = new InternetAddress();
-			InternetAddress props_to = new InternetAddress();
-			InternetAddress props_cc_canBeNull = null;
 			
-			props_from.setPersonal(FromAddress); // TODO: here should be name
-			props_from.setAddress(FromAddress);
-			props_to.setPersonal(parameters.getString("to")); // TODO: here should be name
-			props_to.setAddress(parameters.getString("to"));
-			
-			if (parameters.getString("to").length() > 0) {
-				props_cc_canBeNull = new InternetAddress();
-				props_cc_canBeNull.setPersonal(parameters.getString("cc")); // TODO: here should be name
-				props_cc_canBeNull.setAddress(parameters.getString("cc"));
-			}
-
 			Session mailSession = Session.getDefaultInstance(props);
 			mailSession.setDebug(debugSmtp);
 
-			MimeMessage message = new MimeMessage(mailSession);
-
-			message.setFrom(props_from); // From
-
-			message.addRecipient(Message.RecipientType.TO, props_to); // To
-			message.setSubject((String) parameters.get("subject"), "utf-8"); // Subject
-			if (props_cc_canBeNull != null)
-				message.addRecipient(Message.RecipientType.CC, props_cc_canBeNull); // CC
-
-			Multipart multipart = new MimeMultipart();
-
-			// text message part
-			{
-				// Create the message part
-				BodyPart messageBodyPart = new MimeBodyPart();
-
-				messageBodyPart.setContent(
-						(String) parameters.get("htmlOfEmail"),
-						"text/html; charset=\"utf-8\"");
-
-				// Add part one
-				multipart.addBodyPart(messageBodyPart);
-			}
-
-			// Add next parts which is attachments
-			{
-				CurrentComposingEmailProperties ccep = CurrentComposingEmailProperties
-						.getFromHttpSessionOrCreateNewDefaultInIt(httpSession);
-				GridFS gfsFileAttachment = DbCommon
-						.getGridFSforAttachmentsFiles(this.attachmentsDb);
-				
-				for (CurrentComposingEmailProperties.OneAttachmentProperty oap : ccep
-						.getCopyOfListOfAttachments()) {
-					if (oap.isThisAttachmentFromExistingImapMessage() == false) {
-						ObjectId dbIdOfAttachment = oap.getDbAttachmentId();
-						GridFSDBFile file = gfsFileAttachment
-								.findOne(dbIdOfAttachment);
-
-						currentlyComposingEmailSend_AddAttachmentToComposingMessage(
-								multipart, file, oap.getContentType(),
-								oap.getFileName());
-
-						// TODO: should we close "inputStreamOfAttachmentFromDb"
-						// ?
-						// Or perhaps not here but after sending message bellow,
-						// so
-						// it should accumulate opened streams in list and then
-						// close all at once.
-					} else {
-						// TODO:
-						throw new MessagingException(
-								"Sending email with attachments from imap (e.g. from draft) is not yet supported");
-					}
-				}
-			}
-
-			// Put parts in message
-			message.setContent(multipart);
+			MimeMessage message = createMailMessage(parameters, httpSession,
+					mailSession);
 
 			// Sending
 			Transport transport = mailSession.getTransport();
@@ -765,6 +694,87 @@ public class ImapServiceServlet extends HttpServlet {
 		return res;
 	}
 
+	private MimeMessage createMailMessage(JSONObject parameters,
+			HttpSession httpSession, Session mailSession)
+			throws UnsupportedEncodingException, MessagingException {
+		InternetAddress props_from = new InternetAddress();
+		InternetAddress props_to = new InternetAddress();
+		InternetAddress props_cc_canBeNull = null;
+		
+		props_from.setPersonal(FromAddress); // TODO: here should be name
+		props_from.setAddress(FromAddress);
+		props_to.setPersonal(parameters.getString("to")); // TODO: here should be name
+		props_to.setAddress(parameters.getString("to"));
+		
+		if (parameters.getString("to").length() > 0) {
+			props_cc_canBeNull = new InternetAddress();
+			props_cc_canBeNull.setPersonal(parameters.getString("cc")); // TODO: here should be name
+			props_cc_canBeNull.setAddress(parameters.getString("cc"));
+		}
+
+		MimeMessage message = new MimeMessage(mailSession);
+		
+		message.setSentDate(new Date());
+
+		message.setFrom(props_from); // From
+
+		message.addRecipient(Message.RecipientType.TO, props_to); // To
+		message.setSubject((String) parameters.get("subject"), "utf-8"); // Subject
+		if (props_cc_canBeNull != null)
+			message.addRecipient(Message.RecipientType.CC, props_cc_canBeNull); // CC
+
+		Multipart multipart = new MimeMultipart();
+
+		// text message part
+		{
+			// Create the message part
+			BodyPart messageBodyPart = new MimeBodyPart();
+
+			messageBodyPart.setContent(
+					(String) parameters.get("htmlOfEmail"),
+					"text/html; charset=\"utf-8\"");
+
+			// Add part one
+			multipart.addBodyPart(messageBodyPart);
+		}
+
+		// Add next parts which is attachments
+		{
+			CurrentComposingEmailProperties ccep = CurrentComposingEmailProperties
+					.getFromHttpSessionOrCreateNewDefaultInIt(httpSession);
+			GridFS gfsFileAttachment = DbCommon
+					.getGridFSforAttachmentsFiles(this.attachmentsDb);
+			
+			for (CurrentComposingEmailProperties.OneAttachmentProperty oap : ccep
+					.getCopyOfListOfAttachments()) {
+				if (oap.isThisAttachmentFromExistingImapMessage() == false) {
+					ObjectId dbIdOfAttachment = oap.getDbAttachmentId();
+					GridFSDBFile file = gfsFileAttachment
+							.findOne(dbIdOfAttachment);
+
+					currentlyComposingEmailSend_AddAttachmentToComposingMessage(
+							multipart, file, oap.getContentType(),
+							oap.getFileName());
+
+					// TODO: should we close "inputStreamOfAttachmentFromDb"
+					// ?
+					// Or perhaps not here but after sending message bellow,
+					// so
+					// it should accumulate opened streams in list and then
+					// close all at once.
+				} else {
+					// TODO:
+					throw new MessagingException(
+							"Sending email with attachments from imap (e.g. from draft) is not yet supported");
+				}
+			}
+		}
+
+		// Put parts in message
+		message.setContent(multipart);
+		return message;
+	}
+
 	/**
 	 * Adds to multipart a new part with file attachment.
 	 * 
@@ -793,6 +803,38 @@ public class ImapServiceServlet extends HttpServlet {
 
 		// Add part two
 		multipart.addBodyPart(messageFilePart);
-
+	}
+	
+	public JSONObject currentlyComposingEmailSaveAsDraft(JSONObject parameters,
+			HttpSession httpSession) {
+		JSONObject res = new JSONObject();
+		try {
+			Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
+			// and connected imapStore,
+			// or reconnect.
+			
+			Session imapSession = ImapSession.getImapSession(httpSession);
+			
+			MimeMessage message = createMailMessage(parameters, httpSession,
+					imapSession);
+			message.setFlag(Flags.Flag.DRAFT, true);
+			
+			// Get the specified folder
+			Folder folder = imapStore.getFolder("Drafts");
+				
+			// Folders are retrieved closed. To get the messages it is necessary to
+			// open them (but not to rename them, for example)
+			folder.open(Folder.READ_WRITE);
+			
+			folder.appendMessages(new Message[]{message});
+			
+			folder.close(false);
+			
+			res.put("emailIsSavedAsDraft", true);
+		} catch (Exception ex) {
+			res.put("emailIsSavedAsDraft", false);
+			res.put("errorDetails", ex.toString());
+		}
+		return res;
 	}
 }
