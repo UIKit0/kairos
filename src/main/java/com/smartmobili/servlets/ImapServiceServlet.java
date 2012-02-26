@@ -341,61 +341,66 @@ public class ImapServiceServlet extends HttpServlet {
 		// Folders are retrieved closed. To get the messages it is necessary to
 		// open them (but not to rename them, for example)
 		folder.open(Folder.READ_ONLY);
-
-		MessageIDTerm mIdTerm = new MessageIDTerm(messageId);
-
-		Message[] arr = folder.search(mIdTerm);
-
-		if (arr.length > 0) {
-			IMAPMessage msg = (IMAPMessage) arr[0];
-			JSONObject mailContentInJson = new JSONObject();
-			mailContentInJson.put("from_Array", msg.getFrom());
-			mailContentInJson.put("from",
-					InternetAddress.toString(msg.getFrom()));
-
-			mailContentInJson.put("replyTo_Array", msg.getReplyTo());
-			mailContentInJson.put("to_Array",
-					msg.getRecipients(Message.RecipientType.TO));
-			mailContentInJson.put("to", InternetAddress.toString(msg
-					.getRecipients(Message.RecipientType.TO)));
-			Object cca = msg.getRecipients(Message.RecipientType.CC);
-			mailContentInJson.put("cc_Array", cca);
-			mailContentInJson.put("bcc_Array",
-					msg.getRecipients(Message.RecipientType.BCC));
-
-			if (ImapSession.isWebGuestAccountSoNeedFakeAllNames(httpSession)) {
+		try
+		{
+			MessageIDTerm mIdTerm = new MessageIDTerm(messageId);
+	
+			Message[] arr = folder.search(mIdTerm);
+	
+			if (arr.length > 0) {
+				IMAPMessage msg = (IMAPMessage) arr[0];
+				JSONObject mailContentInJson = new JSONObject();
+				mailContentInJson.put("from_Array", msg.getFrom());
 				mailContentInJson.put("from",
-						demoContentReplacer.addressToString(msg.getFrom()));
-				mailContentInJson.put("to", demoContentReplacer
-						.addressToString(msg
-								.getRecipients(Message.RecipientType.TO)));
-				// TODO: if need, also use demoContentReplacer.addressToFake to
-				// replace all "from, to, cc, bcc" _Arrays.
-			}
-
-			mailContentInJson.put("subject", msg.getSubject());
-			if (msg.getSentDate() != null) {
-				mailContentInJson.put("sentDate", (int) (msg.getSentDate()
-						.getTime() / 1000));
-			} else {
-				mailContentInJson.put("sentDate", "");
-			}
-
-			MailTextAndAttachmentsProcesser javaUtil = new MailTextAndAttachmentsProcesser();
-
-			String body = javaUtil.getTextAndListOfAttachments(folderName,
-					messageId, msg, listOfAttachmentsToFill);
-			if (ImapSession.isWebGuestAccountSoNeedFakeAllNames(httpSession))
-				body = DemoContentReplacer.explicitlyReplaceContent(body);
-			mailContentInJson.put("body", body);
-			// TODO: perhaps in future need to send body and attachments separate, e.g. 
-			// mailContentInJson.put("attachements", null); 
-			// Currently if listOfAttachmentsToFill is null, then attachments as links is inside of body!!
-
-			mailContentInJson.put("isSeen", msg.isSet(Flags.Flag.SEEN));
-			return mailContentInJson;
-		} else
-			return null;
+						InternetAddress.toString(msg.getFrom()));
+	
+				mailContentInJson.put("replyTo_Array", msg.getReplyTo());
+				mailContentInJson.put("to_Array",
+						msg.getRecipients(Message.RecipientType.TO));
+				mailContentInJson.put("to", InternetAddress.toString(msg
+						.getRecipients(Message.RecipientType.TO)));
+				Object cca = msg.getRecipients(Message.RecipientType.CC);
+				mailContentInJson.put("cc_Array", cca);
+				mailContentInJson.put("bcc_Array",
+						msg.getRecipients(Message.RecipientType.BCC));
+	
+				if (ImapSession.isWebGuestAccountSoNeedFakeAllNames(httpSession)) {
+					mailContentInJson.put("from",
+							demoContentReplacer.addressToString(msg.getFrom()));
+					mailContentInJson.put("to", demoContentReplacer
+							.addressToString(msg
+									.getRecipients(Message.RecipientType.TO)));
+					// TODO: if need, also use demoContentReplacer.addressToFake to
+					// replace all "from, to, cc, bcc" _Arrays.
+				}
+	
+				mailContentInJson.put("subject", msg.getSubject());
+				if (msg.getSentDate() != null) {
+					mailContentInJson.put("sentDate", (int) (msg.getSentDate()
+							.getTime() / 1000));
+				} else {
+					mailContentInJson.put("sentDate", "");
+				}
+	
+				MailTextAndAttachmentsProcesser javaUtil = new MailTextAndAttachmentsProcesser();
+	
+				String body = javaUtil.getTextAndListOfAttachments(folderName,
+						messageId, msg, listOfAttachmentsToFill);
+				if (ImapSession.isWebGuestAccountSoNeedFakeAllNames(httpSession))
+					body = DemoContentReplacer.explicitlyReplaceContent(body);
+				mailContentInJson.put("body", body);
+				// TODO: perhaps in future need to send body and attachments separate, e.g. 
+				// mailContentInJson.put("attachements", null); 
+				// Currently if listOfAttachmentsToFill is null, then attachments as links is inside of body!!
+	
+				mailContentInJson.put("isSeen", msg.isSet(Flags.Flag.SEEN));
+				return mailContentInJson;
+			} else
+				return null;
+		}
+		finally{
+			folder.close(false);
+		}
 	}
 
 	public JSONObject mailContentForMessageId(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
