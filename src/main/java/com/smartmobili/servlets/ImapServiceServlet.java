@@ -27,6 +27,7 @@ import java.io.*;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.*;
@@ -40,6 +41,7 @@ import com.smartmobili.other.DbCommon;
 import com.smartmobili.other.DemoContentReplacer;
 import com.smartmobili.other.MailTextAndAttachmentsProcesser;
 import com.smartmobili.other.ImapSession;
+import com.smartmobili.other.MailTextAndAttachmentsProcesser.AttachmentInMessageProperties;
 import com.smartmobili.other.MongoDbImapDataSource;
 //import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPMessage;
@@ -326,75 +328,95 @@ public class ImapServiceServlet extends HttpServlet {
 		}
 	}
 
+	private JSONObject getMailContentAsJson(
+			Store imapStore,
+			String folderName,
+			String messageId,
+			HttpSession httpSession,
+			List<MailTextAndAttachmentsProcesser.AttachmentInMessageProperties> listOfAttachmentsToFill)
+			throws MessagingException, IOException {
+		// Get the specified folder
+		Folder folder = imapStore.getFolder(folderName);
+
+		// Folders are retrieved closed. To get the messages it is necessary to
+		// open them (but not to rename them, for example)
+		folder.open(Folder.READ_ONLY);
+
+		MessageIDTerm mIdTerm = new MessageIDTerm(messageId);
+
+		Message[] arr = folder.search(mIdTerm);
+
+		if (arr.length > 0) {
+			IMAPMessage msg = (IMAPMessage) arr[0];
+			JSONObject mailContentInJson = new JSONObject();
+			mailContentInJson.put("from_Array", msg.getFrom());
+			mailContentInJson.put("from",
+					InternetAddress.toString(msg.getFrom()));
+
+			mailContentInJson.put("replyTo_Array", msg.getReplyTo());
+			mailContentInJson.put("to_Array",
+					msg.getRecipients(Message.RecipientType.TO));
+			mailContentInJson.put("to", InternetAddress.toString(msg
+					.getRecipients(Message.RecipientType.TO)));
+			Object cca = msg.getRecipients(Message.RecipientType.CC);
+			mailContentInJson.put("cc_Array", cca);
+			mailContentInJson.put("bcc_Array",
+					msg.getRecipients(Message.RecipientType.BCC));
+
+			if (ImapSession.isWebGuestAccountSoNeedFakeAllNames(httpSession)) {
+				mailContentInJson.put("from",
+						demoContentReplacer.addressToString(msg.getFrom()));
+				mailContentInJson.put("to", demoContentReplacer
+						.addressToString(msg
+								.getRecipients(Message.RecipientType.TO)));
+				// TODO: if need, also use demoContentReplacer.addressToFake to
+				// replace all "from, to, cc, bcc" _Arrays.
+			}
+
+			mailContentInJson.put("subject", msg.getSubject());
+			if (msg.getSentDate() != null) {
+				mailContentInJson.put("sentDate", (int) (msg.getSentDate()
+						.getTime() / 1000));
+			} else {
+				mailContentInJson.put("sentDate", "");
+			}
+
+			MailTextAndAttachmentsProcesser javaUtil = new MailTextAndAttachmentsProcesser();
+
+			String body = javaUtil.getTextAndListOfAttachments(folderName,
+					messageId, msg, listOfAttachmentsToFill);
+			if (ImapSession.isWebGuestAccountSoNeedFakeAllNames(httpSession))
+				body = DemoContentReplacer.explicitlyReplaceContent(body);
+			mailContentInJson.put("body", body);
+			// TODO: perhaps in future need to send body and attachments separate, e.g. 
+			// mailContentInJson.put("attachements", null); 
+			// Currently if listOfAttachmentsToFill is null, then attachments as links is inside of body!!
+
+			mailContentInJson.put("isSeen", msg.isSet(Flags.Flag.SEEN));
+			return mailContentInJson;
+		} else
+			return null;
+	}
+
 	public JSONObject mailContentForMessageId(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
 		Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
 		// and connected imapStore,
 		// or reconnect.
 
 		try {
-			// Get the specified folder
-			Folder folder = imapStore.getFolder(parameters.getString("folder"));
-	
-			// Folders are retrieved closed. To get the messages it is necessary to
-		    // open them (but not to rename them, for example)
-			folder.open(Folder.READ_ONLY);
-			
-			MessageIDTerm mIdTerm = new MessageIDTerm(parameters.getString("messageId"));
-			
 			JSONObject result = new JSONObject();
-		
-			Message[] arr = folder.search(mIdTerm);
-			if (arr.length > 0)
-			{
-				IMAPMessage msg = (IMAPMessage)arr[0];
-				JSONObject mailContentInJson = new JSONObject();
-				mailContentInJson.put("from_Array", msg.getFrom());
-				mailContentInJson.put("from", InternetAddress.toString(msg.getFrom()));
-				
-				mailContentInJson.put("replyTo_Array", msg.getReplyTo());
-				mailContentInJson.put("to_Array", msg.getRecipients(Message.RecipientType.TO));
-				mailContentInJson.put("to", InternetAddress.toString(msg.getRecipients(Message.RecipientType.TO)));
-				mailContentInJson.put("cc_Array", msg.getRecipients(Message.RecipientType.CC));
-				mailContentInJson.put("bcc_Array", msg.getRecipients(Message.RecipientType.BCC));
-				
-				if (ImapSession.isWebGuestAccountSoNeedFakeAllNames(httpSession)) {
-					mailContentInJson.put("from", demoContentReplacer.addressToString(msg.getFrom()));
-					mailContentInJson.put("to", demoContentReplacer.addressToString(msg.getRecipients(Message.RecipientType.TO)));
-					// TODO: if need, also use demoContentReplacer.addressToFake to replace all "from, to, cc, bcc" _Arrays.
-				}
-				
-				mailContentInJson.put("subject", msg.getSubject());	
-				if (msg.getSentDate() != null) {
-					mailContentInJson.put("sentDate", (int)(msg.getSentDate().getTime() / 1000));
-				}
-				else {
-					mailContentInJson.put("sentDate", "");
-				}
-				
-				MailTextAndAttachmentsProcesser javaUtil = new MailTextAndAttachmentsProcesser();
-				
-				String body = javaUtil.getText(parameters.getString("folder"), 
-						parameters.getString("messageId"), msg);
-				if (ImapSession.isWebGuestAccountSoNeedFakeAllNames(httpSession))
-					body = DemoContentReplacer.explicitlyReplaceContent(body);
-				mailContentInJson.put("body", body); // TODO: need to send to cappucino not just "text" but separated multipart content as is (so it will show images and text properly). See more comments by Oobe in SMMailUtilJava regarding background downloading of attachements (images).
-				
-				mailContentInJson.put("isSeen", msg.isSet(Flags.Flag.SEEN));
-				
-				mailContentInJson.put("attachements", null); // TODO: SMMailUtil function attachmentListForMessage from Scala was used here. 
-				
-				result.put("mailContent", mailContentInJson);
-			}
-			else
-			{
-				result.put("mailContent", null);
-			}
+
+			JSONObject mailContentInJson =
+					getMailContentAsJson(imapStore, parameters.getString("folder"), parameters.getString("messageId"),
+					httpSession, null);
+
+			result.put("mailContent", mailContentInJson);
 			return result;
 		} finally {
 			imapStore.close();
 		}
 	}
-	
+
 	/*
 	 * Rename IMAP folder. 
 	 * Result is "" if no errors, or result is string with
@@ -833,6 +855,46 @@ public class ImapServiceServlet extends HttpServlet {
 			res.put("emailIsSavedAsDraft", true);
 		} catch (Exception ex) {
 			res.put("emailIsSavedAsDraft", false);
+			res.put("errorDetails", ex.toString());
+		}
+		return res;
+	}
+
+	/**
+	 * This function read mail content (text/html only, without attachments)
+	 * and send it to client.
+	 * All Attachments is mapped (e.g. stored links to this attachments) in
+	 * attachments "CurrentComposingEmailProperties" object.
+	 * @param parameters
+	 * @param httpSession
+	 * @return
+	 */
+	public JSONObject restoreMailToEditInComposingWindow(JSONObject parameters,
+			HttpSession httpSession) {
+		JSONObject res = new JSONObject();
+		try {
+			Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
+			// and connected imapStore,
+			// or reconnect.
+
+			//Session imapSession = ImapSession.getImapSession(httpSession);
+			List<AttachmentInMessageProperties> listOfAttachments =
+					new ArrayList<AttachmentInMessageProperties>();
+			JSONObject mailContentInJson =
+					getMailContentAsJson(imapStore, parameters.getString("folder"),
+							parameters.getString("messageId"), httpSession, listOfAttachments);
+
+			currentlyComposingEmailClearAll(null, httpSession);
+			CurrentComposingEmailProperties ccep = CurrentComposingEmailProperties.getFromHttpSessionOrCreateNewDefaultInIt(httpSession);
+
+			for(AttachmentInMessageProperties aim : listOfAttachments) {
+				ccep.insertImapAttachment(aim);
+			}
+
+			res.put("mailContent", mailContentInJson);
+			//res.put("qwer", "asdf");
+		} catch (Exception ex) {
+			//res.put("emailIsSavedAsDraft", false);
 			res.put("errorDetails", ex.toString());
 		}
 		return res;

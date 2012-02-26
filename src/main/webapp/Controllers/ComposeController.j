@@ -14,8 +14,9 @@
 
 var CPAlertSaveAsDraft							= 0,
     CPAlertContinueWriting						= 1,
-    CPAlertDiscard								= 2;
-
+    CPAlertDiscard								= 2,
+    imapMsgIdToOpen,
+    imapFolderName;
 
 @implementation ComposeController: CPWindowController
 {
@@ -35,7 +36,6 @@ var CPAlertSaveAsDraft							= 0,
 
 //	id						_prevDelegate;
 //	Imap					_imap;
-	//CPString				_messageID;
     ServerConnection    _serverConnection;
 }
 
@@ -53,6 +53,8 @@ var CPAlertSaveAsDraft							= 0,
   
     var urlString = "uploadAttachment"; //"http://localhost:8080/uploadAttachment"
     
+    _serverConnection = [[ServerConnection alloc] init];
+
     if (customView1)
     {
         var customView1Frame = customView1._bounds.size;  //CGFrame  
@@ -67,18 +69,35 @@ var CPAlertSaveAsDraft							= 0,
         
         statusDisplay = [[TextDisplay alloc] initWithFrame:CGRectMake(10, 180, 500, 100)];
         [contentView addSubview:statusDisplay];
+
+        [_serverConnection setDefaultTimeout];
+        // Call this clear when starting to compose new email to clear.
+        // TODO: use this only when creatin new email. (not yet possible to DO).
+        [_serverConnection callRemoteFunction:@"currentlyComposingEmailClearAll"
+               withFunctionParametersAsObject:nil
+                                     delegate:self
+                               didEndSelector:nil
+                                        error:nil];
+
+        if (imapFolderName) // with checking imapFolderName to "nil" we check was "setMessageIdToOpenFromImap" function called or not.
+        {
+            // TODO: add loading indicator (opening/loading existing imap email).
+
+            [_serverConnection setTimeout:60]; // downloading mail body can take some time.
+            [_serverConnection callRemoteFunction:@"restoreMailToEditInComposingWindow"
+                   withFunctionParametersAsObject:{ folder:imapFolderName, messageId:imapMsgIdToOpen }
+                                         delegate:self
+                                   didEndSelector:@selector(currentlyComposingEmailRestoreMailToEditInComposingWindowDidReceived:withParametersObject:)
+                                            error:nil];
+
+            // TODO: temporary disable, because restored email from imap is not yet supported to send or save back as draft.
+            [self.buttonSaveAsDraft setEnabled:false];
+            [self.buttonSend setEnabled:false];
+
+            imapFolderName = nil;
+            imapMsgIdToOpen = nil;
+        }
     }
-    
-    _serverConnection = [[ServerConnection alloc] init];
-    
-    [_serverConnection setDefaultTimeout]; 
-    // Call this clear when starting to compose new email to clear. 
-    // TODO: use this only when creatin new email. (not yet possible to DO).
-    [_serverConnection callRemoteFunction:@"currentlyComposingEmailClearAll"
-           withFunctionParametersAsObject:nil
-                                 delegate:self
-                           didEndSelector:nil
-                                    error:nil];
 }
 
 // TODO: this is not working (not called at all)
@@ -105,6 +124,52 @@ var CPAlertSaveAsDraft							= 0,
 		[CPApp stopModal];
 		[theWindow close];
 	}
+}
+
+#pragma mark -
+#pragma mark External Actions
+
+- (void)setMessageIdToOpenFromImap:(CPString)msgIdToOpen andFolder:(CPString)folderName
+{
+    qqMsgIdToOpen = msgIdToOpen;
+    qqFolderName = folderName;
+}
+
+- (void)currentlyComposingEmailRestoreMailToEditInComposingWindowDidReceived:(id)sender withParametersObject:parametersObject 
+{
+    // TODO: for GUI developer: assign parametersObject.mailContent.body to rich text editor
+    [self.textField1 setObjectValue:parametersObject.mailContent.body];
+    [self.textFieldSubject setObjectValue:parametersObject.mailContent.subject];
+
+    if (parametersObject.mailContent.to_Array)
+    {
+        for(var i = 0; i < parametersObject.mailContent.to_Array.length; i++)
+        {
+            var fld = parametersObject.mailContent.to_Array[i];
+            if (fld.address != "MISSING_MAILBOX@SYNTAX_ERROR")
+            {
+                [self.textFieldToAddress setObjectValue:fld.address];
+                break; // THINK: only 1st address is supported now. Perhaps need to support list of addresses in To/cc fields?
+            }
+        }
+    }
+    if (parametersObject.mailContent.cc_Array)
+    {
+        for(var i = 0; i < parametersObject.mailContent.cc_Array.length; i++)
+        {
+            var fld = parametersObject.mailContent.cc_Array[i];
+            if (fld.address != "MISSING_MAILBOX@SYNTAX_ERROR")
+            {
+                [self.textFieldCCAddress setObjectValue:fld.address];
+                break; // THINK: only 1st address is supported now. Perhaps need to support list of addresses in To/cc fields?
+            }
+        }
+    }
+
+    // update list of attachments.
+    [self reDownloadListOfAttachments];
+
+    // TODO: stop loading indicator (opening/loading existing imap email), which should added recently at awakeFromCib function (there is also TODO).
 }
 
 #pragma mark -
