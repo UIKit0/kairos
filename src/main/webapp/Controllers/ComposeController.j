@@ -131,8 +131,8 @@ var CPAlertSaveAsDraft							= 0,
 
 - (void)setMessageIdToOpenFromImap:(CPString)msgIdToOpen andFolder:(CPString)folderName
 {
-    qqMsgIdToOpen = msgIdToOpen;
-    qqFolderName = folderName;
+    imapMsgIdToOpen = msgIdToOpen;
+    imapFolderName = folderName;
 }
 
 - (void)currentlyComposingEmailRestoreMailToEditInComposingWindowDidReceived:(id)sender withParametersObject:parametersObject 
