@@ -1318,7 +1318,7 @@ var indexOf = Array.prototype.indexOf,
 CFDictionary.prototype.copy = function()
 {
     return this;
-}
+};
 CFDictionary.prototype.mutableCopy = function()
 {
     var newDictionary = new CFMutableDictionary(),
@@ -1335,11 +1335,11 @@ CFDictionary.prototype.mutableCopy = function()
         newBuckets[key] = buckets[key];
     }
     return newDictionary;
-}
+};
 CFDictionary.prototype.containsKey = function( aKey)
 {
     return hasOwnProperty.apply(this._buckets, [aKey]);
-}
+};
 CFDictionary.prototype.containsKey.displayName = "CFDictionary.prototype.containsKey";
 CFDictionary.prototype.containsValue = function( anObject)
 {
@@ -1351,17 +1351,17 @@ CFDictionary.prototype.containsValue = function( anObject)
         if (buckets[keys[index]] === anObject)
             return YES;
     return NO;
-}
+};
 CFDictionary.prototype.containsValue.displayName = "CFDictionary.prototype.containsValue";
 CFDictionary.prototype.count = function()
 {
     return this._count;
-}
+};
 CFDictionary.prototype.count.displayName = "CFDictionary.prototype.count";
 CFDictionary.prototype.countOfKey = function( aKey)
 {
     return this.containsKey(aKey) ? 1 : 0;
-}
+};
 CFDictionary.prototype.countOfKey.displayName = "CFDictionary.prototype.countOfKey";
 CFDictionary.prototype.countOfValue = function( anObject)
 {
@@ -1374,12 +1374,12 @@ CFDictionary.prototype.countOfValue = function( anObject)
         if (buckets[keys[index]] === anObject)
             ++countOfValue;
     return countOfValue;
-}
+};
 CFDictionary.prototype.countOfValue.displayName = "CFDictionary.prototype.countOfValue";
 CFDictionary.prototype.keys = function()
 {
     return this._keys.slice();
-}
+};
 CFDictionary.prototype.keys.displayName = "CFDictionary.prototype.keys";
 CFDictionary.prototype.valueForKey = function( aKey)
 {
@@ -1387,7 +1387,7 @@ CFDictionary.prototype.valueForKey = function( aKey)
     if (!hasOwnProperty.apply(buckets, [aKey]))
         return nil;
     return buckets[aKey];
-}
+};
 CFDictionary.prototype.valueForKey.displayName = "CFDictionary.prototype.valueForKey";
 CFDictionary.prototype.toString = function()
 {
@@ -1401,7 +1401,7 @@ CFDictionary.prototype.toString = function()
         string += "\t" + key + " = \"" + String(this.valueForKey(key)).split('\n').join("\n\t") + "\"\n";
     }
     return string + "}";
-}
+};
 CFDictionary.prototype.toString.displayName = "CFDictionary.prototype.toString";
 CFMutableDictionary = function( aDictionary)
 {
@@ -1411,7 +1411,7 @@ CFMutableDictionary.prototype = new CFDictionary();
 CFMutableDictionary.prototype.copy = function()
 {
     return this.mutableCopy();
-}
+};
 CFMutableDictionary.prototype.addValueForKey = function( aKey, aValue)
 {
     if (this.containsKey(aKey))
@@ -1419,7 +1419,7 @@ CFMutableDictionary.prototype.addValueForKey = function( aKey, aValue)
     ++this._count;
     this._keys.push(aKey);
     this._buckets[aKey] = aValue;
-}
+};
 CFMutableDictionary.prototype.addValueForKey.displayName = "CFMutableDictionary.prototype.addValueForKey";
 CFMutableDictionary.prototype.removeValueForKey = function( aKey)
 {
@@ -1443,21 +1443,21 @@ CFMutableDictionary.prototype.removeValueForKey = function( aKey)
     --this._count;
     this._keys.splice(indexOfKey, 1);
     delete this._buckets[aKey];
-}
+};
 CFMutableDictionary.prototype.removeValueForKey.displayName = "CFMutableDictionary.prototype.removeValueForKey";
 CFMutableDictionary.prototype.removeAllValues = function()
 {
     this._count = 0;
     this._keys = [];
     this._buckets = { };
-}
+};
 CFMutableDictionary.prototype.removeAllValues.displayName = "CFMutableDictionary.prototype.removeAllValues";
 CFMutableDictionary.prototype.replaceValueForKey = function( aKey, aValue)
 {
     if (!this.containsKey(aKey))
         return;
     this._buckets[aKey] = aValue;
-}
+};
 CFMutableDictionary.prototype.replaceValueForKey.displayName = "CFMutableDictionary.prototype.replaceValueForKey";
 CFMutableDictionary.prototype.setValueForKey = function( aKey, aValue)
 {
@@ -1467,7 +1467,7 @@ CFMutableDictionary.prototype.setValueForKey = function( aKey, aValue)
         this.replaceValueForKey(aKey, aValue);
     else
         this.addValueForKey(aKey, aValue);
-}
+};
 CFMutableDictionary.prototype.setValueForKey.displayName = "CFMutableDictionary.prototype.setValueForKey";
 CFData = function()
 {
