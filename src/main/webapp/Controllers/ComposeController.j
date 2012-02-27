@@ -15,9 +15,7 @@ var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a s
 
 var CPAlertSaveAsDraft      = 0,
     CPAlertContinueWriting  = 1,
-    CPAlertDiscard          = 2,
-    imapMsgIdToOpen,
-    imapFolderName;
+    CPAlertDiscard          = 2;
 
 @implementation ComposeController : CPWindowController
 {
@@ -45,6 +43,10 @@ var CPAlertSaveAsDraft      = 0,
     ServerConnection                    _serverConnection;
 
     boolean                             isSending;
+    boolean                             isLoading @accessors;
+
+    CPString                            imapMsgIdToOpen;
+    CPString                            imapFolderName;
 }
 
 #pragma mark -
@@ -79,6 +81,21 @@ var CPAlertSaveAsDraft      = 0,
                                  delegate:self
                            didEndSelector:nil
                                     error:nil];
+
+    if (imapFolderName) // with checking imapFolderName to "nil" we check was "setMessageIdToOpenFromImap" function called or t.
+    {
+       // TODO: add loading indicator (opening/loading existing imap email).
+
+       [_serverConnection setTimeout:60]; // downloading mail body can take some time.
+       [_serverConnection callRemoteFunction:@"restoreMailToEditInComposingWindow"
+              withFunctionParametersAsObject:{ folder:imapFolderName, messageId:imapMsgIdToOpen }
+                                    delegate:self
+                              didEndSelector:@selector(currentlyComposingEmailRestoreMailToEditInComposingWindowDidReceived:withParametersObject:)
+                                       error:nil];
+
+       // TODO: temporary disable, because restored email from imap is not yet supported to send or save back as draft.
+       [self setIsLoading:YES];
+    }
 
     [self addObserver:self forKeyPath:@"email.attachments" options:nil context:nil];
 
@@ -140,16 +157,16 @@ var CPAlertSaveAsDraft      = 0,
     if (parametersObject.errorDetails)
     {
         alert("Error: " + parametersObject.errorDetails);
-        [self.theWindow close];
+        [theWindow close];
         return;
     }
-    // TODO: for GUI developer: assign parametersObject.mailContent.body to rich text editor
-    [self.textField1 setObjectValue:parametersObject.mailContent.body];
-    [self.textFieldSubject setObjectValue:parametersObject.mailContent.subject];
+
+    [textFieldSubject setObjectValue:parametersObject.mailContent.subject];
+    [textView setHtmlValue:parametersObject.mailContent.body];
 
     if (parametersObject.mailContent.to_Array)
     {
-        for(var i = 0; i < parametersObject.mailContent.to_Array.length; i++)
+        for (var i = 0; i < parametersObject.mailContent.to_Array.length; i++)
         {
             var fld = parametersObject.mailContent.to_Array[i];
             if (fld.address != "MISSING_MAILBOX@SYNTAX_ERROR")
@@ -161,7 +178,7 @@ var CPAlertSaveAsDraft      = 0,
     }
     if (parametersObject.mailContent.cc_Array)
     {
-        for(var i = 0; i < parametersObject.mailContent.cc_Array.length; i++)
+        for (var i = 0; i < parametersObject.mailContent.cc_Array.length; i++)
         {
             var fld = parametersObject.mailContent.cc_Array[i];
             if (fld.address != "MISSING_MAILBOX@SYNTAX_ERROR")
@@ -191,9 +208,9 @@ var CPAlertSaveAsDraft      = 0,
 - (IBAction)saveAsDraftButtonClickedAction:(id)sender
 {
     // TODO: for GUI developer: replace htmlOfEmail value with full html text of email from rich text editor.
-    [self.buttonSaveAsDraft setEnabled:false];
+    [self setIsSending:YES];
 
-    var htmlOfEmailVar = [self.textField1 objectValue];
+    var htmlOfEmailVar = [textView htmlValue];
     [_serverConnection setTimeout:60];
 
     var alreadyFromImap = false;
@@ -217,14 +234,13 @@ var CPAlertSaveAsDraft      = 0,
 - (void)currentlyComposingEmailSaveAsDraftTimeOutOrError:(id)sender
 {
     // TODO: for GUI developer: THINK: how it should work when email is failed to send by timeout.
-    [self.buttonSaveAsDraft setEnabled:true];
+    [self setIsSending:YES];
     alert("Error saving email as draft: timeout");
 }
 
 - (void)currentlyComposingEmailSaveAsDraftDidReceived:(id)sender withParametersObject:parametersObject
 {
     // TODO: for GUI developer: THINK: how it should work when email is sent - should window be closed or not and etc.
-    [self.buttonSaveAsDraft setEnabled:true];
     if (parametersObject.emailIsSavedAsDraft == true)
     {
         alert("Email is saved as draft successfully");
@@ -235,6 +251,8 @@ var CPAlertSaveAsDraft      = 0,
         // TODO: how to show error for user?
         alert("Failed to save email as draft. Error details: " + parametersObject.errorDetails);
     }
+
+    [self setIsSending:NO];
 }
 
 - (IBAction)sendButtonClickedAction:(id)sender
@@ -262,12 +280,19 @@ var CPAlertSaveAsDraft      = 0,
     [[theWindow toolbar] validateVisibleItems];
 }
 
+- (void)setIsLoading:(boolean)aFlag
+{
+    isLoading = aFlag;
+    [[theWindow toolbar] validateVisibleItems];
+}
+
 - (boolean)validateToolbarItem:(id)toolbarItem
 {
     switch ([toolbarItem itemIdentifier])
     {
         case "toolbarSendItem":
-            return !isSending;
+        case "toolbarDraftItem":
+            return !isSending && !isLoading;
             break;
     }
     return YES;

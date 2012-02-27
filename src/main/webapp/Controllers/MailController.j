@@ -340,6 +340,8 @@ var IsReadImage,
 - (IBAction)composeMail:(id)sender
 {
     _composeController = [[ComposeController alloc] init];
+    [_composeController setMessageIdToOpenFromImap:nil andFolder:nil];
+
     var cib = [[CPCib alloc] initWithContentsOfURL:[[CPBundle mainBundle] pathForResource:@"Compose.cib"]];
     [cib instantiateCibWithExternalNameTable:[CPDictionary dictionaryWithObject:_composeController forKey:CPCibOwner]];
 
@@ -659,8 +661,8 @@ var IsReadImage,
     var row = [emailsHeaderView selectedRow];
 //    selectedEmail = [[[selectedMailbox mailHeaders] objectAtIndex:row] md5];
 //    [loadingLabel setObjectValue:@"Loading E-mail Selected..."];
-    var msgIdToOpen = [[[selectedMailbox mailHeaders] objectAtIndex:row] messageId];
-    var folderName = [self.selectedMailbox name];
+    var msgIdToOpen = [[[selectedMailbox mailHeaders] objectAtIndex:row] messageId],
+        folderName = [self.selectedMailbox name];
 
     [_composeController setMessageIdToOpenFromImap:msgIdToOpen andFolder:folderName];
 

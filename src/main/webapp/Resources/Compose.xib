@@ -79,6 +79,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>4C27D97C-1C7E-434A-A6FC-2494BC080737</string>
+							<string>6773BFF2-5B48-4248-A25E-4C65A13228C0</string>
 							<string>E7040A5C-8250-487E-83A4-1031C10E8816</string>
 							<string>EC82194B-5416-44D2-8596-E48BA0285FBA</string>
 							<string>NSToolbarFlexibleSpaceItem</string>
@@ -97,6 +98,28 @@
 								<object class="NSCustomResource" key="NSToolbarItemImage">
 									<string key="NSClassName">NSImage</string>
 									<string key="NSResourceName">font-icon</string>
+								</object>
+								<nil key="NSToolbarItemTarget"/>
+								<nil key="NSToolbarItemAction"/>
+								<string key="NSToolbarItemMinSize">{0, 0}</string>
+								<string key="NSToolbarItemMaxSize">{0, 0}</string>
+								<bool key="NSToolbarItemEnabled">YES</bool>
+								<bool key="NSToolbarItemAutovalidates">YES</bool>
+								<int key="NSToolbarItemTag">-1</int>
+								<bool key="NSToolbarIsUserRemovable">YES</bool>
+								<int key="NSToolbarItemVisibilityPriority">0</int>
+							</object>
+							<object class="NSToolbarItem" id="217121176">
+								<object class="NSMutableString" key="NSToolbarItemIdentifier">
+									<characters key="NS.bytes">6773BFF2-5B48-4248-A25E-4C65A13228C0</characters>
+								</object>
+								<string key="NSToolbarItemLabel">Save Draft</string>
+								<string key="NSToolbarItemPaletteLabel">Save Draft</string>
+								<string key="NSToolbarItemToolTip"/>
+								<nil key="NSToolbarItemView"/>
+								<object class="NSCustomResource" key="NSToolbarItemImage">
+									<string key="NSClassName">NSImage</string>
+									<string key="NSResourceName">briefcase-icon</string>
 								</object>
 								<nil key="NSToolbarItemTarget"/>
 								<nil key="NSToolbarItemAction"/>
@@ -214,9 +237,10 @@
 							</object>
 						</object>
 					</object>
-					<object class="NSArray" key="NSToolbarIBAllowedItems">
+					<object class="NSMutableArray" key="NSToolbarIBAllowedItems">
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<reference ref="229587835"/>
+						<reference ref="217121176"/>
 						<reference ref="587483457"/>
 						<reference ref="500429763"/>
 						<reference ref="56297954"/>
@@ -226,6 +250,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<reference ref="229587835"/>
 						<reference ref="587483457"/>
+						<reference ref="217121176"/>
 						<reference ref="56297954"/>
 						<reference ref="499590336"/>
 					</object>
@@ -1055,6 +1080,14 @@
 					<int key="connectionID">174</int>
 				</object>
 				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">saveAsDraftButtonClickedAction:</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="217121176"/>
+					</object>
+					<int key="connectionID">185</int>
+				</object>
+				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">initialFirstResponder</string>
 						<reference key="source" ref="1005"/>
@@ -1320,6 +1353,7 @@
 							<reference ref="229587835"/>
 							<reference ref="56297954"/>
 							<reference ref="499590336"/>
+							<reference ref="217121176"/>
 						</object>
 						<reference key="parent" ref="1005"/>
 					</object>
@@ -1728,6 +1762,11 @@
 						<reference key="object" ref="1020625999"/>
 						<reference key="parent" ref="402299358"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">184</int>
+						<reference key="object" ref="217121176"/>
+						<reference key="parent" ref="1042547981"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -1783,6 +1822,8 @@
 					<string>151.IBPluginDependency</string>
 					<string>153.IBPluginDependency</string>
 					<string>173.IBPluginDependency</string>
+					<string>184.IBPluginDependency</string>
+					<string>184.designableToolbarItemIdentifier</string>
 					<string>2.IBPluginDependency</string>
 					<string>31.IBPluginDependency</string>
 					<string>32.IBPluginDependency</string>
@@ -1864,6 +1905,8 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>toolbarDraftItem</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -1909,7 +1952,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">183</int>
+			<int key="maxID">185</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -1922,11 +1965,13 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>attachmentUploaded:</string>
+							<string>saveAsDraftButtonClickedAction:</string>
 							<string>sendButtonClickedAction:</string>
 							<string>toogleFormatBar:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -1937,6 +1982,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>attachmentUploaded:</string>
+							<string>saveAsDraftButtonClickedAction:</string>
 							<string>sendButtonClickedAction:</string>
 							<string>toogleFormatBar:</string>
 						</object>
@@ -1944,6 +1990,10 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBActionInfo">
 								<string key="name">attachmentUploaded:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">saveAsDraftButtonClickedAction:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -2328,6 +2378,7 @@
 				<string>align-left-icon</string>
 				<string>align-right-icon</string>
 				<string>bold-icon</string>
+				<string>briefcase-icon</string>
 				<string>colour-icon</string>
 				<string>font-icon</string>
 				<string>italics-icon</string>
@@ -2345,6 +2396,7 @@
 				<string>{11, 10}</string>
 				<string>{11, 10}</string>
 				<string>{10, 10}</string>
+				<string>{20, 20}</string>
 				<string>{12, 13}</string>
 				<string>{15, 20}</string>
 				<string>{7, 10}</string>
