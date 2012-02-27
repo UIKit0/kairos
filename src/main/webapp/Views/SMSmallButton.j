@@ -41,9 +41,26 @@ var SMSmallButtonBezelColor = nil,
     [self setValue:SMSmallButtonBezelColor forThemeAttribute:@"bezel-color" inState:CPThemeStateBordered];
     [self setValue:SMSmallButtonHighlightedBezelColor forThemeAttribute:@"bezel-color" inState:CPThemeStateBordered | CPThemeStateHighlighted];
     [self setValue:SMSmallButtonDisabledBezelColor forThemeAttribute:@"bezel-color" inState:CPThemeStateBordered | CPThemeStateDisabled];
+    // -1.0 on top to bring text up 1 pixel.
+    [self setValue:CGInsetMake(-1.0, 5.0, 0.0, 5.0) forThemeAttribute:@"content-inset" inState:CPThemeStateBordered];
 
     [self setValue:CGSizeMake(0.0, SMSmallButtonHeight) forThemeAttribute:@"min-size"];
     [self setValue:CGSizeMake(-1.0, SMSmallButtonHeight) forThemeAttribute:@"max-size"];
+}
+
+- (void)initWithCoder:(CPCoder)aCoder
+{
+    if (self = [super initWithCoder:aCoder])
+    {
+        var frame = [self frame];
+        if (frame.size.height != SMSmallButtonHeight)
+        {
+            frame.size.height = SMSmallButtonHeight;
+            [self setFrame:frame];
+        }
+    }
+
+    return self;
 }
 
 @end
