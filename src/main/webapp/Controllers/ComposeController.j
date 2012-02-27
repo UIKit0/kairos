@@ -91,11 +91,7 @@ var CPAlertSaveAsDraft							= 0,
                                             error:nil];
 
             // TODO: temporary disable, because restored email from imap is not yet supported to send or save back as draft.
-            [self.buttonSaveAsDraft setEnabled:false];
             [self.buttonSend setEnabled:false];
-
-            imapFolderName = nil;
-            imapMsgIdToOpen = nil;
         }
     }
 }
@@ -187,13 +183,20 @@ var CPAlertSaveAsDraft							= 0,
     
     var htmlOfEmailVar = [self.textField1 objectValue];
     [_serverConnection setTimeout:60];
+
+    var alreadyFromImap = false;
+    if (imapFolderName)
+        alreadyFromImap = true;
     
-    // parameters is same as for "send email" function.
+    // parameters is almost same as for "send email" function with addition new "alreadyFromImap*" parameters.
     [_serverConnection callRemoteFunction:@"currentlyComposingEmailSaveAsDraft"
            withFunctionParametersAsObject: { "htmlOfEmail":htmlOfEmailVar,
                "subject":[self.textFieldSubject objectValue],
                "to":[self.textFieldToAddress objectValue],
-               "cc":[self.textFieldCCAddress objectValue] }
+               "cc":[self.textFieldCCAddress objectValue],
+               "alreadyFromImap":alreadyFromImap,
+               "alreadyFromImap_folder":imapFolderName,
+               "alreadyFromImap_messageId":imapMsgIdToOpen}
                                  delegate:self
                            didEndSelector:@selector(currentlyComposingEmailSaveAsDraftDidReceived:withParametersObject:)
                                     error:@selector(currentlyComposingEmailSaveAsDraftTimeOutOrError:)];

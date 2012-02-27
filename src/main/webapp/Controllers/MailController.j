@@ -332,6 +332,9 @@ var IsReadImage,
 - (IBAction)composeMail:(id)sender
 {
      _composeController = [[ComposeController alloc] init];
+
+    [_composeController setMessageIdToOpenFromImap:nil andFolder:nil];
+
         var cib = [[CPCib alloc] initWithContentsOfURL:[[CPBundle mainBundle] pathForResource:@"Compose.cib"]];
         [cib instantiateCibWithExternalNameTable:[CPDictionary dictionaryWithObject:_composeController forKey:CPCibOwner]];
     

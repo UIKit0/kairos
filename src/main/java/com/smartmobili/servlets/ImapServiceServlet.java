@@ -43,7 +43,6 @@ import com.smartmobili.other.MailTextAndAttachmentsProcesser;
 import com.smartmobili.other.ImapSession;
 import com.smartmobili.other.MailTextAndAttachmentsProcesser.AttachmentInMessageProperties;
 import com.smartmobili.other.MongoDbImapDataSource;
-//import com.sun.mail.imap.IMAPFolder;
 import com.sun.mail.imap.IMAPMessage;
 
 import net.sf.json.*;
@@ -721,9 +720,7 @@ public class ImapServiceServlet extends HttpServlet {
 		return res;
 	}
 
-	private MimeMessage createMailMessage(JSONObject parameters,
-			HttpSession httpSession, Session mailSession)
-			throws UnsupportedEncodingException, MessagingException {
+	private void setHeadersToMessageDuringCreationOrEditingMessage(MimeMessage message, JSONObject parameters) throws UnsupportedEncodingException, MessagingException {
 		InternetAddress props_from = new InternetAddress();
 		InternetAddress props_to = new InternetAddress();
 		InternetAddress props_cc_canBeNull = null;
@@ -733,22 +730,28 @@ public class ImapServiceServlet extends HttpServlet {
 		props_to.setPersonal(parameters.getString("to")); // TODO: here should be name
 		props_to.setAddress(parameters.getString("to"));
 		
-		if (parameters.getString("to").length() > 0) {
+		if (parameters.getString("cc").length() > 0) {
 			props_cc_canBeNull = new InternetAddress();
 			props_cc_canBeNull.setPersonal(parameters.getString("cc")); // TODO: here should be name
 			props_cc_canBeNull.setAddress(parameters.getString("cc"));
 		}
-
-		MimeMessage message = new MimeMessage(mailSession);
 		
 		message.setSentDate(new Date());
 
 		message.setFrom(props_from); // From
 
-		message.addRecipient(Message.RecipientType.TO, props_to); // To
+		message.setRecipient(Message.RecipientType.TO, props_to); // To
 		message.setSubject((String) parameters.get("subject"), "utf-8"); // Subject
 		if (props_cc_canBeNull != null)
-			message.addRecipient(Message.RecipientType.CC, props_cc_canBeNull); // CC
+			message.setRecipient(Message.RecipientType.CC, props_cc_canBeNull); // CC
+	}
+
+	private MimeMessage createMailMessage(JSONObject parameters,
+			HttpSession httpSession, Session mailSession)
+			throws UnsupportedEncodingException, MessagingException {
+		MimeMessage message = new MimeMessage(mailSession);
+
+		setHeadersToMessageDuringCreationOrEditingMessage(message, parameters);
 
 		Multipart multipart = new MimeMultipart();
 
@@ -757,9 +760,7 @@ public class ImapServiceServlet extends HttpServlet {
 			// Create the message part
 			BodyPart messageBodyPart = new MimeBodyPart();
 
-			messageBodyPart.setContent(
-					(String) parameters.get("htmlOfEmail"),
-					"text/html; charset=\"utf-8\"");
+			setHtmlContentOfBodyPart(parameters, messageBodyPart);
 
 			// Add part one
 			multipart.addBodyPart(messageBodyPart);
@@ -802,6 +803,13 @@ public class ImapServiceServlet extends HttpServlet {
 		return message;
 	}
 
+	private void setHtmlContentOfBodyPart(JSONObject parameters,
+			BodyPart messageBodyPart) throws MessagingException {
+		messageBodyPart.setContent(
+				(String) parameters.get("htmlOfEmail"),
+				"text/html; charset=\"utf-8\"");
+	}
+
 	/**
 	 * Adds to multipart a new part with file attachment.
 	 * 
@@ -841,22 +849,74 @@ public class ImapServiceServlet extends HttpServlet {
 			// or reconnect.
 			
 			Session imapSession = ImapSession.getImapSession(httpSession);
-			
-			MimeMessage message = createMailMessage(parameters, httpSession,
+
+			if (parameters.getBoolean("alreadyFromImap") == false) {
+				MimeMessage message = createMailMessage(parameters, httpSession,
 					imapSession);
-			message.setFlag(Flags.Flag.DRAFT, true);
-			
-			// Get the specified folder
-			Folder folder = imapStore.getFolder("Drafts");
+				message.setFlag(Flags.Flag.DRAFT, true);
 				
-			// Folders are retrieved closed. To get the messages it is necessary to
-			// open them (but not to rename them, for example)
-			folder.open(Folder.READ_WRITE);
-			
-			folder.appendMessages(new Message[]{message});
-			
-			folder.close(false);
-			
+				// Get the specified folder
+				Folder folder = imapStore.getFolder("Drafts");
+
+				// Folders are retrieved closed. To get the messages it is necessary to
+				// open them (but not to rename them, for example)
+				folder.open(Folder.READ_WRITE);
+
+				folder.appendMessages(new Message[]{message});
+
+				folder.close(false);
+			}
+			else {
+				Folder folder = imapStore.getFolder(parameters.getString("alreadyFromImap_folder"));
+				// Folders are retrieved closed. To get the messages it is necessary to
+				// open them (but not to rename them, for example)
+				folder.open(Folder.READ_WRITE);
+
+				MessageIDTerm mIdTerm = new MessageIDTerm(parameters.getString("alreadyFromImap_messageId"));
+
+				Message[] arr = folder.search(mIdTerm);
+
+				if (arr.length > 0) {
+					IMAPMessage msg = (IMAPMessage) arr[0];
+
+					MimeMessage newmsg = new MimeMessage((MimeMessage) msg);
+
+					setHeadersToMessageDuringCreationOrEditingMessage(newmsg, parameters);
+
+					if (newmsg.getContent() instanceof Multipart) {
+						// asdf
+						Multipart mp = (Multipart)newmsg.getContent();
+						for(int i = 0; i < mp.getCount(); i++) {
+						 	BodyPart p = mp.getBodyPart(i);
+						 	if (i == 0) {
+						 		if (p.isMimeType("text/html")) {
+						 			setHtmlContentOfBodyPart(parameters, p);
+						 		}
+						 		else
+						 			throw new Exception("Not supporting to edit messages from foreign mail apps.");
+						 	}
+						 	else {
+						 		// TODO: UNDONE: remove not existed anymore attachemnts
+						 	}
+						}
+						// TODO: UNDONE:  add new attachments (not existed previously).
+					}
+					else
+						throw new Exception("Not supporting to edit messages from foreign mail apps.");
+
+					newmsg.saveChanges();
+
+					folder.appendMessages(new Message[]{newmsg});
+
+					msg.setFlag(Flags.Flag.DELETED, true);
+					folder.expunge();
+				}
+				else
+					throw new Exception("Message at imap is not exists");
+
+				folder.close(true);
+			}
+
 			res.put("emailIsSavedAsDraft", true);
 		} catch (Exception ex) {
 			res.put("emailIsSavedAsDraft", false);
