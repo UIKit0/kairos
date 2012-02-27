@@ -56,8 +56,8 @@ Getting Sources
 Launching
 ---------------
 
-Now we can run gradle wrapper :  
 
+`$> mongod --dbpath data/db`  
 `$> gradlew jettyRun`  
 
 Now open your browser and go to http://localhost:8080  
