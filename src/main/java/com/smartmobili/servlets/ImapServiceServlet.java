@@ -956,7 +956,11 @@ public class ImapServiceServlet extends HttpServlet {
 				ccep.insertImapAttachment(aim);
 			}
 
-			res.put("mailContent", mailContentInJson);
+			if (mailContentInJson != null) {
+				res.put("mailContent", mailContentInJson);
+			}
+			else
+				res.put("errorDetails", "Message is not exists");
 			//res.put("qwer", "asdf");
 		} catch (Exception ex) {
 			//res.put("emailIsSavedAsDraft", false);

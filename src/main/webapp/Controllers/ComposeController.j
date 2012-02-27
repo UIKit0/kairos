@@ -133,6 +133,12 @@ var CPAlertSaveAsDraft							= 0,
 
 - (void)currentlyComposingEmailRestoreMailToEditInComposingWindowDidReceived:(id)sender withParametersObject:parametersObject 
 {
+    if (parametersObject.errorDetails)
+    {
+        alert("Error: " + parametersObject.errorDetails);
+        [self.theWindow close];
+        return;
+    }
     // TODO: for GUI developer: assign parametersObject.mailContent.body to rich text editor
     [self.textField1 setObjectValue:parametersObject.mailContent.body];
     [self.textFieldSubject setObjectValue:parametersObject.mailContent.subject];
