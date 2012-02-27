@@ -15,22 +15,62 @@ import java.util.UUID;
 import javax.servlet.http.HttpSession;
 import org.bson.types.ObjectId;
 
+import com.smartmobili.other.MailTextAndAttachmentsProcesser.AttachmentInMessageProperties;
+
 public class CurrentComposingEmailProperties {
 	public class OneAttachmentProperty
 	{
 		private boolean thisAttachmentFromExistingImapMessage;
-		// id of attachment from imap
-		// UNDONE:
 		
 		// id of attachment in DB
 		private ObjectId dbAttachmentId;
 		
 		private String webServerAttachmentId;
-		
 		private String fileName;
 		private long sizeInBytes;
 		private String contentType;
+
+		// id of attachment from imap
+		public String imapAttachmentId_folderInWhichMessage;
+		public String imapAttachmentId_emailId;
+		public String imapAttachment_linkToGetThumbnail;
+		public String imapAttachment_linkToGetFullsize;
+
+		public String getImapAttachmentId_folderInWhichMessage() {
+			return imapAttachmentId_folderInWhichMessage;
+		}
+
+		public void setImapAttachmentId_folderInWhichMessage(
+				String imapAttachmentId_folderInWhichMessage) {
+			this.imapAttachmentId_folderInWhichMessage = imapAttachmentId_folderInWhichMessage;
+		}
+
+		public String getImapAttachmentId_emailId() {
+			return imapAttachmentId_emailId;
+		}
+
+		public void setImapAttachmentId_emailId(String imapAttachmentId_emailId) {
+			this.imapAttachmentId_emailId = imapAttachmentId_emailId;
+		}
 			
+		public String getImapAttachment_linkToGetThumbnail() {
+			return imapAttachment_linkToGetThumbnail;
+		}
+
+		public void setImapAttachment_linkToGetThumbnail(
+				String imapAttachment_linkToGetThumbnail) {
+			this.imapAttachment_linkToGetThumbnail = imapAttachment_linkToGetThumbnail;
+		}
+
+		public String getImapAttachment_linkToGetFullsize() {
+			return imapAttachment_linkToGetFullsize;
+		}
+
+		public void setImapAttachment_linkToGetFullsize(
+				String imapAttachment_linkToGetFullsize) {
+			this.imapAttachment_linkToGetFullsize = imapAttachment_linkToGetFullsize;
+		}
+
 		public boolean isThisAttachmentFromExistingImapMessage() {
 			return thisAttachmentFromExistingImapMessage;
 		}
@@ -191,5 +231,26 @@ public class CurrentComposingEmailProperties {
 			}
 		}
 		return null;
+	}
+
+	public void insertImapAttachment(AttachmentInMessageProperties aim) {
+		synchronized (listOfAttachmentProperties_useSynchronized) {
+			OneAttachmentProperty oap = new OneAttachmentProperty();
+			oap.thisAttachmentFromExistingImapMessage = true;
+			//oap.dbAttachmentId = dbAttachmentId;
+			oap.imapAttachmentId_folderInWhichMessage = aim.imapEmailFolder;
+			oap.imapAttachmentId_emailId = aim.imapEmailId;
+						
+			oap.webServerAttachmentId = UUID.randomUUID().toString();
+			
+			oap.sizeInBytes = aim.fileSize;
+			oap.fileName = aim.fileName;
+			oap.contentType = aim.contentType;
+			
+			oap.imapAttachment_linkToGetFullsize = aim.linkToServletToDownloadFullSize;
+			oap.imapAttachment_linkToGetThumbnail = aim.linkToServletToDownloadThumbnail;
+			
+			listOfAttachmentProperties_useSynchronized.add(oap);
+		}
 	}
 }

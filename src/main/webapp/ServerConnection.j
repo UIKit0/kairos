@@ -86,6 +86,7 @@
     if (_delegate)
         if (_didEndSelector)
         {
+            //CPLogConsole(_accumulatedResponseString);
             var jsObject = [_accumulatedResponseString objectFromJSON];
             objj_msgSend(_delegate, _didEndSelector, self, jsObject);
 
@@ -115,6 +116,7 @@
  */
 - (void) callRemoteFunction:(CPString)functionNameToCall withFunctionParametersAsObject:functionParametersInObject delegate:(id)aDelegate didEndSelector:(SEL)aSelector error:(SEL)aError
 {
+    //CPLogConsole(functionNameToCall);
     _statusCode = 0;
     _responsesCount = 0;
     _delegate = aDelegate;

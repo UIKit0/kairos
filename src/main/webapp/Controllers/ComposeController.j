@@ -11,13 +11,15 @@
 
 @import "../Models/SMAttachment.j"
 
-var CPAlertSaveAsDraft                          = 0,
-    CPAlertContinueWriting                      = 1,
-    CPAlertDiscard                              = 2;
+var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a scrollbar will be shown;
 
-var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a scrollbar will be shown.
+var CPAlertSaveAsDraft      = 0,
+    CPAlertContinueWriting  = 1,
+    CPAlertDiscard          = 2,
+    imapMsgIdToOpen,
+    imapFolderName;
 
-@implementation ComposeController: CPWindowController
+@implementation ComposeController : CPWindowController
 {
     @outlet CPWindow                    theWindow;
 
@@ -125,6 +127,58 @@ var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a s
 }
 
 #pragma mark -
+#pragma mark External Actions
+
+- (void)setMessageIdToOpenFromImap:(CPString)msgIdToOpen andFolder:(CPString)folderName
+{
+    imapMsgIdToOpen = msgIdToOpen;
+    imapFolderName = folderName;
+}
+
+- (void)currentlyComposingEmailRestoreMailToEditInComposingWindowDidReceived:(id)sender withParametersObject:parametersObject
+{
+    if (parametersObject.errorDetails)
+    {
+        alert("Error: " + parametersObject.errorDetails);
+        [self.theWindow close];
+        return;
+    }
+    // TODO: for GUI developer: assign parametersObject.mailContent.body to rich text editor
+    [self.textField1 setObjectValue:parametersObject.mailContent.body];
+    [self.textFieldSubject setObjectValue:parametersObject.mailContent.subject];
+
+    if (parametersObject.mailContent.to_Array)
+    {
+        for(var i = 0; i < parametersObject.mailContent.to_Array.length; i++)
+        {
+            var fld = parametersObject.mailContent.to_Array[i];
+            if (fld.address != "MISSING_MAILBOX@SYNTAX_ERROR")
+            {
+                [self.textFieldToAddress setObjectValue:fld.address];
+                break; // THINK: only 1st address is supported now. Perhaps need to support list of addresses in To/cc fields?
+            }
+        }
+    }
+    if (parametersObject.mailContent.cc_Array)
+    {
+        for(var i = 0; i < parametersObject.mailContent.cc_Array.length; i++)
+        {
+            var fld = parametersObject.mailContent.cc_Array[i];
+            if (fld.address != "MISSING_MAILBOX@SYNTAX_ERROR")
+            {
+                [self.textFieldCCAddress setObjectValue:fld.address];
+                break; // THINK: only 1st address is supported now. Perhaps need to support list of addresses in To/cc fields?
+            }
+        }
+    }
+
+    // update list of attachments.
+    [self reDownloadListOfAttachments];
+
+    // TODO: stop loading indicator (opening/loading existing imap email), which should added recently at awakeFromCib function (there is also TODO).
+}
+
+#pragma mark -
 #pragma mark Actions
 
 - (IBAction)attachmentUploaded:(id)sender
@@ -132,6 +186,55 @@ var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a s
     //alert("This button used for tests during development of compose window.");
 
     [self reDownloadListOfAttachments];
+}
+
+- (IBAction)saveAsDraftButtonClickedAction:(id)sender
+{
+    // TODO: for GUI developer: replace htmlOfEmail value with full html text of email from rich text editor.
+    [self.buttonSaveAsDraft setEnabled:false];
+
+    var htmlOfEmailVar = [self.textField1 objectValue];
+    [_serverConnection setTimeout:60];
+
+    var alreadyFromImap = false;
+    if (imapFolderName)
+        alreadyFromImap = true;
+
+    // parameters is almost same as for "send email" function with addition new "alreadyFromImap*" parameters.
+    [_serverConnection callRemoteFunction:@"currentlyComposingEmailSaveAsDraft"
+           withFunctionParametersAsObject: { "htmlOfEmail":htmlOfEmailVar,
+               "subject":[self.textFieldSubject objectValue],
+               "to":[self.textFieldToAddress objectValue],
+               "cc":[self.textFieldCCAddress objectValue],
+               "alreadyFromImap":alreadyFromImap,
+               "alreadyFromImap_folder":imapFolderName,
+               "alreadyFromImap_messageId":imapMsgIdToOpen}
+                                 delegate:self
+                           didEndSelector:@selector(currentlyComposingEmailSaveAsDraftDidReceived:withParametersObject:)
+                                    error:@selector(currentlyComposingEmailSaveAsDraftTimeOutOrError:)];
+}
+
+- (void)currentlyComposingEmailSaveAsDraftTimeOutOrError:(id)sender
+{
+    // TODO: for GUI developer: THINK: how it should work when email is failed to send by timeout.
+    [self.buttonSaveAsDraft setEnabled:true];
+    alert("Error saving email as draft: timeout");
+}
+
+- (void)currentlyComposingEmailSaveAsDraftDidReceived:(id)sender withParametersObject:parametersObject
+{
+    // TODO: for GUI developer: THINK: how it should work when email is sent - should window be closed or not and etc.
+    [self.buttonSaveAsDraft setEnabled:true];
+    if (parametersObject.emailIsSavedAsDraft == true)
+    {
+        alert("Email is saved as draft successfully");
+        [theWindow close];
+    }
+    else
+    {
+        // TODO: how to show error for user?
+        alert("Failed to save email as draft. Error details: " + parametersObject.errorDetails);
+    }
 }
 
 - (IBAction)sendButtonClickedAction:(id)sender
@@ -142,8 +245,7 @@ var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a s
     var htmlOfEmailVar = [textView htmlValue];
     [_serverConnection setTimeout:60];
 
-    console.log("emailing html ", htmlOfEmailVar);
-
+    // parameters is same as for "save email as draft" function.
     [_serverConnection callRemoteFunction:@"currentlyComposingEmailSend"
            withFunctionParametersAsObject: { "htmlOfEmail":htmlOfEmailVar,
                                              "subject":[self.textFieldSubject objectValue],

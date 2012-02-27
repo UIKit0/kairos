@@ -16,6 +16,7 @@ import com.sun.mail.imap.*;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MailTextAndAttachmentsProcesser {
 	/**
@@ -25,7 +26,31 @@ public class MailTextAndAttachmentsProcesser {
 	public String getText(String usedForLinkToAttachment_imapMailFolder, 
 			String usedForLinkToAttachment_imapEmailId, Part p) throws MessagingException, IOException {
 		return getText(usedForLinkToAttachment_imapMailFolder, usedForLinkToAttachment_imapEmailId,
-				p, p);
+				p, p, null);
+	}
+
+	/**
+	 * Get the text content of the message and list of attachments.
+	 * Author: Victor Kazarinov <oobe@kazarinov.biz>
+	 */
+	public String getTextAndListOfAttachments(String usedForLinkToAttachment_imapMailFolder,
+			String usedForLinkToAttachment_imapEmailId, Part p,
+			List<AttachmentInMessageProperties> listOfAttachments) throws MessagingException, IOException {
+		return getText(usedForLinkToAttachment_imapMailFolder, usedForLinkToAttachment_imapEmailId,
+				p, p, listOfAttachments);
+	}
+
+	public static class AttachmentInMessageProperties
+	{
+		public String imapEmailId;
+		public int fileSize;
+		public String fileName;
+		public String contentIdOrEmptyNotNullString;
+		public boolean isImage;
+		public String imapEmailFolder;
+		public String contentType;
+		public String linkToServletToDownloadThumbnail;
+		public String linkToServletToDownloadFullSize;
 	}
 
 	/**
@@ -33,11 +58,13 @@ public class MailTextAndAttachmentsProcesser {
 	 * 
 	 * TODO: perhaps not all cases is processed here. Perhaps need rewrite this function to clearly pass all cases of all kinds of emails.
 	 *
+	 *  @listOfAttachemtsToFill if null, then not fill it and fill text of message with links to attachments.
 	 *  Author: Ignacio Cases
 	 *	Modifications: Victor Kazarinov <oobe@kazarinov.biz>
 	 */
 	private String getText(String usedForLinkToAttachment_imapMailFolder, 
-			String usedForLinkToAttachment_imapEmailId, Part p, Part wholeMessage) throws MessagingException, IOException {
+			String usedForLinkToAttachment_imapEmailId, Part p, Part wholeMessage, 
+			List<AttachmentInMessageProperties> listOfAttachemtsToFill) throws MessagingException, IOException {
 		if (p.isMimeType("text/*")) {
 			String s = (String) p.getContent();
 			boolean textIsHtml = p.isMimeType("text/html");
@@ -91,14 +118,14 @@ public class MailTextAndAttachmentsProcesser {
 					Part bp = mp.getBodyPart(i);
 					if (bp.isMimeType("text/plain")) {
 						if (text == null)
-							text = getText(usedForLinkToAttachment_imapMailFolder, usedForLinkToAttachment_imapEmailId, bp, wholeMessage);
+							text = getText(usedForLinkToAttachment_imapMailFolder, usedForLinkToAttachment_imapEmailId, bp, wholeMessage, listOfAttachemtsToFill);
 						continue;
 					} else if (bp.isMimeType("text/html")) {
-						String s = getText(usedForLinkToAttachment_imapMailFolder, usedForLinkToAttachment_imapEmailId, bp, wholeMessage);
+						String s = getText(usedForLinkToAttachment_imapMailFolder, usedForLinkToAttachment_imapEmailId, bp, wholeMessage, listOfAttachemtsToFill);
 						if (s != null)
 							return s;
 					} else {
-						return getText(usedForLinkToAttachment_imapMailFolder, usedForLinkToAttachment_imapEmailId, bp, wholeMessage);
+						return getText(usedForLinkToAttachment_imapMailFolder, usedForLinkToAttachment_imapEmailId, bp, wholeMessage, listOfAttachemtsToFill);
 					}
 				}
 			}
@@ -110,68 +137,79 @@ public class MailTextAndAttachmentsProcesser {
 				Part bp = mp.getBodyPart(i); 
 				if (bp.isMimeType("text/*") || bp.isMimeType("multipart/alternative"))
 					res = res + getText(usedForLinkToAttachment_imapMailFolder, 
-							usedForLinkToAttachment_imapEmailId, bp, wholeMessage);
-				else if (bp.isMimeType("image/*")) {					
-					// TODO: perhaps need also pass contentID to link, but always when I tested it was null. Here is code: IMAPBodyPart ibp = (IMAPBodyPart)bp;String contentId = ibp.getContentID();
-
-					String imgCell = "<a href=\"" + 
-							generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-									usedForLinkToAttachment_imapEmailId, false, false) +
-									"\" target=\"_blank\""+">" +
-									"<img src=\"" + 
-									generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-											usedForLinkToAttachment_imapEmailId, true, false) + "\" />" +
-									"</a>";
-					String secondCell = "<b>" + bp.getFileName() + "</b>" + 
-							"<br>" + 
-							bp.getSize() + " bytes " + // TODO: convert to visible by human size e.g. K  MB and etc.		
-							
-							"<a href=\"" + 
-							generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-									usedForLinkToAttachment_imapEmailId, false, false) +
-									"\" target=\"_blank\""+">" + "View</a>" + 
-							" <a href=\"" + 
-									generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-											usedForLinkToAttachment_imapEmailId, false, true) +"\">" + "Download</a>";
-					res = res + "<br>" +
-							"<table border=\"0\" width=\"0%\"><tr><td width=\"0%\">" + 
-							imgCell + "</td>" +
-									"<td align=\"left\">" + secondCell + "</td></tr></table>";
+							usedForLinkToAttachment_imapEmailId, bp, wholeMessage, listOfAttachemtsToFill);
+				else if (bp.isMimeType("image/*")) {		
+					if (listOfAttachemtsToFill != null) {						
+						listOfAttachemtsToFill.add(generateAttachmentInMessageProperties(bp, 
+								usedForLinkToAttachment_imapMailFolder, usedForLinkToAttachment_imapEmailId, true));
+					}
+					else {
+						// TODO: perhaps need also pass contentID to link, but always when I tested it was null. Here is code: IMAPBodyPart ibp = (IMAPBodyPart)bp;String contentId = ibp.getContentID();
+						String imgCell = "<a href=\"" + 
+								generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+										usedForLinkToAttachment_imapEmailId, false, false) +
+										"\" target=\"_blank\""+">" +
+										"<img src=\"" + 
+										generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+												usedForLinkToAttachment_imapEmailId, true, false) + "\" />" +
+										"</a>";
+						String secondCell = "<b>" + bp.getFileName() + "</b>" + 
+								"<br>" + 
+								bp.getSize() + " bytes " + // TODO: convert to visible by human size e.g. K  MB and etc.		
+								
+								"<a href=\"" + 
+								generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+										usedForLinkToAttachment_imapEmailId, false, false) +
+										"\" target=\"_blank\""+">" + "View</a>" + 
+								" <a href=\"" + 
+										generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+												usedForLinkToAttachment_imapEmailId, false, true) +"\">" + "Download</a>";
+						res = res + "<br>" +
+								"<table border=\"0\" width=\"0%\"><tr><td width=\"0%\">" + 
+								imgCell + "</td>" +
+										"<td align=\"left\">" + secondCell + "</td></tr></table>";
+					}
 				} else if (bp.isMimeType("message/rfc822")) {
 					if (bp.getContent() instanceof IMAPNestedMessage) {
 						IMAPNestedMessage msg = (IMAPNestedMessage)bp.getContent();
 						// TODO: perhaps need to show also message header in-line?
 						res = res + "<HR>" + getText(usedForLinkToAttachment_imapMailFolder, 
-								usedForLinkToAttachment_imapEmailId, msg, wholeMessage);
+								usedForLinkToAttachment_imapEmailId, msg, wholeMessage, listOfAttachemtsToFill);
 					}
 					else
 						res = res + "Unknown type: " + bp.getContent(); // TODO: could this happen?
 				}
 				else {
-					String imgCell = ""; /*"<a href=\"" + 
-							generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-									usedForLinkToAttachment_imapEmailId, false) +
-									"\" target=\"_blank\""+">" +
-									"<img src=\"" + 
-									generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-											usedForLinkToAttachment_imapEmailId, true) + "\" />" +
-									"</a>"*/;
-					String secondCell = "<b>" + bp.getFileName() + "</b>" + 
-							"<br>" + 
-							bp.getSize() + " bytes " + // TODO: convert to visible by human size e.g. K  MB and etc.		
-							
-							"<a href=\"" + 
-							generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-									usedForLinkToAttachment_imapEmailId, false, true) +
-									"\">" + "Download</a>" /*+ 
-							" <a href=\"" + 
-									generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
-											usedForLinkToAttachment_imapEmailId, false) +"\">" + "Download</a>"*/;
-					res = res + "<br>" +
-							"<table border=\"0\" width=\"0%\"><tr><td width=\"0%\">" + 
-							imgCell + "</td>" +
-									"<td align=\"left\">" + secondCell + "</td></tr></table>";
-					//res = res + "<br>Unknown file type (" + bp.getFileName() + ") (" + bp.getContentType() + ")"; // TODO:
+					if (listOfAttachemtsToFill != null) {						
+						listOfAttachemtsToFill.add(generateAttachmentInMessageProperties(bp, 
+								usedForLinkToAttachment_imapMailFolder, usedForLinkToAttachment_imapEmailId, false));
+					}
+					else {
+						String imgCell = ""; /*"<a href=\"" + 
+								generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+										usedForLinkToAttachment_imapEmailId, false) +
+										"\" target=\"_blank\""+">" +
+										"<img src=\"" + 
+										generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+												usedForLinkToAttachment_imapEmailId, true) + "\" />" +
+										"</a>"*/;
+						String secondCell = "<b>" + bp.getFileName() + "</b>" + 
+								"<br>" + 
+								bp.getSize() + " bytes " + // TODO: convert to visible by human size e.g. K  MB and etc.		
+								
+								"<a href=\"" + 
+								generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+										usedForLinkToAttachment_imapEmailId, false, true) +
+										"\">" + "Download</a>" /*+ 
+								" <a href=\"" + 
+										generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder, 
+												usedForLinkToAttachment_imapEmailId, false) +"\">" + "Download</a>"*/;
+						res = res + "<br>" +
+								"<table border=\"0\" width=\"0%\"><tr><td width=\"0%\">" + 
+								imgCell + "</td>" +
+										"<td align=\"left\">" + secondCell + "</td></tr></table>";
+						//res = res + "<br>Unknown file type (" + bp.getFileName() + ") (" + bp.getContentType() + ")"; // TODO:
+					}
 				}
 			}
 			if (res.length() == 0)
@@ -247,6 +285,42 @@ public class MailTextAndAttachmentsProcesser {
 				"&asThumbnail=" + String.valueOf(asThumbnail) +
 				"&downloadMode=" + String.valueOf(downloadMode) +
 				"&contentIdOrEmptyNotNullString=" + URLEncoder.encode(contentIdOrEmptyNotNullString, "UTF8");
+	}
+
+	/*
+	 * generateAttachmentInMessageProperties function.
+	 * Author: Victor Kazarinov <oobe@kazarinov.biz>
+	 */
+	private AttachmentInMessageProperties generateAttachmentInMessageProperties(Part bp,
+			String usedForLinkToAttachment_imapMailFolder,
+			String usedForLinkToAttachment_imapEmailId, boolean isImage)
+					throws UnsupportedEncodingException, MessagingException {
+		String contentIdOrEmptyNotNullString = null;
+		if (bp instanceof IMAPBodyPart)
+			contentIdOrEmptyNotNullString = ((IMAPBodyPart)bp).getContentID();
+		if (contentIdOrEmptyNotNullString == null)
+			contentIdOrEmptyNotNullString = "";
+
+		AttachmentInMessageProperties res = new AttachmentInMessageProperties();
+		res.imapEmailId = usedForLinkToAttachment_imapEmailId;
+		res.fileSize = bp.getSize();
+		res.imapEmailFolder = usedForLinkToAttachment_imapMailFolder;
+		res.fileName = bp.getFileName();
+		res.contentIdOrEmptyNotNullString = contentIdOrEmptyNotNullString;
+		res.isImage = isImage;
+		res.contentType = bp.getContentType();
+
+		res.linkToServletToDownloadFullSize = generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder,
+				usedForLinkToAttachment_imapEmailId, false, false);
+		if (isImage) {
+			res.linkToServletToDownloadThumbnail = generateLinkToImage(bp, usedForLinkToAttachment_imapMailFolder,
+				usedForLinkToAttachment_imapEmailId, true, false);
+		}
+		else {
+			res.linkToServletToDownloadThumbnail = "";
+		}
+
+		return res;
 	}
 
 	/*
