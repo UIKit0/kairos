@@ -80,8 +80,6 @@ var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a s
 
     [self addObserver:self forKeyPath:@"email.attachments" options:nil context:nil];
 
-    [theWindow makeFirstResponder:textView];
-
     var toolbarView = [editorToolbarController view];
     [toolbarView setFrame:[toolbarSlot bounds]];
     [toolbarSlot addSubview:toolbarView];
@@ -259,12 +257,14 @@ var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a s
     [attachmentScrollView setBackgroundColor:showScrollbars ? [CPColor whiteColor] : [CPColor clearColor]];
     [attachmentScrollView setBorderType:showScrollbars ? CPLineBorder : CPNoBorder];
     [attachmentScrollView setHasVerticalScroller:showScrollbars];
+    [attachmentScrollView setHidden:attachmentsToShow == 0];
 
     var delta = frame.size.height - heightBefore;
 
     editorFrame.origin.y += delta;
     editorFrame.size.height -= delta;
     [editorView setFrame:editorFrame];
+
 }
 
 @end
