@@ -41,6 +41,8 @@ var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a s
 //  Imap                                _imap;
     //CPString                          _messageID;
     ServerConnection                    _serverConnection;
+
+    boolean                             isSending;
 }
 
 #pragma mark -
@@ -137,7 +139,7 @@ var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a s
 - (IBAction)sendButtonClickedAction:(id)sender
 {
     // TODO: for GUI developer: replace htmlOfEmail value with full html text of email from rich text editor.
-    [self.buttonSend setEnabled:false];
+    [self setIsSending:YES];
 
     var htmlOfEmailVar = [textView htmlValue];
     [_serverConnection setTimeout:60];
@@ -154,17 +156,35 @@ var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a s
                                     error:@selector(currentlyComposingEmailSendTimeOutOrError:)];
 }
 
+- (void)setIsSending:(boolean)aFlag
+{
+    isSending = aFlag;
+    [[theWindow toolbar] validateVisibleItems];
+}
+
+- (boolean)validateToolbarItem:(id)toolbarItem
+{
+    switch ([toolbarItem itemIdentifier])
+    {
+        case "toolbarSendItem":
+            return !isSending;
+            break;
+    }
+    return YES;
+}
+
 - (void)currentlyComposingEmailSendTimeOutOrError:(id)sender
 {
-     // TODO: for GUI developer: THINK: how it should work when email is failed to send by timeout.
-    [self.buttonSend setEnabled:true];
+    // TODO: for GUI developer: THINK: how it should work when email is failed to send by timeout.
+    [self setIsSending:NO];
+
     alert("Error sending email: timeout");
 }
 
 - (void)currentlyComposingEmailSendDidReceived:(id)sender withParametersObject:parametersObject
 {
     // TODO: for GUI developer: THINK: how it should work when email is sent - should window be closed or not and etc.
-    [self.buttonSend setEnabled:true];
+
     if (parametersObject.emailIsSent == true)
     {
         alert("Email is sent successfully");
@@ -175,6 +195,7 @@ var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a s
         // TODO: how to show error for user?
         alert("Failed to send email. Error details: " + parametersObject.errorDetails);
     }
+    [self setIsSending:NO];
 }
 
 #pragma mark -
@@ -244,7 +265,6 @@ var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a s
     editorFrame.origin.y += delta;
     editorFrame.size.height -= delta;
     [editorView setFrame:editorFrame];
-
 }
 
 @end
