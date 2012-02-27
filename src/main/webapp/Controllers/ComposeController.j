@@ -8,34 +8,40 @@
 
 @import <AppKit/AppKit.j>
 @import <Foundation/Foundation.j>
-@import "../Components/FileUpload.j" // UploadButton component.
 
-
+@import "../Models/SMAttachment.j"
 
 var CPAlertSaveAsDraft                          = 0,
     CPAlertContinueWriting                      = 1,
     CPAlertDiscard                              = 2;
 
+var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a scrollbar will be shown.
 
 @implementation ComposeController: CPWindowController
 {
-    @outlet CPWindow        theWindow;
-    @outlet id              customView1;
-    @outlet id              textField1; //CPTextField  This is email body currently. Should be replaced to rich text editor
-    @outlet id              textFieldToAddress; //CPTextField
-    @outlet id              textFieldCCAddress; //CPTextField
+    @outlet CPWindow                    theWindow;
 
-    @outlet id              textFieldSubject; //CPTextField
+    @outlet CPView                      toolbarSlot;
 
-    @outlet id              buttonSend;
+    @outlet id                          customView1;
+    @outlet SMEditorToolbarController   editorToolbarController;
+    @outlet WKTextView                  textView;
+    @outlet id                          textFieldToAddress; //CPTextField
+    @outlet id                          textFieldCCAddress; //CPTextField
 
-    TextDisplay statusDisplay;
-//  @outlet CPWebView       webView;
+    @outlet id                          textFieldSubject; //CPTextField
 
-//  id                      _prevDelegate;
-//  Imap                    _imap;
-    //CPString              _messageID;
-    ServerConnection    _serverConnection;
+    @outlet id                          buttonSend;
+
+    IBOutlet CPCollectionView           attachmentList;
+
+    /*! The email being composed. */
+    SMEmail                             email @accessors;
+
+//  id                                  _prevDelegate;
+//  Imap                                _imap;
+    //CPString                          _messageID;
+    ServerConnection                    _serverConnection;
 }
 
 #pragma mark -
@@ -43,29 +49,22 @@ var CPAlertSaveAsDraft                          = 0,
 
 - (void)awakeFromCib
 {
+    [self setEmail:[SMEmail new]];
+
     [theWindow center];
 
     // TODO for GUI developer: this is not working (strange). We need modal window, but this making windows non-respondable:
     // [CPApp runModalForWindow:theWindow];
 
-    var contentView = [theWindow contentView],
-        urlString = "uploadAttachment"; //"http://localhost:8080/uploadAttachment"
+    [textView setBackgroundColor:[CPColor whiteColor]];
+    [textView setValue:CGInsetMake(8.0, 10.0, 8.0, 10.0) forThemeAttribute:@"content-inset"];
+    [textView setAutohidesScrollers:NO];
 
-    if (customView1)
-    {
-        var customView1Frame = customView1._bounds.size,
-            fileUploadButton = [[UploadButton alloc] initWithFrame:CGRectMake(0, 0, customView1Frame.width, customView1Frame.height)];
-        [fileUploadButton setTitle:"Upload File1"];
-        [fileUploadButton setBordered:YES];
-        [fileUploadButton allowsMultipleFiles:YES];
-        [fileUploadButton setURL:urlString];
-        [fileUploadButton setDelegate:self];
+    var attachmentPrototypeView = [[attachmentList itemPrototype] view];
+    [attachmentList setMinItemSize:[attachmentPrototypeView frameSize]];
+    [attachmentList setMaxItemSize:[attachmentPrototypeView frameSize]];
 
-        [customView1 addSubview:fileUploadButton];
-
-        statusDisplay = [[TextDisplay alloc] initWithFrame:CGRectMake(10, 180, 500, 100)];
-        [contentView addSubview:statusDisplay];
-    }
+    var contentView = [theWindow contentView]; //"http://localhost:8080/uploadAttachment"
 
     _serverConnection = [[ServerConnection alloc] init];
 
@@ -77,6 +76,25 @@ var CPAlertSaveAsDraft                          = 0,
                                  delegate:self
                            didEndSelector:nil
                                     error:nil];
+
+    [self addObserver:self forKeyPath:@"email.attachments" options:nil context:nil];
+
+    [theWindow makeFirstResponder:textView];
+
+    var toolbarView = [editorToolbarController view];
+    [toolbarView setFrame:[toolbarSlot bounds]];
+    [toolbarSlot addSubview:toolbarView];
+}
+
+- (void)observeValueForKeyPath:keyPath
+    ofObject:anObject
+    change:change
+    context:context
+{
+    if (keyPath == @"email.attachments")
+    {
+        [self layoutSubviews];
+    }
 }
 
 // TODO: this is not working (not called at all)
@@ -108,9 +126,11 @@ var CPAlertSaveAsDraft                          = 0,
 #pragma mark -
 #pragma mark Actions
 
-- (IBAction)testAction1:(id)sender
+- (IBAction)attachmentUploaded:(id)sender
 {
-    alert("This button used for tests during development of compose window.");
+    //alert("This button used for tests during development of compose window.");
+
+    [self reDownloadListOfAttachments];
 }
 
 - (IBAction)sendButtonClickedAction:(id)sender
@@ -118,8 +138,10 @@ var CPAlertSaveAsDraft                          = 0,
     // TODO: for GUI developer: replace htmlOfEmail value with full html text of email from rich text editor.
     [self.buttonSend setEnabled:false];
 
-    var htmlOfEmailVar = [self.textField1 stringValue];
+    var htmlOfEmailVar = [textView htmlValue];
     [_serverConnection setTimeout:60];
+
+    console.log("emailing html ", htmlOfEmailVar);
 
     [_serverConnection callRemoteFunction:@"currentlyComposingEmailSend"
            withFunctionParametersAsObject: { "htmlOfEmail":htmlOfEmailVar,
@@ -157,31 +179,6 @@ var CPAlertSaveAsDraft                          = 0,
 #pragma mark -
 #pragma mark Client-Server API
 
-// TODO for GUI developer: UNDONE: use this deleteAttachment function to delete attachments from list when user want to delete selected attachment from list. Also please handle "currentlyComposingEmailDeleteAttachmentDidReceived" function where is shown alert for user
-- (void)deleteAttachment:(CPString)webServerAttachmentIdToDelete
-{
-    //var value = [textField1 objectValue];
-    var value = webServerAttachmentIdToDelete;
-    [_serverConnection setDefaultTimeout];
-    [_serverConnection callRemoteFunction:@"currentlyComposingEmailDeleteAttachment"
-           withFunctionParametersAsObject:{ webServerAttachmentId:value }
-                             delegate:self
-                       didEndSelector:@selector(currentlyComposingEmailDeleteAttachmentDidReceived:withParametersObject:)
-                                error:nil];
-}
-
-- (void)currentlyComposingEmailDeleteAttachmentDidReceived:(id)sender withParametersObject:parametersObject
-{
-    // TODO for GUI developer:
-    alert("Attachment deleted:\n deletedWebServerAttachmentId=" +
-          parametersObject.deletedWebServerAttachmentId + "\n" +
-          "deletedSuccessfully=" + parametersObject.deletedSuccessfully + "\n" +
-          "error=" + parametersObject.error);
-
-    // update list of attachments.
-    [self reDownloadListOfAttachments];
-}
-
 - (void)reDownloadListOfAttachments
 {
     [_serverConnection setDefaultTimeout];
@@ -194,132 +191,56 @@ var CPAlertSaveAsDraft                          = 0,
 
 - (void)reDownloadListOfAttachmentsDidReceived:(id)sender withParametersObject:parametersObject
 {
-    // TODO for GUI developer: UNDONE: replace this with GUI showing list of attachments, where each attachment clickable to view it. (it should go to link of attachment to view/download it).
-    [statusDisplay clearDisplay];
-    [statusDisplay appendString:@"List of attachments"];
+    var newAttachments = [];
 
     for (var i = 0; i < parametersObject.listOfAttachments.length; i++)
-    {
-        var link = [[CPString alloc] initWithString:@"<a href=\"" +
-                    "GetComposingAttachment?webServerAttachmentId=" +
-                    parametersObject.listOfAttachments[i].webServerAttachmentId +
-                    "&downloadMode=false\"" + " target=\"_blank\"" +
-                    ">View</a>" + " " +
-                    "<a href=\"" +
-                    "GetComposingAttachment?webServerAttachmentId=" +
-                    parametersObject.listOfAttachments[i].webServerAttachmentId +
-                    "&downloadMode=true\"" + " target=\"_blank\"" +
-                    ">Download</a>"];
+        newAttachments.push([[SMAttachment alloc] initWithAttachmentObject:parametersObject.listOfAttachments[i]]);
 
-        [statusDisplay appendHtml:parametersObject.listOfAttachments[i].fileName + " size: " + parametersObject.listOfAttachments[i].sizeInBytes +
-         //" " + "webServerAttachmentId=" + parametersObject.listOfAttachments[i].webServerAttachmentId +
-         " " + link];
+    [self setAttachments:newAttachments];
 
-        // UNDONE  NOTE: bellow notes for future, not yet implemented at server side!!
-        // TODO for GUI developer: to create downloadable link, use parametersObject.listOfAttachments[i].webServerAttachmentId field as "webServerAttachmentId" parameter in link GetComposingAttachment?webServerAttachmentId=webServerAttachmentId, e.g. http://anHost.com/GetComposingAttachment?webServerAttachmentId=123456asdf where in example webServerAttachmentId has value 123456asdf.
-        // Additional URL parameters &downloadMode=true When "false" it will return usual attachment, when "true" it will respond to download it (in Content-Disposition header in response will be "attachment" keyword).
-        // Another additional URL parameter &asThumbnail=true If "true" returned image will be small thumbnail (converted at server side). For files it will fail, will work only for images. (THINK: Perhaps in future it can return icons of files by file extension?)
-        // ---
-        // Available fields in listOfAttachments[i] object:
-        // 1. fileName (String)
-        // 2. sizeInBytes (long)
-        // 3. webServerAttachmentId (String)
-        // 4. contentType (String)
-    }
+    // UNDONE  NOTE: bellow notes for future, not yet implemented at server side!!
+    // TODO for GUI developer: to create downloadable link, use parametersObject.listOfAttachments[i].webServerAttachmentId field as "webServerAttachmentId" parameter in link GetComposingAttachment?webServerAttachmentId=webServerAttachmentId, e.g. http://anHost.com/GetComposingAttachment?webServerAttachmentId=123456asdf where in example webServerAttachmentId has value 123456asdf.
+    // Additional URL parameters &downloadMode=true When "false" it will return usual attachment, when "true" it will respond to download it (in Content-Disposition header in response will be "attachment" keyword).
+    // Another additional URL parameter &asThumbnail=true If "true" returned image will be small thumbnail (converted at server side). For files it will fail, will work only for images. (THINK: Perhaps in future it can return icons of files by file extension?)
+    // ---
+    // Available fields in listOfAttachments[i] object:
+    // 1. fileName (String)
+    // 2. sizeInBytes (long)
+    // 3. webServerAttachmentId (String)
+    // 4. contentType (String)
 }
 
-#pragma mark -
-#pragma mark UploadButton Handlers
-
-- (void)uploadButton:(UploadButton)button didChangeSelection:(CPArray)selection
+- (void)setAttachments:(CPArray)someAttachments
 {
-    [button submit];
+    [email setAttachments:someAttachments];
 }
 
-- (void)uploadButton:(UploadButton)button didFailWithError:(CPString)anError
+- (void)layoutSubviews
 {
-    alert("Upload failed with this error: " + anError);
-    [self reDownloadListOfAttachments];
-     // TODO for GUI developer: hide loading indicator (e.g. ajax-loader.gif)
+    var attachmentSize = [attachmentList minItemSize],
+        attachmentsCount = [[email attachments] count],
+        attachmentsToShow = MIN(attachmentsCount, MAX_ATTACHMENTS_TO_SHOW),
+        attachmentScrollView = [attachmentList enclosingScrollView],
+        frame = CGRectMakeCopy([attachmentScrollView frame]),
+        editorView = textView,
+        editorFrame = CGRectMakeCopy([editorView frame]),
+        heightBefore = frame.size.height,
+        verticalMargin = [attachmentList verticalMargin];
+
+    frame.size.height = attachmentsToShow * (verticalMargin + attachmentSize.height) + verticalMargin;
+    [attachmentScrollView setFrame:frame];
+
+    var showScrollbars = attachmentsCount > attachmentsToShow;
+    [attachmentScrollView setBackgroundColor:showScrollbars ? [CPColor whiteColor] : [CPColor clearColor]];
+    [attachmentScrollView setBorderType:showScrollbars ? CPLineBorder : CPNoBorder];
+    [attachmentScrollView setHasVerticalScroller:showScrollbars];
+
+    var delta = frame.size.height - heightBefore;
+
+    editorFrame.origin.y += delta;
+    editorFrame.size.height -= delta;
+    [editorView setFrame:editorFrame];
 }
-
-- (void)uploadButton:(UploadButton)button didFinishUploadWithData:(CPString)response
-{
-    [button resetSelection];
-    [self reDownloadListOfAttachments];
-    // TODO for GUI developer: hide loading indicator (e.g. ajax-loader.gif)
-}
-
-- (void)uploadButtonDidBeginUpload:(UploadButton)button
-{
-    // TODO for GUI developer: show loading indicator (e.g. ajax-loader.gif)
-}
-
-#pragma mark -
-#pragma mark Old
-
-//- (void) gotMailContent:(Imap) aImap
-//{
-//  CPLog.trace(@"ComposeController - gotMailContent");
-//  /* we restore the main window as a delaget for the imap object */
-//  _imap.delegate = _prevDelegate;
-//
-//  /* we display email content */
-//  [webView loadHTMLString:[[CPString alloc] initWithFormat:@"<html><body style='font-family: Helvetica, Verdana; font-size: 12px;'>%@</body></html>", aImap.mailContent.HTMLBody]];
-//}
-/*
-
- - (void) setImap:(CPImap)aImap prevDelegate:(id)delegate
- {
- _prevDelegate = delegate;
- _imap = aImap;
- }
-
-
- - (void) setMessageID:(CPString)messageID
- {
- _messageID = messageID;
- }*/
 
 @end
 
-#pragma mark -
-#pragma mark TextDisplay class implementation
-
-@implementation TextDisplay: CPWebView
-{
-    CPString currentString;
-}
-
-- (id)initWithFrame:(CPRect)aFrame
-{
-    self = [super initWithFrame:aFrame];
-    if (self)
-    {
-        currentString = "";
-    }
-
-    return self;
-}
-
-- (void)appendString:(CPString)aString
-{
-    currentString = currentString + "<pre>" + aString + "</pre>";
-    [self loadHTMLString: currentString];
-}
-
-- (void)appendHtml:(CPString)aString
-{
-    currentString = currentString  + "<br>" +  aString;
-    //[self loadHTMLString: currentString];
-    [self loadHTMLString:[[CPString alloc] initWithFormat:@"<html><head></head><body style='font-family: Helvetica, Verdana; font-size: 12px;'>%@%@</body></html>", currentString, ""]];
-
-}
-
-- (void)clearDisplay
-{
-    currentString = "";
-    [self loadHTMLString:""];
-}
-
-@end

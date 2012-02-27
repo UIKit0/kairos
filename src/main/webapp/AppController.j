@@ -11,6 +11,7 @@ APPLICATION_VERSION_NUMBER = 0.1;
 
 @import <Foundation/Foundation.j>
 @import <AppKit/AppKit.j>
+@import <WKTextView/WKTextView.j>
 
 @import "./Categories/VRCategories.j"
 
@@ -19,9 +20,14 @@ APPLICATION_VERSION_NUMBER = 0.1;
 @import "./Controllers/ComposeController.j"
 @import "./Controllers/HNAuthController.j"
 @import "./Controllers/AboutPanelController.j"
+@import "./Controllers/SMEditorToolbarController.j"
 
 @import "./Views/MailboxColumnView.j"
 @import "./Views/SMSplitView.j"
+@import "./Views/SMAttachmentView.j"
+@import "./Views/SMUploadToolbarItem.j"
+@import "./Views/SMSmallButton.j"
+@import "./Views/SMEditorToolbarView.j"
 
 @import "TNLocalizationCenter.j"
 @import "language_registry.js"

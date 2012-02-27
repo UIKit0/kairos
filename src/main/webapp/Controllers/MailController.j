@@ -339,9 +339,9 @@ var IsReadImage,
 #pragma mark Actions
 - (IBAction)composeMail:(id)sender
 {
-     _composeController = [[ComposeController alloc] init];
-        var cib = [[CPCib alloc] initWithContentsOfURL:[[CPBundle mainBundle] pathForResource:@"Compose.cib"]];
-        [cib instantiateCibWithExternalNameTable:[CPDictionary dictionaryWithObject:_composeController forKey:CPCibOwner]];
+    _composeController = [[ComposeController alloc] init];
+    var cib = [[CPCib alloc] initWithContentsOfURL:[[CPBundle mainBundle] pathForResource:@"Compose.cib"]];
+    [cib instantiateCibWithExternalNameTable:[CPDictionary dictionaryWithObject:_composeController forKey:CPCibOwner]];
 
     /*var indexesSelectedEmail = emailsHeaderView._selectedRowIndexes;
     if ([indexesSelectedEmail count] == 1)

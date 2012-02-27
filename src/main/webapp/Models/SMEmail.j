@@ -19,6 +19,9 @@
     /*! The mailbox the email belongs to. */
     SMMailbox mailbox @accessors;
 
+    /*! The attachments belonging to this email. */
+    CPArray attachments @accessors;
+
     CPString from @accessors;
     CPString subject @accessors;
     CPString date @accessors;
@@ -26,10 +29,9 @@
 
 - (id)init
 {
-    self = [super init];
-    if (self)
+    if (self = [super init])
     {
-        // Initialization code here.
+        attachments = [CPMutableArray array];
     }
 
     return self;
@@ -38,6 +40,21 @@
 - (void)dealloc
 {
     [super dealloc];
+}
+
+/*!
+    Make sure attachments know they belong to this email.
+*/
+- (void)setAttachments:(CPArray)someAttachments
+{
+    [someAttachments makeObjectsPerformSelector:@selector(setEmail:) withObject:self];
+    attachments = someAttachments;
+}
+
+- (void)insertObject:(id)anAttachment inAttachmentsAtIndex:(int)anIndex
+{
+    [anAttachment setEmail:self];
+    [attachments insertObject:anAttachment atIndex:anIndex];
 }
 
 @end
