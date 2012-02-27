@@ -27,6 +27,17 @@
         fileName = anObject.fileName;
         sizeInBytes = anObject.sizeInBytes;
         contentType = anObject.contentType;
+
+        // UNDONE  NOTE: bellow notes for future, not yet implemented at server side!!
+        // TODO for GUI developer: to create downloadable link, use parametersObject.listOfAttachments[i].webServerAttachmentId field as "webServerAttachmentId" parameter in link GetComposingAttachment?webServerAttachmentId=webServerAttachmentId, e.g. http://anHost.com/GetComposingAttachment?webServerAttachmentId=123456asdf where in example webServerAttachmentId has value 123456asdf.
+        // Additional URL parameters &downloadMode=true When "false" it will return usual attachment, when "true" it will respond to download it (in Content-Disposition header in response will be "attachment" keyword).
+        // Another additional URL parameter &asThumbnail=true If "true" returned image will be small thumbnail (converted at server side). For files it will fail, will work only for images. (THINK: Perhaps in future it can return icons of files by file extension?)
+        // ---
+        // Available fields in listOfAttachments[i] object:
+        // 1. fileName (String)
+        // 2. sizeInBytes (long)
+        // 3. webServerAttachmentId (String)
+        // 4. contentType (String)
     }
     return self;
 }
