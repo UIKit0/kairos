@@ -37,9 +37,6 @@ var CPAlertSaveAsDraft      = 0,
     /*! The email being composed. */
     SMEmail                             email @accessors;
 
-//  id                                  _prevDelegate;
-//  Imap                                _imap;
-    //CPString                          _messageID;
     ServerConnection                    _serverConnection;
 
     boolean                             isSending;
@@ -84,8 +81,6 @@ var CPAlertSaveAsDraft      = 0,
 
     if (imapFolderName) // with checking imapFolderName to "nil" we check was "setMessageIdToOpenFromImap" function called or t.
     {
-       // TODO: add loading indicator (opening/loading existing imap email).
-
        [_serverConnection setTimeout:60]; // downloading mail body can take some time.
        [_serverConnection callRemoteFunction:@"restoreMailToEditInComposingWindow"
               withFunctionParametersAsObject:{ folder:imapFolderName, messageId:imapMsgIdToOpen }
@@ -191,8 +186,6 @@ var CPAlertSaveAsDraft      = 0,
 
     // update list of attachments.
     [self reDownloadListOfAttachments];
-
-    // TODO: stop loading indicator (opening/loading existing imap email), which should added recently at awakeFromCib function (there is also TODO).
 }
 
 #pragma mark -
@@ -257,7 +250,6 @@ var CPAlertSaveAsDraft      = 0,
 
 - (IBAction)sendButtonClickedAction:(id)sender
 {
-    // TODO: for GUI developer: replace htmlOfEmail value with full html text of email from rich text editor.
     [self setIsSending:YES];
 
     var htmlOfEmailVar = [textView htmlValue];
@@ -265,10 +257,10 @@ var CPAlertSaveAsDraft      = 0,
 
     // parameters is same as for "save email as draft" function.
     [_serverConnection callRemoteFunction:@"currentlyComposingEmailSend"
-           withFunctionParametersAsObject: { "htmlOfEmail":htmlOfEmailVar,
-                                             "subject":[self.textFieldSubject objectValue],
-                                             "to":[self.textFieldToAddress objectValue],
-                                             "cc":[self.textFieldCCAddress objectValue] }
+           withFunctionParametersAsObject:{ "htmlOfEmail":htmlOfEmailVar,
+                                            "subject":[self.textFieldSubject objectValue],
+                                            "to":[self.textFieldToAddress objectValue],
+                                            "cc":[self.textFieldCCAddress objectValue] }
                                  delegate:self
                            didEndSelector:@selector(currentlyComposingEmailSendDidReceived:withParametersObject:)
                                     error:@selector(currentlyComposingEmailSendTimeOutOrError:)];
@@ -282,6 +274,7 @@ var CPAlertSaveAsDraft      = 0,
 
 - (void)setIsLoading:(boolean)aFlag
 {
+    // TODO: show or hide loading indicator (opening/loading existing imap email).
     isLoading = aFlag;
     [[theWindow toolbar] validateVisibleItems];
 }

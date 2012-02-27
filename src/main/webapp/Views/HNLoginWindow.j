@@ -30,7 +30,7 @@ var SharedLoginWindow = nil;
 - (void)awakeFromCib
 {
     SharedLoginWindow = self;
-    
+
     [[CPNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loggedIn:)
                                                  name:HNUserAuthenticationDidChangeNotification
@@ -40,38 +40,41 @@ var SharedLoginWindow = nil;
                                              selector:@selector(updateErrorField:)
                                                  name:HNUserAuthenticationErrorNotification
                                                object:nil];
-    
+
     // The initial state of login is not enabled
     [defaultButton setEnabled:NO];
     [errorMessageField setTextColor:[CPColor redColor]];
-    
+
     // Localization
-	[self localizeWindow];
+    [self localizeWindow];
 }
 
-- (void) localizeWindow {
-	//[theWindow setTitle:[[TNLocalizationCenter defaultCenter] localize:@"Login"]];
-	//[labelTitle setObjectValue:[[TNLocalizationCenter defaultCenter] localize:@"Mail App"]];
-	[welcomeLabel setObjectValue:[[CPString alloc] initWithFormat:[[TNLocalizationCenter defaultCenter] localize:@"%@ Mail Server"], @"Smartmobili"]];
-	[emailLabel setStringValue:[[CPString alloc] initWithFormat:@"%@:", [[TNLocalizationCenter defaultCenter] localize:@"E-mail"]]];
-	[passwordLabel setStringValue:[[CPString alloc] initWithFormat:@"%@:", [[TNLocalizationCenter defaultCenter] localize:@"Password"]]];
-	[defaultButton setTitle:[[TNLocalizationCenter defaultCenter] localize:@"Login"]];
+- (void) localizeWindow
+{
+    //[theWindow setTitle:[[TNLocalizationCenter defaultCenter] localize:@"Login"]];
+    //[labelTitle setObjectValue:[[TNLocalizationCenter defaultCenter] localize:@"Mail App"]];
+    [welcomeLabel setObjectValue:[[CPString alloc] initWithFormat:[[TNLocalizationCenter defaultCenter] localize:@"%@ Mail Server"], @"Smartmobili"]];
+    [emailLabel setStringValue:[[CPString alloc] initWithFormat:@"%@:", [[TNLocalizationCenter defaultCenter] localize:@"E-mail"]]];
+    [passwordLabel setStringValue:[[CPString alloc] initWithFormat:@"%@:", [[TNLocalizationCenter defaultCenter] localize:@"Password"]]];
+    [defaultButton setTitle:[[TNLocalizationCenter defaultCenter] localize:@"Login"]];
 }
 
 - (@action)relocalizeWindow:(id)sender {
-    var languageTag = [[sender selectedItem] tag]; 
+    var languageTag = [[sender selectedItem] tag];
 
     // set the language selected
     var itemArray = [localePopUp itemArray];
-    for (var i = 0; i < [itemArray count]; i++) {
+    for (var i = 0; i < [itemArray count]; i++)
+    {
         [[localePopUp itemAtIndex:i] setState:CPOffState];
     }
     [[localePopUp selectedItem] setState:CPOnState];
 
     // define the current language
     var currentLanguage = @"en-us";
-    
-    switch (languageTag) {
+
+    switch (languageTag)
+    {
         case 1:
             currentLanguage = @"en-us";
             break;
@@ -82,18 +85,19 @@ var SharedLoginWindow = nil;
             currentLanguage = @"pt-br";
             break;
         default:
-            CPLog.info(@"Default locale: English");   
+            CPLog.info(@"Default locale: English");
             currentLanguage = @"en-us";
             break;
     }
-	[[TNLocalizationCenter defaultCenter] setCurrentLanguage:currentLanguage];
-	[self localizeWindow];
+    [[TNLocalizationCenter defaultCenter] setCurrentLanguage:currentLanguage];
+    [self localizeWindow];
 }
 
-- (void) localizeWindow {
-	//[theWindow setTitle:[[TNLocalizationCenter defaultCenter] localize:@"Login"]];
-    //	[labelTitle setObjectValue:[[TNLocalizationCenter defaultCenter] localize:@"Mail App"]];
-    //	[labelServer setObjectValue:[[CPString alloc] initWithFormat:[[TNLocalizationCenter defaultCenter] localize:@"%@ Mail Server"], @"Smartmobili"]];
+- (void)localizeWindow
+{
+    //[theWindow setTitle:[[TNLocalizationCenter defaultCenter] localize:@"Login"]];
+    //  [labelTitle setObjectValue:[[TNLocalizationCenter defaultCenter] localize:@"Mail App"]];
+    //  [labelServer setObjectValue:[[CPString alloc] initWithFormat:[[TNLocalizationCenter defaultCenter] localize:@"%@ Mail Server"], @"Smartmobili"]];
     [emailLabel setObjectValue:[[CPString alloc] initWithFormat:@"%@:", [[TNLocalizationCenter defaultCenter] localize:@"E-mail"]]];
     [passwordLabel setObjectValue:[[CPString alloc] initWithFormat:@"%@:", [[TNLocalizationCenter defaultCenter] localize:@"Password"]]];
     [defaultButton setTitle:[[TNLocalizationCenter defaultCenter] localize:@"Login"]];
@@ -105,7 +109,7 @@ var SharedLoginWindow = nil;
     // FIXME: these values are for development only
     // change these values to none and defaultButton visibility to NO
     [usernameField setStringValue:@"webguest@smartmobili.com"];
-    [passwordField setStringValue:@""];
+    [passwordField setStringValue:@"webguest78"];
     [defaultButton setEnabled:YES];
 }
 
@@ -137,14 +141,14 @@ var SharedLoginWindow = nil;
 //            [self orderOut:self];
 //        }
 //    }];
-//    
+//
 //    [errorMessageField setHidden:YES];
 
 //    [defaultButton setEnabled:NO];
 //    [cancelButton setEnabled:NO];
 }
 
-- (void)loggedIn:(CPNotification)notification 
+- (void)loggedIn:(CPNotification)notification
 {
     [self orderOut:self];
 }
@@ -156,12 +160,16 @@ var SharedLoginWindow = nil;
 
     if (![usernameField stringValue] || ![passwordField stringValue])
         [defaultButton setEnabled:NO];
-    else if ([usernameField stringValue] && [passwordField stringValue]){
-        if (![self checkUsername]) {
+    else if ([usernameField stringValue] && [passwordField stringValue])
+    {
+        if (![self checkUsername])
+        {
             [defaultButton setEnabled:NO];
             [errorMessageField setStringValue:@"Please check your username"];
             [errorMessageField setHidden:NO];
-        } else {
+        }
+        else
+        {
             [defaultButton setEnabled:YES];
             [errorMessageField setHidden:YES];
         }
@@ -175,29 +183,32 @@ var SharedLoginWindow = nil;
     [errorMessageField setHidden:NO];
 }
 
--(BOOL)checkUsername 
+- (BOOL)checkUsername
 {
-	var email = [[usernameField stringValue] lowercaseString];
-	if ([email length] > 0) {
+    var email = [[usernameField stringValue] lowercaseString];
+    if ([email length] > 0)
+    {
         return [self validateEmail:email compliantRFC2822:NO];
-	}
-	return NO;
+    }
+    return NO;
 }
 
--(BOOL)validateEmail:(CPString)email compliantRFC2822:(BOOL)compliant
-{ 
-    var emailRegExp;
-    var isValid = YES;
-    
-    if (compliant) {
-        // RFC2822 compliant 
+- (BOOL)validateEmail:(CPString)email compliantRFC2822:(BOOL)compliant
+{
+    var emailRegExp,
+        isValid = NO;
+
+    if (compliant)
+    {
+        // RFC2822 compliant
         emailRegExp = new RegExp("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?");
     } else {
         //emailRegExp = new RegExp("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$");
         emailRegExp = new RegExp("^[a-zA-Z0-9._-]+@smartmobili.com");
     }
-    
-    if (email.match(emailRegExp)) {
+
+    if (email.match(emailRegExp))
+    {
         isValid = YES;
     }
     return isValid;
