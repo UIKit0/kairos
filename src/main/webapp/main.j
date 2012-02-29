@@ -11,10 +11,9 @@
 
 @import "AppController.j"
 
-
 //CPLogRegister(CPLogPopup);
 
-function main(args, namedArgs) 
+function main(args, namedArgs)
 {
     CPApplicationMain(args, namedArgs);
 }
