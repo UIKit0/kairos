@@ -14,8 +14,8 @@
 var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a scrollbar will be shown;
 
 var CPAlertSaveAsDraft      = 0,
-    CPAlertContinueWriting  = 1,
-    CPAlertDiscard          = 2;
+    CPAlertContinueWriting  = 2,
+    CPAlertDiscard          = 1;
 
 @implementation ComposeController : CPWindowController
 {
@@ -41,6 +41,7 @@ var CPAlertSaveAsDraft      = 0,
 
     boolean                             isSending;
     boolean                             isLoading @accessors;
+    boolean                             wasEdited @accessors;
 
     CPString                            imapMsgIdToOpen;
     CPString                            imapFolderName;
@@ -121,8 +122,8 @@ var CPAlertSaveAsDraft      = 0,
     [confirmBox setMessageText:[[TNLocalizationCenter defaultCenter] localize:@"Do you want to discard the changes in the email?"]];
     [confirmBox setInformativeText:[[TNLocalizationCenter defaultCenter] localize:@"Your changes will be lost if you discard them."]];
     [confirmBox addButtonWithTitle:[[TNLocalizationCenter defaultCenter] localize:@"Save as draft"]];
-    [confirmBox addButtonWithTitle:[[TNLocalizationCenter defaultCenter] localize:@"Continue writing"]];
     [confirmBox addButtonWithTitle:[[TNLocalizationCenter defaultCenter] localize:@"Discard"]];
+    [confirmBox addButtonWithTitle:[[TNLocalizationCenter defaultCenter] localize:@"Cancel"]];
     [confirmBox beginSheetModalForWindow:theWindow modalDelegate:self didEndSelector:@selector(confirmEnd:returnCode:) contextInfo:nil];
 
     return NO;
@@ -131,10 +132,15 @@ var CPAlertSaveAsDraft      = 0,
 - (void)confirmEnd:(CPAlert)confirm returnCode:(int)returnCode
 {
     CPLog.trace(@"confirmEnd - returnCode = %d", returnCode);
-    if (returnCode == CPAlertDiscard)
+    switch (returnCode)
     {
+    case CPAlertDiscard:
         [CPApp stopModal];
         [theWindow close];
+        break;
+    case CPAlertSaveAsDraft:
+        [self saveAsDraftButtonClickedAction:nil];
+        break;
     }
 }
 
