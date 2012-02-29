@@ -40,7 +40,7 @@
 - (void)load
 {
     isReloading = YES;
-    
+
     [_serverConnection callRemoteFunction:@"listMailfolders"
                     withFunctionParametersAsObject:nil
                     delegate:self
@@ -69,7 +69,6 @@
 {
     if ([mailboxes containsObject:aMailbox])
     {
-        console.log("removing ", aMailbox);
         [[self mutableArrayValueForKey:@"mailboxes"] removeObject:aMailbox];
         [aMailbox setMailAccount:nil];
     }
@@ -80,10 +79,10 @@
 
 - (void)imapServerListMailboxesDidChange:(id)sender withParametersObject:parametersObject
 {
-    var listOfFolders = parametersObject.listOfFolders;
-        
-    var result = [CPArray array];
-    for (var i = 0; i < listOfFolders.length; i++) 
+    var listOfFolders = parametersObject.listOfFolders,
+        result = [CPArray array];
+
+    for (var i = 0; i < listOfFolders.length; i++)
     {
         var mailBox = [[SMMailbox alloc] initWithName:listOfFolders[i].label count:listOfFolders[i].count unread:listOfFolders[i].unread];
         result = [result arrayByAddingObject:mailBox];

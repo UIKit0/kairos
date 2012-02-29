@@ -15,7 +15,6 @@ var SMEditorToolbarViewBackgroundColor;
 
 + (void)initialize
 {
-    console.log("initialize");
     SMEditorToolbarViewBackgroundColor = CPColorWithImages([
         nil,
         ['editor-toolbar-bezel.png', 167, 29],
@@ -25,13 +24,11 @@ var SMEditorToolbarViewBackgroundColor;
 
 - (void)_init
 {
-    console.log("_init", SMEditorToolbarViewBackgroundColor);
     [self setBackgroundColor:SMEditorToolbarViewBackgroundColor];
 }
 
 - (void)awakeFromCib
 {
-    console.log("awakeFromCib");
     [self _init];
 }
 
@@ -39,7 +36,6 @@ var SMEditorToolbarViewBackgroundColor;
 {
     if (self = [super initWithCoder:aCoder])
     {
-        console.log("initWithCoder");
         [self _init];
     }
     return self;

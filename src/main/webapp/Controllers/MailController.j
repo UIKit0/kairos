@@ -827,7 +827,7 @@ var IsReadImage,
 
 - (IBAction)refresh:(id)sender
 {
-    console.log(@"Refresh...");
+    CPLog.info(@"Refresh...");
 }
 
 - (void)clearMailContent
