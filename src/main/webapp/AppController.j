@@ -119,9 +119,8 @@ APPLICATION_VERSION_NUMBER = 0.1;
         case @"SelectAll" :
             return([mailController shouldSelectAll]);
             break;
-        default:
-            return [anItem isEnabled];
     }
+    return [anItem isEnabled];
 }
 
 #pragma mark
