@@ -136,7 +136,7 @@ var defaultLocalizationCenter = nil;
             && (aDomainIdentifier == TNLocalizationCenterGeneralLocaleDomain))
         return;
 
-    [_locales setObject:aLocalization forKey:aDomainIdentifier]
+    [_locales setObject:aLocalization forKey:aDomainIdentifier];
 }
 
 
@@ -156,7 +156,7 @@ var defaultLocalizationCenter = nil;
             return (aDomainIdentifier == TNLocalizationCenterGeneralLocaleDomain) ? aToken : [self localize:aToken forDomain:TNLocalizationCenterGeneralLocaleDomain];
 
     if (aDomainIdentifier == TNLocalizationCenterGoogleTranslatorDomain)
-        return
+        return "";
 
     return [_locales objectForKey:aDomainIdentifier][aToken][_currentLanguage]
             || [_locales objectForKey:aDomainIdentifier][aToken][_defaultLanguage];
@@ -164,8 +164,8 @@ var defaultLocalizationCenter = nil;
 
 - (CPString)localizeUsingGoogle:(CPString)aToken
 {
-    var region = [[CPBundle mainBundle] objectForInfoDictionaryKey:@"CPBundleDevelopmentRegion"] ||
-                 [[CPBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDevelopmentRegion"];
+    var region = ([[CPBundle mainBundle] objectForInfoDictionaryKey:@"CPBundleDevelopmentRegion"] ||
+                 [[CPBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDevelopmentRegion"]);
 
     return [self localizeUsingGoogle:aToken from:region to:[TNLocalizationCenter navigatorLocale]];
 }
@@ -173,9 +173,9 @@ var defaultLocalizationCenter = nil;
 - (CPString)localizeUsingGoogle:(CPString)aToken from:(CPString)originLanguage to:(CPString)localLanguage
 {
     var l = [[localLanguage substringToIndex:2] lowercaseString],
-        o = [[originLanguage substringToIndex:2] lowercaseString];
-    var str = [CPString stringWithFormat:@"https://www.googleapis.com/language/translate/v2?key=%@&source=%@&target=%@&q=%@", _apiKey, o, l, aToken];
-    var t = [CPURLConnection sendSynchronousRequest:[CPURLRequest requestWithURL:[CPURL URLWithString:str]] returningResponse:nil];
+        o = [[originLanguage substringToIndex:2] lowercaseString],
+        str = [CPString stringWithFormat:@"https://www.googleapis.com/language/translate/v2?key=%@&source=%@&target=%@&q=%@", _apiKey, o, l, aToken],
+        t = [CPURLConnection sendSynchronousRequest:[CPURLRequest requestWithURL:[CPURL URLWithString:str]] returningResponse:nil];
     if (t.data)
         return t.data.translations[0].translatedText;
     return @"";
