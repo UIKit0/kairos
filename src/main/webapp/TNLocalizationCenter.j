@@ -28,12 +28,12 @@ var defaultLocalizationCenter = nil;
 /*! @ingroup tnkit
     localization manager.
     Default localization is get from the browser language
-    
+
     You have to import a js file, (you should place it in resources) that contains
     a JS dictionnary named 'GENERAL_LANGUAGE_REGISTRY'
-    
+
     for example:
-    
+
     GENERAL_LANGUAGE_REGISTRY = {
         "cancel" : {
             "en-us": "Cancel",
@@ -44,22 +44,22 @@ var defaultLocalizationCenter = nil;
             "fr-fr": "OK",
         },
     }
-    
+
     this will be used as default localization system.
-    
+
     if you want to add more localization files (for CPBundles, for example), you can register
     a new registry using
-    
+
     [[TNLocalizationCenter defaultCenter] setLocale:CUSTOM_REGISTRY forDomain:@"MY_CUSTOM_DOMAIN"];
-    
+
     then you can get translation using
-    
+
     [[TNLocalizationCenter defaultCenter] localize:@"cancel"]
-    
+
     or
-    
+
     [[TNLocalizationCenter defaultCenter] localize:@"cancel" forDomain:@"MY_CUSTOM_DOMAIN"];
-    
+
     If you used a token that doesn't exist, TNLocalizationCenter will try to get it from
     the GeneralDomain. If it fails, it will simply return the given token.
 */
@@ -70,7 +70,7 @@ var defaultLocalizationCenter = nil;
     CPDictionary    _locales;
     CPString        _defaultLanguage;
 
-	CPString		_apiKey @accessors(property=googleAPIKey);
+    CPString        _apiKey @accessors(property=googleAPIKey);
 }
 
 
@@ -154,31 +154,31 @@ var defaultLocalizationCenter = nil;
 {
     if (![_locales objectForKey:aDomainIdentifier] || ![_locales objectForKey:aDomainIdentifier][aToken])
             return (aDomainIdentifier == TNLocalizationCenterGeneralLocaleDomain) ? aToken : [self localize:aToken forDomain:TNLocalizationCenterGeneralLocaleDomain];
-	
-	if (aDomainIdentifier == TNLocalizationCenterGoogleTranslatorDomain)
-			return 
-	
+
+    if (aDomainIdentifier == TNLocalizationCenterGoogleTranslatorDomain)
+        return
+
     return [_locales objectForKey:aDomainIdentifier][aToken][_currentLanguage]
             || [_locales objectForKey:aDomainIdentifier][aToken][_defaultLanguage];
 }
 
 - (CPString)localizeUsingGoogle:(CPString)aToken
 {
-	var region = [[CPBundle mainBundle] objectForInfoDictionaryKey:@"CPBundleDevelopmentRegion"] ||
-				 [[CPBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDevelopmentRegion"];
-	
-	return [self localizeUsingGoogle:aToken from:region to:[TNLocalizationCenter navigatorLocale]];
+    var region = [[CPBundle mainBundle] objectForInfoDictionaryKey:@"CPBundleDevelopmentRegion"] ||
+                 [[CPBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDevelopmentRegion"];
+
+    return [self localizeUsingGoogle:aToken from:region to:[TNLocalizationCenter navigatorLocale]];
 }
 
 - (CPString)localizeUsingGoogle:(CPString)aToken from:(CPString)originLanguage to:(CPString)localLanguage
 {
-	var l = [[localLanguage substringToIndex:2] lowercaseString],
-		o = [[originLanguage substringToIndex:2] lowercaseString];
-	var str = [CPString stringWithFormat:@"https://www.googleapis.com/language/translate/v2?key=%@&source=%@&target=%@&q=%@", _apiKey, o, l, aToken];
-	var t = [CPURLConnection sendSynchronousRequest:[CPURLRequest requestWithURL:[CPURL URLWithString:str]] returningResponse:nil];
-	if (t.data)
-		return t.data.translations[0].translatedText;
-	return @"";
+    var l = [[localLanguage substringToIndex:2] lowercaseString],
+        o = [[originLanguage substringToIndex:2] lowercaseString];
+    var str = [CPString stringWithFormat:@"https://www.googleapis.com/language/translate/v2?key=%@&source=%@&target=%@&q=%@", _apiKey, o, l, aToken];
+    var t = [CPURLConnection sendSynchronousRequest:[CPURLRequest requestWithURL:[CPURL URLWithString:str]] returningResponse:nil];
+    if (t.data)
+        return t.data.translations[0].translatedText;
+    return @"";
 }
 
 /*! get the locale for the given token according to current language
