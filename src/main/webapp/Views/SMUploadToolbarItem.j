@@ -40,13 +40,14 @@
 
 - (void)_init
 {
-    uploadView = [[CPView alloc] initWithFrame:CGRectMake(0, 0, 100, 100)];
+    uploadView = [[CPView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+    [uploadView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
     var bounds = [uploadView bounds];
-    imageView = [[CPImageView alloc] initWithFrame:bounds];
 
+    imageView = [[CPImageView alloc] initWithFrame:bounds];
     [imageView setImageScaling:CPScaleProportionally];
     [imageView setImage:[self image]];
-    [imageView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable]
+    [imageView setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
     [uploadView addSubview:imageView];
 
     var fileUploadButton = [[UploadButton alloc] initWithFrame:bounds];
@@ -54,6 +55,7 @@
     [fileUploadButton allowsMultipleFiles:YES];
     [fileUploadButton setURL:"uploadAttachment"];
     [fileUploadButton setDelegate:self];
+    [fileUploadButton setAutoresizingMask:CPViewWidthSizable | CPViewHeightSizable];
 
     [uploadView addSubview:fileUploadButton];
 }

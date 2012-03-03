@@ -129,7 +129,10 @@
 
         _fileUploadElement.style.fontSize = "1000px";
 
-        if (_isBrowser.IE)
+        // Smartmobili/Kairos change: if the browser is IE9+, don't use this hack below.
+        // It doesn't seem to work, while running without the hack does seem to work.
+        // This check relies in index.html having loaded the BrowserDetect.js plugin.
+        if (_isBrowser.IE && BrowserDetect.version < 9)
         {
             _fileUploadElement.style.position = "relative";
             _fileUploadElement.style.top = "-10px";
@@ -312,7 +315,11 @@
         _DOMIFrameElement = nil;
     }
 
-    if (_isBrowser.IE)
+    // Smartmobili/Kairos change: before IE9, createElement with HTML was (incorrectly)
+    // allowed and a hack which helped avoid some bugs with createElement. With IE9+
+    // createElement works like for other browsers, so we assume it'll work well.
+    // This check relies in index.html having loaded the BrowserDetect.js plugin.
+    if (_isBrowser.IE && BrowserDetect.version < 9)
     {
         _DOMIFrameElement = document.createElement("<iframe id=\"" + _uploadForm.target + "\" name=\"" + _uploadForm.target + "\" />");
 
@@ -337,8 +344,7 @@
     {
         try
         {
-            var responseText = _DOMIFrameElement.contentWindow.document.body ? _DOMIFrameElement.contentWindow.document.body.innerHTML :
-                                                                               _DOMIFrameElement.contentWindow.document.documentElement.textContent;
+            var responseText = _DOMIFrameElement.contentWindow.document.body ? _DOMIFrameElement.contentWindow.document.body.innerHTML : _DOMIFrameElement.contentWindow.document.documentElement.textContent;
 
             [self uploadDidFinishWithResponse: responseText];
 
@@ -354,7 +360,7 @@
         }
     }
 
-    if(_isBrowser.IE)
+    if (_isBrowser.IE)
     {
         _DOMIFrameElement.onreadystatechange = function()
         {
@@ -374,7 +380,7 @@
 - (void)_removeUploadFormElements
 {
     var index = _uploadForm.childNodes.length;
-    while(index--)
+    while (index--)
         _uploadForm.removeChild(_uploadForm.childNodes[index]);
 }
 
