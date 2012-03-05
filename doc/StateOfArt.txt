@@ -1,0 +1,2 @@
+http://www.docjar.com/html/api/org/joshy/
+http://yawebmail.svn.sourceforge.net/viewvc/yawebmail/yawebmail_faces/trunk/src/main/java/de/lotk/yawebmail/
