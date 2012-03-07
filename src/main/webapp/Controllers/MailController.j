@@ -656,17 +656,20 @@ var IsReadImage,
     CPLog.trace(@"deleteMessages");
 
     //var row = [emailsHeaderView selectedRow];
-    var msgIds = [CPMutableArray array];
+    var messageIds = [CPMutableArray array];
 	var folderName = [self.selectedMailbox name]
-	var indexes = [emailsHeaderView selectedRowIndexes]
-    for (var j=0; j<[indexes count]; j++)
+	
+	var indexes = [];
+	[[emailsHeaderView selectedRowIndexes] getIndexes:indexes maxCount:-1 inIndexRange:nil]
+    
+	for (var j=0; j<[indexes count]; j++)
     {
-	    var msgId = [[[selectedMailbox mailHeaders] objectAtIndex:j] messageId]
-		[msgIds addObject:msgId];
+	    var msgId = [[[selectedMailbox mailHeaders] objectAtIndex:indexes[j]] messageId]
+		[messageIds addObject:msgId];
     }
 
     [_serverConnection callRemoteFunction:@"deleteMessages"
-                   withFunctionParametersAsObject:{ "messageIds":msgIds, "srcFolder":folderName }
+                   withFunctionParametersAsObject:{ "messageIds":messageIds, "srcFolder":folderName }
                                          delegate:self
                                    didEndSelector:@selector(imapServerMessagesDeleted:withParametersObject:)
                                             error:nil];
