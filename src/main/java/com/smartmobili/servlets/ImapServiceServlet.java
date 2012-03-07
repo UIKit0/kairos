@@ -421,6 +421,61 @@ public class ImapServiceServlet extends HttpServlet {
 		}
 	}
 
+	
+	
+	public JSONObject moveMessages(JSONObject parameters, HttpSession httpSession, Boolean isDelete) throws MessagingException, IOException {
+		Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
+		// and connected imapStore,
+		// or reconnect.
+		
+		JSONObject result = new JSONObject();		
+		Folder srcFolder = null;
+		Folder dstFolder = null;
+
+		try {
+			srcFolder = imapStore.getFolder(parameters.getString("srcFolder"));
+			srcFolder.open(Folder.READ_WRITE);
+			dstFolder = imapStore.getFolder(parameters.getString("dstFolder"));
+			
+			JSONArray  messageIds = parameters.getJSONArray("messageIds");
+			if (messageIds != null) 
+			{
+				for (int i=0;i < messageIds.size();i++) {
+					
+					String messageId = messageIds.getString(i);
+					Message[] messages = srcFolder.search(new MessageIDTerm(messageId));
+					if (messages.length > 0) 
+					{
+						srcFolder.copyMessages(messages, dstFolder);
+
+						for(int j = 0; j < messages.length; j++) 
+						{
+							messages[j].setFlag(Flags.Flag.DELETED, true);
+						}	
+					}
+				}
+				
+				result.put("messagesMoved","OK");
+			}
+		} 
+		finally {
+			srcFolder.close(true);
+			imapStore.close();
+		}
+		
+		return result;
+	}
+	
+	
+	public JSONObject deleteMessages(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
+		// Don't really like to pass arguments as JSONObject.
+		// I would prefer a more static api.
+		
+		parameters.put("dstFolder", "Trash");
+		return moveMessages(parameters, httpSession, true);
+	}
+	
+	
 	/*
 	 * Rename IMAP folder. 
 	 * Result is "" if no errors, or result is string with

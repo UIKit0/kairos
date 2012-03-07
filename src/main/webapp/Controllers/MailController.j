@@ -646,9 +646,38 @@ var IsReadImage,
     [[emailContextMenu addItemWithTitle:@"Forward" action:nil keyEquivalent:nil] setTarget:self];
     [[emailContextMenu addItemWithTitle:@"Mark as Read" action:nil keyEquivalent:nil] setTarget:self];
     [[emailContextMenu addItemWithTitle:@"Mark as Unread" action:nil keyEquivalent:nil] setTarget:self];
-    [[emailContextMenu addItemWithTitle:@"Delete" action:nil keyEquivalent:nil] setTarget:self];
+    [[emailContextMenu addItemWithTitle:@"Delete" action:@selector(deleteMessages:) keyEquivalent:nil] setTarget:self];
 
     return emailContextMenu;
+}
+
+- (IBAction)deleteMessages:(id)sender
+{
+    CPLog.trace(@"deleteMessages");
+
+    //var row = [emailsHeaderView selectedRow];
+    var msgIds = [CPMutableArray array];
+	var folderName = [self.selectedMailbox name]
+	var indexes = [emailsHeaderView selectedRowIndexes]
+    for (var j=0; j<[indexes count]; j++)
+    {
+	    var msgId = [[[selectedMailbox mailHeaders] objectAtIndex:j] messageId]
+		[msgIds addObject:msgId];
+    }
+
+    [_serverConnection callRemoteFunction:@"deleteMessages"
+                   withFunctionParametersAsObject:{ "messageIds":msgIds, "srcFolder":folderName }
+                                         delegate:self
+                                   didEndSelector:@selector(imapServerMessagesDeleted:withParametersObject:)
+                                            error:nil];
+
+
+}
+
+- (void)imapServerMessagesDeleted:(id)sender withParametersObject:parametersObject
+{
+	CPLog.debug(@"%@%@", _cmd, "TEST");
+	[emailsHeaderView reloadData];
 }
 
 
