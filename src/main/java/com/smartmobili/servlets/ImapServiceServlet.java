@@ -422,7 +422,7 @@ public class ImapServiceServlet extends HttpServlet {
 	}
 
 	/**
-	 * Returns a javax.Mail.Message array from a JSONArray holding a list of messageIds. 
+	 * Returns a javax.Mail.Message array from a JSONArray holding a list of RFC822 "MessageId". 
 	 *
 	 * @param folder 			the folder whose messageIds belongs to
 	 * @param jsonMessageIds 	the messageIds
@@ -453,7 +453,7 @@ public class ImapServiceServlet extends HttpServlet {
 	}
 	
 	
-	public JSONObject moveMessages(JSONObject parameters, HttpSession httpSession, Boolean isDelete) throws MessagingException, IOException {
+	public JSONObject moveMessages(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
 		
 		JSONObject result = new JSONObject();
 		
@@ -463,16 +463,18 @@ public class ImapServiceServlet extends HttpServlet {
 
 		try {
 			srcFolder = imapStore.getFolder(parameters.getString("srcFolder"));
-			srcFolder.open(Folder.READ_WRITE);
 			dstFolder = imapStore.getFolder(parameters.getString("dstFolder"));
 			
-			Message[] messages = GetMessages(srcFolder, parameters.getJSONArray("messageIds"));
-			if (messages != null)
+			if (srcFolder != null && dstFolder != null && !srcFolder.getFullName().equalsIgnoreCase(dstFolder.getFullName()))
 			{
-				srcFolder.copyMessages(messages, dstFolder);
-				srcFolder.setFlags(messages, new Flags(Flags.Flag.DELETED), true);
-				
-				result.put("messagesMoved","OK");
+				srcFolder.open(Folder.READ_WRITE);
+				Message[] messages = GetMessages(srcFolder, parameters.getJSONArray("messageIds"));
+				if (messages != null)
+				{
+					srcFolder.copyMessages(messages, dstFolder);
+					srcFolder.setFlags(messages, new Flags(Flags.Flag.DELETED), true);
+					result.put("result","OK");
+				}
 			}
 		} 
 		finally {
@@ -491,7 +493,7 @@ public class ImapServiceServlet extends HttpServlet {
 		// I would prefer a more static api.
 		
 		parameters.put("dstFolder", "Trash");
-		return moveMessages(parameters, httpSession, true);
+		return moveMessages(parameters, httpSession);
 	}
 	
 	

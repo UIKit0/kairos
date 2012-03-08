@@ -259,6 +259,7 @@ var IsReadImage,
 
 - (void)setSelectedMailbox:(SMMailbox)aMailbox
 {
+    CPLog.trace(@"setSelectedMailbox : %@", aMailbox);
     selectedMailbox = aMailbox;
 
     if (!selectedMailbox)
@@ -680,7 +681,7 @@ var IsReadImage,
 - (void)imapServerMessagesDeleted:(id)sender withParametersObject:parametersObject
 {
 	CPLog.trace(@"imapServerMessagesDeleted");
-	[emailsHeaderView reloadData];
+	[mailSourceController reload];
 }
 
 
