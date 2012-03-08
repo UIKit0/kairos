@@ -421,14 +421,43 @@ public class ImapServiceServlet extends HttpServlet {
 		}
 	}
 
+	/**
+	 * Returns a javax.Mail.Message array from a JSONArray holding a list of messageIds. 
+	 *
+	 * @param folder 			the folder whose messageIds belongs to
+	 * @param jsonMessageIds 	the messageIds
+	 * @return      			javax.Mail.Message 
+	 * @see         
+	 */
+	private Message[] GetMessages(Folder folder, JSONArray  jsonMessageIds) throws MessagingException
+	{
+		Message[] messages = null;
+		
+		if (folder != null && jsonMessageIds != null)
+		{
+			List<Message> messageList = new ArrayList<Message>(jsonMessageIds.size());
+			for(int i = 0; i < jsonMessageIds.size(); i++)
+			{
+				String messageId = jsonMessageIds.getString(i);
+				Message[] foundMsgs = folder.search(new MessageIDTerm(messageId));
+				if (foundMsgs.length > 0)
+				{
+					messageList.add(foundMsgs[0]);
+				}
+			}
+			
+			messages = messageList.toArray(new Message[0]);
+		}
+		
+		return messages;
+	}
 	
 	
 	public JSONObject moveMessages(JSONObject parameters, HttpSession httpSession, Boolean isDelete) throws MessagingException, IOException {
-		Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
-		// and connected imapStore,
-		// or reconnect.
 		
-		JSONObject result = new JSONObject();		
+		JSONObject result = new JSONObject();
+		
+		Store imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
 		Folder srcFolder = null;
 		Folder dstFolder = null;
 
@@ -437,30 +466,20 @@ public class ImapServiceServlet extends HttpServlet {
 			srcFolder.open(Folder.READ_WRITE);
 			dstFolder = imapStore.getFolder(parameters.getString("dstFolder"));
 			
-			JSONArray  messageIds = parameters.getJSONArray("messageIds");
-			if (messageIds != null) 
+			Message[] messages = GetMessages(srcFolder, parameters.getJSONArray("messageIds"));
+			if (messages != null)
 			{
-				for (int i=0;i < messageIds.size();i++) {
-					
-					String messageId = messageIds.getString(i);
-					Message[] messages = srcFolder.search(new MessageIDTerm(messageId));
-					if (messages.length > 0) 
-					{
-						srcFolder.copyMessages(messages, dstFolder);
-
-						for(int j = 0; j < messages.length; j++) 
-						{
-							messages[j].setFlag(Flags.Flag.DELETED, true);
-						}	
-					}
-				}
+				srcFolder.copyMessages(messages, dstFolder);
+				srcFolder.setFlags(messages, new Flags(Flags.Flag.DELETED), true);
 				
 				result.put("messagesMoved","OK");
 			}
 		} 
 		finally {
-			srcFolder.close(true);
-			imapStore.close();
+			if (srcFolder != null)
+				srcFolder.close(true);
+			if (imapStore != null)
+				imapStore.close();
 		}
 		
 		return result;

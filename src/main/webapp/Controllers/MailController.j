@@ -672,14 +672,14 @@ var IsReadImage,
                    withFunctionParametersAsObject:{ "messageIds":messageIds, "srcFolder":folderName }
                                          delegate:self
                                    didEndSelector:@selector(imapServerMessagesDeleted:withParametersObject:)
-                                            error:nil];
+                                            error:nil]
 
 
 }
 
 - (void)imapServerMessagesDeleted:(id)sender withParametersObject:parametersObject
 {
-	CPLog.debug(@"%@%@", _cmd, "TEST");
+	CPLog.trace(@"imapServerMessagesDeleted");
 	[emailsHeaderView reloadData];
 }
 
