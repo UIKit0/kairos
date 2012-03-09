@@ -72,7 +72,8 @@ var ContextMenuAddFolderTag = 0,
     [mailboxColumnView setAutoresizingMask:CPViewWidthSizable];
     [column setDataView:mailboxColumnView];
 
-    [view setBackgroundColor:[CPColor colorWithHexString:@"D6DDE3"]];
+    [view setBackgroundColor:[CPColor colorWithHexString:@"FFFFFF"]];
+    //[view setBackgroundColor:[CPColor colorWithHexString:@"D6DDE3"]];
 
     // Work around Cappuccino bug #1411 in IE8. Can be removed once #1411 has been fixed and
     // Cappuccino updated (after Cappuccino 0.9.5).

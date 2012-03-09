@@ -24,6 +24,8 @@
 @import "../EventsFromServerReceiver.j"
 
 
+var tableTestDragType = "tableTestDragType";
+
 SMEmailTableViewRowHeightParallelView = 40;
 SMEmailTableViewRowHeightTraditionalView = 23;
 SMSubjectTableColumnWidthParallelView = 440;
@@ -131,7 +133,9 @@ var IsReadImage,
     [emailsHeaderView setAllowsColumnReordering:NO];
     [emailsHeaderView setAllowsColumnSelection:NO];
     [emailsHeaderView setAllowsMultipleSelection:YES];
-    [emailsHeaderView setUsesAlternatingRowBackgroundColors:YES];
+    [emailsHeaderView registerForDraggedTypes:[tableTestDragType]];
+
+    //[emailsHeaderView setUsesAlternatingRowBackgroundColors:YES];
     [theWindow makeFirstResponder:emailsHeaderView];
     //var selHightLightColor = [CPColor colorWithHexString:@"a7cdf0"];
     //[emailsHeaderView setSelectionHighlightColor:selHightLightColor];
@@ -196,7 +200,7 @@ var IsReadImage,
 
     // Give the activity area the same background colour as the source view.
     // TODO The activity area should have its own controller.
-    [[loadingLabel superview] setBackgroundColor:[CPColor colorWithHexString:@"D6DDE3"]];
+    [[loadingLabel superview] setBackgroundColor:[CPColor colorWithHexString:@"FFFFFF"]];
 
     // Localize
     [fromLabel setObjectValue:[[CPString alloc] initWithFormat:@"%@:", [[TNLocalizationCenter defaultCenter] localize:@"From"]]];
@@ -1036,6 +1040,23 @@ var IsReadImage,
     [textfield setValue:CGInsetMake(3.0, 3.0, 3.0, 3.0) forThemeAttribute:@"bezel-inset" inState:CPThemeStateBezeled | CPTextFieldStateRounded];
     [textfield setValue:CGInsetMake(0.0, 0.0, 0.0, 0.0) forThemeAttribute:@"bezel-inset" inState:CPThemeStateBezeled | CPTextFieldStateRounded | CPThemeStateEditing];
     [textfield setValue:CGInsetMake(9.0, 14.0, 6.0, 14.0) forThemeAttribute:@"content-inset" inState:CPThemeStateBezeled | CPTextFieldStateRounded | CPThemeStateEditing];
+}
+
+- (CPDragOperation)tableView:(CPTableView)aTableView
+                   validateDrop:(id)info
+                   proposedRow:(CPInteger)row
+                   proposedDropOperation:(CPTableViewDropOperation)operation
+{
+    CPLog.trace(@"aTableView.validateDrop : row=%d", row);
+    [aTableView setDropRow:(row) dropOperation:CPTableViewDropOn];
+
+    return CPDragOperationMove;
+}
+
+- (BOOL)tableView:(CPTableView)aTableView acceptDrop:(id)info row:(int)row dropOperation:(CPTableViewDropOperation)operation
+{
+    CPLog.trace(@"aTableView.acceptDrop : row=%d", row);
+    return YES;
 }
 
 
