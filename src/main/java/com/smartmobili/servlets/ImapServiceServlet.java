@@ -533,7 +533,7 @@ public class ImapServiceServlet extends HttpServlet {
 		String srcFolderName = parameters.getString("srcFolder");
 		if (srcFolderName.equalsIgnoreCase("Trash"))
 		{
-			expungeMessages(parameters, httpSession);
+			result = expungeMessages(parameters, httpSession);
 		}
 		else
 		{
