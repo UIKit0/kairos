@@ -429,7 +429,7 @@ public class ImapServiceServlet extends HttpServlet {
 	 * @return      			javax.Mail.Message 
 	 * @see         
 	 */
-	private Message[] GetMessages(Folder folder, JSONArray  jsonMessageIds) throws MessagingException
+	private Message[] getMessages(Folder folder, JSONArray  jsonMessageIds) throws MessagingException
 	{
 		Message[] messages = null;
 		
@@ -468,7 +468,7 @@ public class ImapServiceServlet extends HttpServlet {
 			if (srcFolder != null && dstFolder != null && !srcFolder.getFullName().equalsIgnoreCase(dstFolder.getFullName()))
 			{
 				srcFolder.open(Folder.READ_WRITE);
-				Message[] messages = GetMessages(srcFolder, parameters.getJSONArray("messageIds"));
+				Message[] messages = getMessages(srcFolder, parameters.getJSONArray("messageIds"));
 				if (messages != null)
 				{
 					srcFolder.copyMessages(messages, dstFolder);
@@ -487,13 +487,61 @@ public class ImapServiceServlet extends HttpServlet {
 		return result;
 	}
 	
+	private JSONObject expungeMessages(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
+		
+		JSONObject result = new JSONObject();
+		
+		Store imapStore = null; // TODO: get cached opened
+		Folder srcFolder = null;
+
+		try {
+			imapStore = ImapSession.imapConnect(httpSession); // TODO: get cached opened
+			
+			srcFolder = imapStore.getFolder(parameters.getString("srcFolder"));
+			if (srcFolder != null)
+			{
+				srcFolder.open(Folder.READ_WRITE);
+				Message[] messages = getMessages(srcFolder, parameters.getJSONArray("messageIds"));
+				if (messages != null)
+				{
+					srcFolder.setFlags(messages, new Flags(Flags.Flag.DELETED), true);
+					result.put("result","OK");
+				}
+			}
+		} 
+		finally {
+			if (srcFolder != null)
+				srcFolder.close(true);
+			if (imapStore != null)
+				imapStore.close();
+		}
+		
+		return result;
+	}
 	
+	/**
+	 * Move or expunge messages. 
+	 *
+	 * @return      			result code 
+	 * @see         
+	 */
 	public JSONObject deleteMessages(JSONObject parameters, HttpSession httpSession) throws MessagingException, IOException {
 		// Don't really like to pass arguments as JSONObject.
 		// I would prefer a more static api.
+		JSONObject result = new JSONObject();
 		
-		parameters.put("dstFolder", "Trash");
-		return moveMessages(parameters, httpSession);
+		String srcFolderName = parameters.getString("srcFolder");
+		if (srcFolderName.equalsIgnoreCase("Trash"))
+		{
+			expungeMessages(parameters, httpSession);
+		}
+		else
+		{
+			parameters.put("dstFolder", "Trash");
+			result = moveMessages(parameters, httpSession);
+		}
+		
+		return result;
 	}
 	
 	
