@@ -3,7 +3,10 @@ apply plugin: 'war'
 apply plugin: 'jetty'
 apply plugin: "eclipse"
 
+// Project properties
 version = '1.0'
+//webAppDirName = 'src/main/webapp/Build/Deployment/Mail'
+
 
 jettyRun.contextPath = "/"
 
@@ -35,9 +38,22 @@ dependencies {
     compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4', classifier: 'jdk15'
 }
 
+/*
+task jakeDeploy(type:Exec) {
+	workingDir 'src/main/webapp'
+   	commandLine 'jake'
+    args 'deploy'
+}
+
+
+war.dependsOn jakeDeploy
+
 war {
     exclude '.xCodeSupport'
 }
+*/
+
+
 
 // File: build.gradle
 task createWrapper(type: Wrapper) {
