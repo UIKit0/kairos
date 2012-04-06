@@ -954,7 +954,7 @@ CFPropertyListSerializers[CFPropertyList.FormatXML_v1_0] =
                     },
     "string": function( aString)
                     {
-                        return "<string>" + encodeHTMLComponent(aString) + "</string>";;
+                        return "<string>" + encodeHTMLComponent(aString) + "</string>";
                     },
     "boolean" : function( aBoolean)
                     {
@@ -1060,6 +1060,7 @@ var XML_XML = "xml",
     PLIST_DICTIONARY = "dict",
     PLIST_ARRAY = "array",
     PLIST_STRING = "string",
+    PLIST_DATE = "date",
     PLIST_BOOLEAN_TRUE = "true",
     PLIST_BOOLEAN_FALSE = "false",
     PLIST_NUMBER_REAL = "real",
@@ -1255,12 +1256,16 @@ CFPropertyList.propertyListFromXML = function( aStringOrXMLNode)
                                         else
                                             object = decodeHTMLComponent((XMLNode.firstChild) ? (XMLNode.textContent || (XMLNode.textContent !== "" && textContent([XMLNode]))) : "");
                                         break;
+            case PLIST_DATE: var timestamp = Date.parseISO8601((XMLNode.textContent || (XMLNode.textContent !== "" && textContent([XMLNode]))));
+                                        object = isNaN(timestamp) ? new Date() : new Date(timestamp);
+                                        break;
             case PLIST_BOOLEAN_TRUE: object = YES;
                                         break;
             case PLIST_BOOLEAN_FALSE: object = NO;
                                         break;
             case PLIST_DATA: object = new CFMutableData();
-                                        object.bytes = (XMLNode.firstChild) ? CFData.decodeBase64ToArray((XMLNode.textContent || (XMLNode.textContent !== "" && textContent([XMLNode]))), YES) : [];
+                                        var data_bytes = (XMLNode.firstChild) ? CFData.decodeBase64ToArray((XMLNode.textContent || (XMLNode.textContent !== "" && textContent([XMLNode]))), YES) : [];
+                                        object.setBytes(data_bytes);
                                         break;
             default: throw new Error("*** " + (String(XMLNode.nodeName)) + " tag not recognized in Plist.");
         }
@@ -2348,7 +2353,7 @@ CFBundle.prototype.isLoading = function()
 CFBundle.prototype.isLoading.displayName = "CFBundle.prototype.isLoading";
 CFBundle.prototype.isLoaded = function()
 {
-    return this._loadStatus & CFBundleLoaded;
+    return !!(this._loadStatus & CFBundleLoaded);
 }
 CFBundle.prototype.isLoaded.displayName = "CFBundle.prototype.isLoaded";
 CFBundle.prototype.load = function( shouldExecute)

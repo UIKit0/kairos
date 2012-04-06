@@ -4296,7 +4296,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("dataWithString:"), fun
 CFData.prototype.isa = CPData;
 CFMutableData.prototype.isa = CPData;
 
-p;8;CPDate.jt;7876;@STATIC;1.0;i;10;CPObject.ji;10;CPString.ji;13;CPException.jt;7809;objj_executeFile("CPObject.j", YES);
+p;8;CPDate.jt;8821;@STATIC;1.0;i;10;CPObject.ji;10;CPString.ji;13;CPException.jt;8754;objj_executeFile("CPObject.j", YES);
 objj_executeFile("CPString.j", YES);
 objj_executeFile("CPException.j", YES);
 var CPDateReferenceDate = new Date(Date.UTC(2001, 1, 1, 0, 0, 0, 0));
@@ -4476,6 +4476,31 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 }
 },["void","CPCoder"])]);
 }
+var numericKeys = [1, 4, 5, 6, 7, 10, 11];
+Date.parseISO8601 = function (date)
+{
+    var timestamp, struct, minutesOffset = 0;
+    timestamp = Date.parse(date);
+    if (isNaN(timestamp) && (struct = /^(\d{4}|[+\-]\d{6})(?:-(\d{2})(?:-(\d{2}))?)?(?:T(\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{3}))?)?(?:(Z)|([+\-])(\d{2})(?::(\d{2}))?)?)?$/.exec(date)))
+    {
+        for (var i = 0, k; (k = numericKeys[i]); ++i)
+        {
+            struct[k] = +struct[k] || 0;
+        }
+        struct[2] = (+struct[2] || 1) - 1;
+        struct[3] = +struct[3] || 1;
+        if (struct[8] !== 'Z' && struct[9] !== undefined)
+        {
+            minutesOffset = struct[10] * 60 + struct[11];
+            if (struct[9] === '+')
+            {
+                minutesOffset = 0 - minutesOffset;
+            }
+        }
+        return Date.UTC(struct[1], struct[2], struct[3], struct[4], struct[5] + minutesOffset, struct[6], struct[7]);
+    }
+    return timestamp;
+};
 Date.prototype.isa = CPDate;
 
 p;11;CPDecimal.jt;28435;@STATIC;1.0;i;9;CPArray.ji;10;CPNumber.jt;28387;objj_executeFile("CPArray.j", YES);
@@ -6816,7 +6841,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
 },["void","CPCoder"])]);
 }
 
-p;12;CPIndexSet.jt;21540;@STATIC;1.0;i;9;CPArray.ji;10;CPObject.ji;9;CPRange.jt;21479;objj_executeFile("CPArray.j", YES);
+p;12;CPIndexSet.jt;24097;@STATIC;1.0;i;9;CPArray.ji;10;CPObject.ji;9;CPRange.jt;24036;objj_executeFile("CPArray.j", YES);
 objj_executeFile("CPObject.j", YES);
 objj_executeFile("CPRange.j", YES);
 {var the_class = objj_allocateClassPair(CPObject, "CPIndexSet"),
@@ -7077,7 +7102,69 @@ class_addMethods(the_class, [new objj_method(sel_getUid("init"), function $CPInd
         description += "(no indexes)";
     return description;
 }
-},["CPString"])]);
+},["CPString"]), new objj_method(sel_getUid("enumerateIndexesUsingBlock:"), function $CPIndexSet__enumerateIndexesUsingBlock_(self, _cmd, aFunction)
+{ with(self)
+{
+    objj_msgSend(self, "enumerateIndexesWithOptions:usingBlock:", CPEnumerationNormal, aFunction);
+}
+},["void","Function"]), new objj_method(sel_getUid("enumerateIndexesWithOptions:usingBlock:"), function $CPIndexSet__enumerateIndexesWithOptions_usingBlock_(self, _cmd, options, aFunction)
+{ with(self)
+{
+    if (!_count)
+        return;
+    objj_msgSend(self, "enumerateIndexesInRange:options:usingBlock:", CPMakeRange(0, ((_ranges[_ranges.length - 1]).location + (_ranges[_ranges.length - 1]).length)), options, aFunction);
+}
+},["void","CPEnumerationOptions","Function"]), new objj_method(sel_getUid("enumerateIndexesInRange:options:usingBlock:"), function $CPIndexSet__enumerateIndexesInRange_options_usingBlock_(self, _cmd, enumerationRange, options, aFunction)
+{ with(self)
+{
+    if (!_count || CPEmptyRange(enumerationRange))
+        return;
+    var shouldStop = NO,
+        index,
+        stop,
+        increment;
+    if (options & CPEnumerationReverse)
+    {
+        index = _ranges.length - 1,
+        stop = -1,
+        increment = -1;
+    }
+    else
+    {
+        index = 0;
+        stop = _ranges.length;
+        increment = 1;
+    }
+    for (; index !== stop; index += increment)
+    {
+        var range = _ranges[index];
+        var rangeIndex,
+            rangeStop,
+            rangeIncrement;
+        if (options & CPEnumerationReverse)
+        {
+            rangeIndex = ((range).location + (range).length) - 1;
+            rangeStop = range.location - 1;
+            rangeIncrement = -1;
+        }
+        else
+        {
+            rangeIndex = range.location;
+            rangeStop = ((range).location + (range).length);
+            rangeIncrement = 1;
+        }
+        for (; rangeIndex !== rangeStop; rangeIndex += rangeIncrement)
+        {
+            if (CPLocationInRange(rangeIndex, enumerationRange))
+            {
+                aFunction(rangeIndex, function(__input) { if (arguments.length) return shouldStop = __input; return shouldStop; });
+                if (shouldStop)
+                    return;
+            }
+        }
+    }
+}
+},["void","CPRange","CPEnumerationOptions","Function"])]);
 class_addMethods(meta_class, [new objj_method(sel_getUid("indexSet"), function $CPIndexSet__indexSet(self, _cmd)
 { with(self)
 {
@@ -7127,7 +7214,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         lhsRangeIndexCEIL = CEIL(lhsRangeIndex);
     if (lhsRangeIndexCEIL === lhsRangeIndex && lhsRangeIndexCEIL < rangeCount)
         aRange = CPUnionRange(aRange, _ranges[lhsRangeIndexCEIL]);
-    var rhsRangeIndex = assumedPositionOfIndex(_ranges, CPMaxRange(aRange)),
+    var rhsRangeIndex = assumedPositionOfIndex(_ranges, ((aRange).location + (aRange).length)),
         rhsRangeIndexFLOOR = FLOOR(rhsRangeIndex);
     if (rhsRangeIndexFLOOR === rhsRangeIndex && rhsRangeIndexFLOOR >= 0)
         aRange = CPUnionRange(aRange, _ranges[rhsRangeIndexFLOOR]);
@@ -7192,8 +7279,8 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         var existingRange = _ranges[lhsRangeIndexCEIL];
         if (aRange.location !== existingRange.location)
         {
-            var maxRange = CPMaxRange(aRange),
-                existingMaxRange = CPMaxRange(existingRange);
+            var maxRange = ((aRange).location + (aRange).length),
+                existingMaxRange = ((existingRange).location + (existingRange).length);
             existingRange.length = aRange.location - existingRange.location;
             if (maxRange < existingMaxRange)
             {
@@ -7208,13 +7295,13 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
             }
         }
     }
-    var rhsRangeIndex = assumedPositionOfIndex(_ranges, CPMaxRange(aRange) - 1),
+    var rhsRangeIndex = assumedPositionOfIndex(_ranges, ((aRange).location + (aRange).length) - 1),
         rhsRangeIndexFLOOR = FLOOR(rhsRangeIndex);
     if (rhsRangeIndex === rhsRangeIndexFLOOR && rhsRangeIndexFLOOR >= 0)
     {
-        var maxRange = CPMaxRange(aRange),
+        var maxRange = ((aRange).location + (aRange).length),
             existingRange = _ranges[rhsRangeIndexFLOOR],
-            existingMaxRange = CPMaxRange(existingRange);
+            existingMaxRange = ((existingRange).location + (existingRange).length);
         if (maxRange !== existingMaxRange)
         {
             _count -= maxRange - existingRange.location;
@@ -7243,7 +7330,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
     for (; i >= 0; --i)
     {
         var range = _ranges[i],
-            maximum = CPMaxRange(range);
+            maximum = ((range).location + (range).length);
         if (anIndex >= maximum)
             break;
         if (anIndex > range.location)
@@ -7254,15 +7341,15 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
                 objj_msgSend(_ranges, "insertObject:atIndex:", shifted, i + 1);
             else if (shifted.location < 0)
             {
-                shifted.length = CPMaxRange(shifted);
+                shifted.length = ((shifted).location + (shifted).length);
                 shifted.location = 0;
             }
             break;
         }
         if ((range.location += aDelta) < 0)
         {
-            _count -= range.length - CPMaxRange(range);
-            range.length = CPMaxRange(range);
+            _count -= range.length - ((range).location + (range).length);
+            range.length = ((range).location + (range).length);
             range.location = 0;
         }
     }
@@ -7278,7 +7365,7 @@ var meta_class = the_class.isa;class_addMethods(the_class, [new objj_method(sel_
         }
         if ((j = i + 1) < count)
         {
-            objj_msgSend(_ranges, "removeObjectsInRange:", CPMakeRange(j, count - j));
+            objj_msgSend(_ranges, "removeObjectsInRange:", { location:(j), length:count - j });
             for (j = 0, count = shifts.length; j < count; ++j)
                 objj_msgSend(self, "addIndexesInRange:", shifts[j]);
         }
@@ -7350,7 +7437,7 @@ var positionOfIndex = function(ranges, anIndex)
             range = ranges[middle];
         if (anIndex < range.location)
             high = middle - 1;
-        else if (anIndex >= CPMaxRange(range))
+        else if (anIndex >= ((range).location + (range).length))
             low = middle + 1;
         else
             return middle;
@@ -7371,7 +7458,7 @@ var assumedPositionOfIndex = function(ranges, anIndex)
             positionFLOOR = FLOOR(position);
         if (position === positionFLOOR)
         {
-            if (positionFLOOR - 1 >= 0 && anIndex < CPMaxRange(ranges[positionFLOOR - 1]))
+            if (positionFLOOR - 1 >= 0 && anIndex < ((ranges[positionFLOOR - 1]).location + (ranges[positionFLOOR - 1]).length))
                 high = middle - 1;
             else if (positionFLOOR < count && anIndex >= ranges[positionFLOOR].location)
                 low = middle + 1;
@@ -7383,7 +7470,7 @@ var assumedPositionOfIndex = function(ranges, anIndex)
             var range = ranges[positionFLOOR];
             if (anIndex < range.location)
                 high = middle - 1;
-            else if (anIndex >= CPMaxRange(range))
+            else if (anIndex >= ((range).location + (range).length))
                 low = middle + 1;
             else
                 return positionFLOOR;
@@ -7961,7 +8048,7 @@ var _CPKeyedArchiverEncodeObject = function(self, anObject, isConditional)
     return objj_msgSend(CPDictionary, "dictionaryWithObject:forKey:", UID, _CPKeyedArchiverUIDKey);
 };
 
-p;19;CPKeyedUnarchiver.jt;14970;@STATIC;1.0;i;9;CPArray.ji;9;CPCoder.ji;8;CPData.ji;14;CPDictionary.ji;13;CPException.ji;17;CPKeyedArchiver.ji;8;CPNull.ji;10;CPNumber.ji;10;CPString.jt;14811;objj_executeFile("CPArray.j", YES);
+p;19;CPKeyedUnarchiver.jt;14972;@STATIC;1.0;i;9;CPArray.ji;9;CPCoder.ji;8;CPData.ji;14;CPDictionary.ji;13;CPException.ji;17;CPKeyedArchiver.ji;8;CPNull.ji;10;CPNumber.ji;10;CPString.jt;14813;objj_executeFile("CPArray.j", YES);
 objj_executeFile("CPCoder.j", YES);
 objj_executeFile("CPData.j", YES);
 objj_executeFile("CPDictionary.j", YES);
@@ -8111,7 +8198,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initForReadingWithData:
         return nil;
     var objectClass = data.isa;
     if (objectClass === CPDataClass)
-        return data.bytes;
+        return data.bytes();
     return nil;
 }
 },["id","CPString"]), new objj_method(sel_getUid("finishDecoding"), function $CPKeyedUnarchiver__finishDecoding(self, _cmd)
@@ -14980,7 +15067,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("alloc"), function $_CP
 
 Array.prototype.isa = _CPJavaScriptArray;
 
-p;9;CPArray.jt;23255;@STATIC;1.0;i;14;CPEnumerator.ji;13;CPException.ji;10;CPObject.ji;9;CPRange.ji;18;CPSortDescriptor.ji;20;_CPJavaScriptArray.jt;23122;objj_executeFile("CPEnumerator.j", YES);
+p;9;CPArray.jt;24261;@STATIC;1.0;i;14;CPEnumerator.ji;13;CPException.ji;10;CPObject.ji;9;CPRange.ji;18;CPSortDescriptor.ji;20;_CPJavaScriptArray.jt;24128;objj_executeFile("CPEnumerator.j", YES);
 objj_executeFile("CPException.j", YES);
 objj_executeFile("CPObject.j", YES);
 objj_executeFile("CPRange.j", YES);
@@ -15228,11 +15315,40 @@ class_addMethods(the_class, [new objj_method(sel_getUid("init"), function $CPArr
 { with(self)
 {
     var index = 0,
-        count = objj_msgSend(self, "count");
+        count = objj_msgSend(self, "count"),
+        shouldStop = NO,
+        shouldStopRef = function(__input) { if (arguments.length) return shouldStop = __input; return shouldStop; };
     for (; index < count; ++index)
-        aFunction(objj_msgSend(self, "objectAtIndex:", index), index);
+    {
+        aFunction(objj_msgSend(self, "objectAtIndex:", index), index, shouldStopRef);
+        if (shouldStop)
+            return;
+    }
 }
-},["void","Function"]), new objj_method(sel_getUid("firstObjectCommonWithArray:"), function $CPArray__firstObjectCommonWithArray_(self, _cmd, anArray)
+},["void","Function"]), new objj_method(sel_getUid("enumerateObjectsWithOptions:usingBlock:"), function $CPArray__enumerateObjectsWithOptions_usingBlock_(self, _cmd, options, aFunction)
+{ with(self)
+{
+    var shouldStop = NO;
+    if (options & CPEnumerationReverse)
+    {
+        var index = objj_msgSend(self, "count") - 1,
+            stop = -1,
+            increment = -1;
+    }
+    else
+    {
+        var index = 0,
+            stop = objj_msgSend(self, "count"),
+            increment = 1;
+    }
+    for (; index !== stop; index += increment)
+    {
+        aFunction(objj_msgSend(self, "objectAtIndex:", index), index, function(__input) { if (arguments.length) return shouldStop = __input; return shouldStop; });
+        if (shouldStop)
+            return;
+    }
+}
+},["void","CPEnumerationOptions","Function"]), new objj_method(sel_getUid("firstObjectCommonWithArray:"), function $CPArray__firstObjectCommonWithArray_(self, _cmd, anArray)
 { with(self)
 {
     var count = objj_msgSend(self, "count");
@@ -18166,7 +18282,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("setWithCapacity:"), fu
 }
 objj_executeFile("_CPConcreteMutableSet.j", YES);
 
-p;7;CPSet.jt;13401;@STATIC;1.0;i;9;CPArray.ji;14;CPEnumerator.ji;10;CPNumber.ji;10;CPObject.ji;14;CPMutableSet.jt;13300;objj_executeFile("CPArray.j", YES);
+p;7;CPSet.jt;13695;@STATIC;1.0;i;9;CPArray.ji;14;CPEnumerator.ji;10;CPNumber.ji;10;CPObject.ji;14;CPMutableSet.jt;13594;objj_executeFile("CPArray.j", YES);
 objj_executeFile("CPEnumerator.j", YES);
 objj_executeFile("CPNumber.j", YES);
 objj_executeFile("CPObject.j", YES);
@@ -18336,7 +18452,12 @@ class_addMethods(the_class, [new objj_method(sel_getUid("setByAddingObject:"), f
             return YES;
     return NO;
 }
-},["BOOL","CPSet"]), new objj_method(sel_getUid("isEqualToSet:"), function $CPSet__isEqualToSet_(self, _cmd, aSet)
+},["BOOL","CPSet"]), new objj_method(sel_getUid("sortedArrayUsingDescriptors:"), function $CPSet__sortedArrayUsingDescriptors_(self, _cmd, someSortDescriptors)
+{ with(self)
+{
+    return objj_msgSend(objj_msgSend(self, "allObjects"), "sortedArrayUsingDescriptors:", someSortDescriptors);
+}
+},["CPArray","CPArray"]), new objj_method(sel_getUid("isEqualToSet:"), function $CPSet__isEqualToSet_(self, _cmd, aSet)
 { with(self)
 {
     return objj_msgSend(self, "isEqual:", aSet);
