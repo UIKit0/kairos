@@ -116,12 +116,12 @@ GENERAL_LANGUAGE_REGISTRY = {
 	},
 	"Drafts": {
 		"en-us": "Drafts",
-		"fr-fr": "Projets",
+		"fr-fr": "Brouillons",
 		"pt-br": "Rascunhos"
 	},
 	"Junk": {
 		"en-us": "Junk",
-		"fr-fr": "Jonque",
+		"fr-fr": "Courrier indésirable",
 		"pt-br": "Lixo Eletrônico"
 	},
 	"": {
