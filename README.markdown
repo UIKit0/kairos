@@ -53,15 +53,39 @@ Getting Sources
 `$> git clone git@github.com:smartmobili/kairos.git`  
 `$> cd kairos`  
 
-Launching
+Quick Launch
 ---------------
 
-
 `$> mongod --dbpath data/db`  
-`$> gradlew jettyRun`  
+`$> ./gradlew jettyRun`  
 
 Now open your browser and go to http://localhost:8080  
 
 Et voila! You should see the current status of the project.  
+
+Development
+---------------
+
+The kairos project is splitted in two parts :
+
+- a backend using java
+- a frontend using cappuccino
+
+For the backend we use eclipse as a preferred ide and gradle is able to generate an eclipse project through a plugin (see build.gradle)
+
+`$> ./gradlew eclipse`
+
+Now start eclipse and import the kairos project into your workspace (File->Import...->Existing projects into Workspace)
+Right-click on src/test/java and choose Debug As->Java application, normally a jetty webserver should get launched and you can go
+to http://localhost:8080.
+
+
+
+
+
+
+
+
+
 
 
