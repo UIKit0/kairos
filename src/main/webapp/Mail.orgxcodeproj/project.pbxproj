@@ -21,7 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXFileReference section */
-		013FA08214DB4BE900C9E65D /* FileUpload.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = FileUpload.j; path = Components/FileUpload.j; sourceTree = "<group>"; };
+		013FA08214DB4BE900C9E65D /* FileUpload.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = FileUpload.j; path = Components/FileUpload.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objj; };
 		0146B0E314BBFD7E0020764E /* MailSourceViewController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = MailSourceViewController.j; path = Controllers/MailSourceViewController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		01A08D7314D84B02000D35C8 /* EventsFromServerReceiver.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; path = EventsFromServerReceiver.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		01A9208E14D88FB700829D17 /* ServerConnection.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; path = ServerConnection.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -33,7 +33,7 @@
 		244893D113B0C2E700331759 /* SMEmail.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = SMEmail.j; path = Models/SMEmail.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2470208C13A92F33005C3198 /* HNAuxiliarWindow.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = HNAuxiliarWindow.j; path = Views/HNAuxiliarWindow.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		2470208D13A92F33005C3198 /* HNLoginWindow.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = HNLoginWindow.j; path = Views/HNLoginWindow.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		2470208E13A92F47005C3198 /* HNAuthController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = HNAuthController.j; path = Controllers/HNAuthController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		2470208E13A92F47005C3198 /* HNAuthController.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = HNAuthController.j; path = Controllers/HNAuthController.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objj; };
 		247F8B5913BE2C2B006BAA8E /* SMMailbox.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; lineEnding = 0; name = SMMailbox.j; path = Models/SMMailbox.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		24B6ACA813B900D100709912 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 		24B6ACAD13B9F48B00709912 /* Email.j */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.objj; name = Email.j; path = Models/Email.j; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
