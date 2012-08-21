@@ -3,7 +3,8 @@ Kairos Project
 
 ![Kairos-Webmail](https://github.com/downloads/smartmobili/kairos/kairos_webmail_horz.png)
 
-A demo is running ![here](http://bifrost.smartmobili.com/kairos-1.0/)
+[This link](http://example.net/)
+A demo is running here : [http://bifrost.smartmobili.com/kairos-1.0/](http://bifrost.smartmobili.com/kairos-1.0/)
 
 
 Getting Started
