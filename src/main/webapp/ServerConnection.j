@@ -49,7 +49,7 @@
 
 
 #pragma mark -
-#pragma mark CPURLConnecion 
+#pragma mark CPURLConnecion
 -(void)connection:(CPURLConnection)connection didFailWithError:(id)error
 {
     // This will be newer called during normal operation, even if server is not responded.
@@ -77,13 +77,14 @@
 {
     // This is FIX for firefox (when calling URLConnection, first response is with status 0 and with useless didReceiveData and connectionDidFinishLoading calls.
     // Note that if _statusCode == 0 this not means error in Firefox. This means nothing, perhaps there is will be another response soon...
-    // But in all browsers 0 means that current data is not a data. In WebKit 
+    // But in all browsers 0 means that current data is not a data. In WebKit
     // if 0 of course this means error in connection. In Firefox this means nothing.
     if (_statusCode == 0)
         return;
-    
+
     // calling event of data did recieved
     if (_delegate)
+    {
         if (_didEndSelector)
         {
             //CPLogConsole(_accumulatedResponseString);
@@ -93,13 +94,15 @@
         }
     }
 
-    [_urlConnection cancel]; // didn't help in firefox, still twice called connectionDidFinishLoading.
+    // didn't help in firefox, still twice called connectionDidFinishLoading.
+    [_urlConnection cancel];
 }
 
 - (void)timerTimeoutWaitingResponseTick:(var)anParam
 {
     [_urlConnection cancel];
     if (_delegate)
+    {
         if (_errorSelector)
         {
             objj_msgSend(_delegate, _errorSelector, self);
@@ -110,7 +113,7 @@
 #pragma mark -
 #pragma mark Commands From Client to Server
 /*
- * "aError" is a selector which will be called when connection is failed, 
+ * "aError" is a selector which will be called when connection is failed,
  * for example if remote server is not responding. So it will be called, when
  * ServerConnection failed to "call" requested "function" from server.
  */
@@ -126,25 +129,25 @@
         [_urlConnection cancel];
     if (!_timerTimeoutWaitingResponse)
         [_timerTimeoutWaitingResponse invalidate]; //stop
-    
+
     var request = [[CPURLRequest alloc] initWithURL:@"postRequest"]; // TODO: need add random subparameter to avoid caching ?
-    [request setHTTPMethod:@"POST"]; 
-    
+    [request setHTTPMethod:@"POST"];
+
     var functionParametersInJSON = nil;
     if (functionParametersInObject)
         functionParametersInJSON = [CPString JSONFromObject:functionParametersInObject];
     var jsonObjectToPost = { "functionNameToCall" : functionNameToCall,
         "functionParameters"  : functionParametersInJSON };
-    
+
     [request setHTTPBody:[CPString JSONFromObject:jsonObjectToPost]];
-    
+
     // This require a lot of memory - a new timer for each request! But there is no good way to solve Firefox issue with URLConnection and POST command which is not return responce 200 from first time, which can be 0 (NS_BINDING_ABORTED). (See more comments in function connectionDidFinishLoading above).
     _timerTimeoutWaitingResponse = [CPTimer scheduledTimerWithTimeInterval:_timeoutInSeconds  // timeout in seconds to raise timeout (_errorSelector).
                                      target:self
                                    selector:@selector(timerTimeoutWaitingResponseTick:)
                                    userInfo:nil
                                     repeats:NO];
-    
+
     _urlConnection = [CPURLConnection connectionWithRequest:request delegate:self];
 
    // [_urlConnection start]; // No need to call start, it is already started after creation
