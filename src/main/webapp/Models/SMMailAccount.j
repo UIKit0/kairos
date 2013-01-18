@@ -9,6 +9,11 @@
 /*!
     A mail account contains one or more mail boxes.
 */
+
+@import "SMRemoteObject.j"
+@import "../ServerConnection.j"
+@import "SMMailbox.j"
+
 @implementation SMMailAccount : SMRemoteObject
 {
     CPArray         mailboxes @accessors;

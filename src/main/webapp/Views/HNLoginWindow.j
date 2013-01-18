@@ -9,7 +9,13 @@
  */
 
 @import <Foundation/Foundation.j>
+
+@import "../TNLocalizationCenter.j"
 @import "../Views/HNAuxiliarWindow.j"
+//@import "../Controllers/HNUserAuthenticationDidChangeNotification.j"
+
+@global HNUserAuthenticationDidChangeNotification;
+@global HNUserAuthenticationErrorNotification;
 
 var SharedLoginWindow = nil;
 

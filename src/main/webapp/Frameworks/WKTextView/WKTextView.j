@@ -394,7 +394,7 @@ var _EditorEvents = [
             return [self tryToBecomeFirstResponder];
         }
 
-        defaultKeydown = doc.onkeydown;
+        var defaultKeydown = doc.onkeydown;
         var onkeydown = function(ev) {
             if (!ev)
                 ev = window.event;

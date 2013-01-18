@@ -18,6 +18,8 @@
 
 @import <AppKit/AppKit.j>
 
+@global GENERAL_LANGUAGE_REGISTRY
+
 
 TNLocalizationCenterGeneralLocaleDomain = @"TNLocalizationCenterGeneralLocaleDomain";
 TNLocalizationCenterGoogleTranslatorDomain = @"TNLocalizationCenterGoogleTranslatorDomain";

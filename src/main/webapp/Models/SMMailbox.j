@@ -9,8 +9,9 @@
 @import <Foundation/Foundation.j>
 
 @import "SMRemoteObject.j"
-
+@import "../ServerConnection.j"
 @import "../Controllers/MailSourceViewController.j" // for FolderEditModes enum.
+@import "SMMailHeader.j"
 
 // The order to display mailboxes. Any mailbox name not in this list goes at the end.
 var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
@@ -20,7 +21,7 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     /*! The account the mailbox belongs to. */
     SMMailAccount   mailAccount @accessors;
 
-    //ServerConnection _serverConnection @accessors;
+    ServerConnection _serverConnection @accessors;
 
     // Headers of email within the box, if loaded.
     CPArray         mailHeaders @accessors;

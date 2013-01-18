@@ -8,6 +8,7 @@
 */
 
 @import "MailSourceViewRows.j"
+@import "../Views/MailboxColumnView.j"
 @import "../Views/SMSmallButton.j"
 
 SMOutlineViewMailPaneMinimumSize = 210;
@@ -231,7 +232,7 @@ var ContextMenuAddFolderTag = 0,
     {
         _folderEditMode = FolderEditModes.RenameFolder; // Reset to default
         var mailboxes = [self mailboxes];
-        for (i=0; i<[mailboxes count]; i++) {
+        for (var i=0; i<[mailboxes count]; i++) {
             
             var mailbox = mailboxes[i];
             if ([mailbox name] == _folderCreatingNowName)
@@ -339,7 +340,7 @@ var ContextMenuAddFolderTag = 0,
     // If i just want to select, and not reload
     if ([mailController justSelectMailboxes])
     {
-        justSelectMailboxes = NO;
+        //justSelectMailboxes = NO;
         return;
     }
     [mailController setSelectedMailbox:[self selectedMailbox]];
@@ -352,7 +353,7 @@ var ContextMenuAddFolderTag = 0,
 
 - (void)outlineView:(CPOutlineView)anOutlineView setObjectValue:(id)aValue forTableColumn:(CPTableColumn)aColumn byItem:(id)anItem
 {
-    for (i=0; i<[[self mailboxes] count]; i++) {
+    for (var i=0; i<[[self mailboxes] count]; i++) {
         var mailboxes = [self mailboxes];
         var mailbox = mailboxes[i];
         if ([mailbox name] == aValue)
