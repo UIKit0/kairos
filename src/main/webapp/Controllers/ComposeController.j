@@ -32,7 +32,7 @@ var CPAlertSaveAsDraft      = 0,
 
     @outlet id                          textFieldSubject; //CPTextField
 
-    IBOutlet CPCollectionView           attachmentList;
+    @outlet CPCollectionView           attachmentList;
 
     /*! The email being composed. */
     SMEmail                             email @accessors;

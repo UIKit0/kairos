@@ -36,10 +36,10 @@ APPLICATION_VERSION_NUMBER = 0.1;
 {
     MailController      mailController;
     HNAuthController    authenticationController;
-    IBOutlet CPMenuItem viewMenu;
-    IBOutlet CPMenuItem readingPaneMenuItem;
-    IBOutlet CPMenuItem rightMenuItem;
-    IBOutlet CPMenuItem belowMenuItem;
+    @outlet CPMenuItem viewMenu;
+    @outlet CPMenuItem readingPaneMenuItem;
+    @outlet CPMenuItem rightMenuItem;
+    @outlet CPMenuItem belowMenuItem;
              CPPanel    cachedAboutPanel;
 }
 

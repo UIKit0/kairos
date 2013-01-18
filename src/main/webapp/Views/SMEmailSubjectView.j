@@ -15,9 +15,9 @@
 
 @implementation SMEmailSubjectView : CPView
 {
-    IBOutlet CPTextField emailFrom @accessors;
-    IBOutlet CPTextField emailSubject @accessors;
-    IBOutlet CPTextField emailDate @accessors;
+    @outlet CPTextField emailFrom @accessors;
+    @outlet CPTextField emailSubject @accessors;
+    @outlet CPTextField emailDate @accessors;
 }
 
 - (void)setObjectValue:(id)anEmail

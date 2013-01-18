@@ -11,10 +11,10 @@
 {
     SMAttachment attachment @accessors;
 
-    IBOutlet CPTextField    nameLabel;
-    IBOutlet CPButton       downloadButton;
-    IBOutlet CPButton       viewButton;
-    IBOutlet CPButton       deleteButton;
+    @outlet CPTextField    nameLabel;
+    @outlet CPButton       downloadButton;
+    @outlet CPButton       viewButton;
+    @outlet CPButton       deleteButton;
 }
 
 - (void)_init

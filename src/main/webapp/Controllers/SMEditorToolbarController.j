@@ -16,19 +16,19 @@ var SMEditorToolbarControllerFontSizes = [10, 13, 16, 18, 24, 32, 48];
 */
 @implementation SMEditorToolbarController : CPViewController
 {
-    IBOutlet CPView             editorToolbarContentView;
+    @outlet CPView             editorToolbarContentView;
 
-    IBOutlet CPPopUpButton      fontPopUp;
-    IBOutlet CPPopUpButton      sizePopUp;
+    @outlet CPPopUpButton      fontPopUp;
+    @outlet CPPopUpButton      sizePopUp;
 
-    IBOutlet CPSegmentedControl colorSegment;
+    @outlet CPSegmentedControl colorSegment;
 
-    IBOutlet CPSegmentedControl styleSegment;
-    IBOutlet CPSegmentedControl alignSegment;
-    IBOutlet CPSegmentedControl listSegment;
+    @outlet CPSegmentedControl styleSegment;
+    @outlet CPSegmentedControl alignSegment;
+    @outlet CPSegmentedControl listSegment;
 
     CPArray                     availableFonts;
-    IBOutlet WKTextView         textView @accessors;
+    @outlet WKTextView         textView @accessors;
 }
 
 - (void)awakeFromCib

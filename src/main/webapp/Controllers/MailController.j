@@ -58,16 +58,16 @@ var IsReadImage,
 
     @outlet MailSourceViewController mailSourceController;
 
-    IBOutlet SMEmailSubjectView parallelDataView;
-    IBOutlet CPTableColumn  unread;
-    IBOutlet CPTableColumn  fromTableColumn;
-    IBOutlet CPTableColumn  subjectTableColumn;
-    IBOutlet CPTableColumn  dateTableColumn;
+    @outlet SMEmailSubjectView parallelDataView;
+    @outlet CPTableColumn  unread;
+    @outlet CPTableColumn  fromTableColumn;
+    @outlet CPTableColumn  subjectTableColumn;
+    @outlet CPTableColumn  dateTableColumn;
 
     CPView                  originalSubjectTableColumnView;
     int                     originalSubjectTableColumnWidth;
 
-    IBOutlet CPImageView    testImageView;
+    @outlet CPImageView    testImageView;
     ComposeController       _composeController;
 
     SMMailAccount           mailAccount @accessors;
@@ -663,10 +663,10 @@ var IsReadImage,
     //var row = [emailsHeaderView selectedRow];
     var messageIds = [CPMutableArray array];
 	var folderName = [self.selectedMailbox name]
-	
+
 	var indexes = [];
 	[[emailsHeaderView selectedRowIndexes] getIndexes:indexes maxCount:-1 inIndexRange:nil]
-    
+
 	for (var j=0; j<[indexes count]; j++)
     {
 	    var msgId = [[[selectedMailbox mailHeaders] objectAtIndex:indexes[j]] messageId]

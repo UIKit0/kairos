@@ -11,24 +11,24 @@
 @import <AppKit/CPWindowController.j>
 
 @implementation AboutPanelController : CPWindowController
-{    
-    IBOutlet CPButton northButton;
-    IBOutlet CPButton cappuccinoButton;
-    IBOutlet CPButton cardanoButton;
-    IBOutlet CPButton scalaButton;
-    IBOutlet CPButton liftButton;
+{
+    @outlet CPButton northButton;
+    @outlet CPButton cappuccinoButton;
+    @outlet CPButton cardanoButton;
+    @outlet CPButton scalaButton;
+    @outlet CPButton liftButton;
 }
 
 - (void)awakeFromCib
 {
     var panel = [self window],
     contentView = [panel contentView];
-    
+
     var buttons = [northButton, cappuccinoButton, cardanoButton, scalaButton, liftButton],
     bundle = [CPBundle mainBundle],
     arrowImage = [[CPImage alloc] initWithContentsOfFile:[bundle pathForResource:"AboutBoxArrow.png"] size:CGSizeMake(16, 16)],
     arrowImageHighlighted = [[CPImage alloc] initWithContentsOfFile:[bundle pathForResource:"AboutBoxArrowHighlighted.png"] size:CGSizeMake(16, 16)];
-    
+
     for (var i = 0, count = buttons.length; i < count; i++)
     {
         var button = buttons[i];
