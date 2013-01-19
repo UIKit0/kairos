@@ -86,8 +86,8 @@ HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification"
     authenticationToken = nil;
     firstName = nil;
     password = nil;
-    userImage = nil;
-    userThumbnailImage = nil;
+    //userImage = nil;
+    //userThumbnailImage = nil;
 
     [[CPUserSessionManager defaultManager] setStatus:CPUserSessionLoggedOutStatus];
 }

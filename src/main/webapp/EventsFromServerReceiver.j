@@ -5,7 +5,7 @@
  *  Author: Victor Kazarinov <oobe@kazarinov.biz>
  *
  *  Copyright 2012 Smartmobili. All rights reserved.
- * 
+ *
  *  TODO: This class should be later remade to COMET connection to recieve events from server.
  */
 
@@ -15,6 +15,8 @@
 @implementation EventsFromServerReceiver : CPObject
 {
     id              _delegate;
+    SEL             _didEndSelector;
+    SEL             _errorSelector;
     SEL             _eventOccurredSelector;
     var             _serverConnection;
     var             _authenticationController;
@@ -62,7 +64,7 @@
 }
 
 
-- (void)getEventsAndTestSessionValidSoKeepAliveDidReceived:(id)sender withParametersObject:parametersObject 
+- (void)getEventsAndTestSessionValidSoKeepAliveDidReceived:(id)sender withParametersObject:parametersObject
 {
     if (parametersObject.credentialsIsValidInSession == false)
     {

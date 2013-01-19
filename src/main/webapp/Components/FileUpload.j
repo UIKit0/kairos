@@ -340,7 +340,7 @@
 
     document.body.appendChild(_DOMIFrameElement);
 
-    _onloadHandler = function()
+    var _onloadHandler = function()
     {
         try
         {

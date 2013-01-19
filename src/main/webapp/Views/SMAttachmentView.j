@@ -12,6 +12,7 @@
     SMAttachment attachment @accessors;
 
     @outlet CPTextField    nameLabel;
+    @outlet CPTextField    downloadLabel;
     @outlet CPButton       downloadButton;
     @outlet CPButton       viewButton;
     @outlet CPButton       deleteButton;

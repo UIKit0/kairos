@@ -20,6 +20,7 @@
 @import "../Views/SMEmailSubjectView.j"
 @import "../Views/SMPagerView.j"
 @import "../Controllers/HNAuthController.j"
+@import "../Controllers/ComposeController.j"
 @import "../Categories/CPDate+Formatting.j"
 @import "../EventsFromServerReceiver.j"
 
@@ -77,7 +78,7 @@ var IsReadImage,
     SMEmail                 selectedEmail @accessors;
     BOOL                    justSelect;
     BOOL                    justSelectMailboxes @accessors;
-    CPDictionary            items;
+    //CPDictionary            items;
 
     // This should be moved to the App Controller
     CPString                displayedViewKey @accessors;
@@ -310,7 +311,7 @@ var IsReadImage,
 - (void)mailAccountDidReload:(SMMailAccount)anAccount
 {
     [loadingLabel setObjectValue:@"Mailboxes Loaded. Loading Headers for INBOX..."];
-    selectedMailBox = nil;
+    selectedMailbox = nil;
     // The new selection will lead to a setSelectedMailboxName which in turn will finish loading
     // the box we want to see.
     [mailSourceController reloadAndSelectInbox];
@@ -895,8 +896,8 @@ var IsReadImage,
     if ([aNotification object] == emailsHeaderView)
     {
         // Get the Delete and the Reply CPToolbarItem
-        deleteItem = [toolbar._items objectAtIndex:3];// TODO: make getting using getToobarItemViaIDentifier function in this class.
-        replyItem = [toolbar._items objectAtIndex:4];
+        var deleteItem = [toolbar._items objectAtIndex:3];// TODO: make getting using getToobarItemViaIDentifier function in this class.
+        var replyItem = [toolbar._items objectAtIndex:4];
 
         // User selected one/another e-mail
         var indexesSelectedEmail = [emailsHeaderView selectedRowIndexes],
@@ -1141,8 +1142,9 @@ var IsReadImage,
             // This is invisible window in whole screen, to avoid user clicking on components of main app while connections is lost.
             _connectionErrorWholeScreenWindow = [[CPWindow alloc]
                      initWithContentRect:CGRectMakeZero()
-                     styleMask:CPBorderlessBridgeWindowMask],
-            contentView = [_connectionErrorWholeScreenWindow contentView];
+                     styleMask:CPBorderlessBridgeWindowMask];
+
+            var contentView = [_connectionErrorWholeScreenWindow contentView];
 
             [_connectionErrorWholeScreenWindow orderFront:self];
 
