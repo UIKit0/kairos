@@ -1,7 +1,8 @@
 Kairos Project
 ==============
 
-![Kairos-Webmail](https://github.com/downloads/smartmobili/kairos/kairos_webmail_horz.png)
+![Kairos-Webmail](https://github.com/smartmobili/kairos/raw/java/misc/kairos_screenshot.png)
+
 
 A demo is running here : [http://bifrost.smartmobili.com/kairos-1.0/](http://bifrost.smartmobili.com/kairos-1.0/)
 
