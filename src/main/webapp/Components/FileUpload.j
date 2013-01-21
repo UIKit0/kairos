@@ -162,7 +162,7 @@
 
         _uploadForm.appendChild(_fileUploadElement);
 
-        _DOMElement.appendChild(_uploadForm);
+        self._DOMElement.appendChild(_uploadForm);
 
         _parameters = [CPDictionary dictionary];
 
