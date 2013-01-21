@@ -9,6 +9,9 @@
 /*!
     An SMEmail may have zero or more file attachments.
 */
+
+@import "SMRemoteObject.j"
+
 @implementation SMAttachment : SMRemoteObject
 {
     SMEmail     email @accessors;

@@ -7,6 +7,9 @@
  *  Copyright 2012 Smartmobili. All rights reserved.
  */
 
+
+@import "../ServerConnection.j"
+
 @implementation SMAttachmentView : CPView
 {
     SMAttachment attachment @accessors;

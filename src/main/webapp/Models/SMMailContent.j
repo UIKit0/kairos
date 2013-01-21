@@ -6,6 +6,8 @@
  *  Copyright 2011 Smartmobili. All rights reserved.
  */
 
+@import <Foundation/Foundation.j>
+
 /*
 @import <Foundation/Foundation.j>
 
@@ -57,4 +59,6 @@
     [aCoder encodeBool:self.isSeen forKey:@"isSeen"];
     [aCoder encodeObject:self.attachment forKey:@"attachment"];
 }
-@end*/
+@end
+
+*/

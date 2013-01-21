@@ -11,6 +11,8 @@
 @import <Foundation/CPValue.j>
 @import <Foundation/CPException.j>
 
+@class BrowserDetect;
+
 @implementation UploadButton : CPButton
 {
     DOMElement      _DOMIFrameElement;
