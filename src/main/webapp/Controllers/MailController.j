@@ -16,7 +16,7 @@
 @import "../Models/SMMailAccount.j"
 @import "../Models/SMMailbox.j"
 @import "../Models/SMMailHeader.j"
-@import "../Models/SMMailContent.j"
+//@import "../Models/SMMailContent.j"
 @import "../Views/SMEmailSubjectView.j"
 @import "../Views/SMPagerView.j"
 @import "../Controllers/HNAuthController.j"
