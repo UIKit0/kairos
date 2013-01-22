@@ -1599,7 +1599,7 @@
 			</object>
 			<object class="NSViewController" id="410997622"/>
 			<object class="NSCustomView" id="585480364">
-				<reference key="NSNextResponder"/>
+				<nil key="NSNextResponder"/>
 				<int key="NSvFlags">268</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1608,7 +1608,6 @@
 						<int key="NSvFlags">266</int>
 						<string key="NSFrame">{{289, 0}, {154, 20}}</string>
 						<reference key="NSSuperview" ref="585480364"/>
-						<reference key="NSWindow"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="828472863">
 							<int key="NSCellFlags">67108928</int>
@@ -1634,7 +1633,6 @@
 						<int key="NSvFlags">266</int>
 						<string key="NSFrame">{{17, 19}, {426, 20}}</string>
 						<reference key="NSSuperview" ref="585480364"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="1025494898"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="389808682">
@@ -1654,7 +1652,6 @@
 						<int key="NSvFlags">266</int>
 						<string key="NSFrame">{{17, 0}, {270, 20}}</string>
 						<reference key="NSSuperview" ref="585480364"/>
-						<reference key="NSWindow"/>
 						<reference key="NSNextKeyView" ref="592140581"/>
 						<bool key="NSEnabled">YES</bool>
 						<object class="NSTextFieldCell" key="NSCell" id="731321079">
@@ -1674,8 +1671,6 @@
 					</object>
 				</object>
 				<string key="NSFrameSize">{440, 39}</string>
-				<reference key="NSSuperview"/>
-				<reference key="NSWindow"/>
 				<reference key="NSNextKeyView" ref="11627355"/>
 				<string key="NSClassName">SMEmailSubjectView</string>
 			</object>
@@ -1722,14 +1717,6 @@
 						<reference key="destination" ref="412169619"/>
 					</object>
 					<int key="connectionID">941</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">usernameField</string>
-						<reference key="source" ref="359364549"/>
-						<reference key="destination" ref="435326851"/>
-					</object>
-					<int key="connectionID">774</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -1813,11 +1800,35 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
+						<string key="label">initialFirstResponder</string>
+						<reference key="source" ref="359364549"/>
+						<reference key="destination" ref="435326851"/>
+					</object>
+					<int key="connectionID">999</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">usernameField</string>
+						<reference key="source" ref="359364549"/>
+						<reference key="destination" ref="435326851"/>
+					</object>
+					<int key="connectionID">1001</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
 						<string key="label">delegate</string>
 						<reference key="source" ref="435326851"/>
 						<reference key="destination" ref="359364549"/>
 					</object>
 					<int key="connectionID">998</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="802682299"/>
+						<reference key="destination" ref="359364549"/>
+					</object>
+					<int key="connectionID">1003</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
@@ -3281,7 +3292,7 @@
 				<reference key="dict.values" ref="0"/>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">998</int>
+			<int key="maxID">1003</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

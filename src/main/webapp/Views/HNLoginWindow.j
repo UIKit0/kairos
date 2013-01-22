@@ -14,7 +14,7 @@
 @import "../Views/HNAuxiliarWindow.j"
 //@import "../Controllers/HNAuthController.j"
 
-@class HNAuthController
+@class HNAuthController;
 
 @global HNUserAuthenticationDidChangeNotification;
 @global HNUserAuthenticationErrorNotification;
@@ -23,10 +23,10 @@ var SharedLoginWindow = nil;
 
 @implementation HNLoginWindow : HNAuxiliarWindow
 {
-    @outlet CPTextField       usernameField @accessors;
-    @outlet CPSecureTextField passwordField @accessors;
-    @outlet CPTextField       emailLabel @accessors;
-    @outlet CPTextField       passwordLabel @accessors;
+    @outlet CPTextField         usernameField @accessors;
+    @outlet CPSecureTextField   passwordField @accessors;
+    CPTextField                 emailLabel @accessors;
+    CPTextField                 passwordLabel @accessors;
     @outlet CPPopUpButton     localePopUp @accessors;
 }
 
@@ -118,7 +118,7 @@ var SharedLoginWindow = nil;
     // change these values to none and defaultButton visibility to NO
     [usernameField setStringValue:@""];
     [passwordField setStringValue:@""];
-    [defaultButton setEnabled:YES];
+    [defaultButton setEnabled:NO];
 }
 
 - (@action)login:(id)sender
@@ -163,6 +163,8 @@ var SharedLoginWindow = nil;
 
 - (void)controlTextDidChange:(CPNotification)aNote
 {
+    CPLog.trace(@"controlTextDidChange : aNote =%@", [aNote object] );
+
     if ([aNote object] !== passwordField && [aNote object] !== usernameField)
         return;
 
@@ -196,7 +198,8 @@ var SharedLoginWindow = nil;
     var email = [[usernameField stringValue] lowercaseString];
     if ([email length] > 0)
     {
-        return [self validateEmail:email compliantRFC2822:NO];
+        return YES;
+        //return [self validateEmail:email compliantRFC2822:NO];
     }
     return NO;
 }

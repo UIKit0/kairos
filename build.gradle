@@ -5,7 +5,7 @@ apply plugin: "eclipse"
 
 // Project properties
 version = '1.1'
-webAppDirName = 'src/main/webapp/Build/Deployment/Mail'
+//webAppDirName = 'src/main/webapp/Build/Deployment/Mail'
 
 
 jettyRun.contextPath = "/"
