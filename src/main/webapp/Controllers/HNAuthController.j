@@ -8,7 +8,7 @@
  *  Used with permission of the copyright holder.
  */
 
-@import <Foundation/Foundation.j>
+//@import <Foundation/Foundation.j>
 
 @import "../Views/HNLoginWindow.j"
 @import "../Controllers/MailController.j"

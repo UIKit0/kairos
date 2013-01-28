@@ -6,8 +6,8 @@
  *  Copyright 2011 Smartmobili. All rights reserved.
  */
 
-@import <AppKit/AppKit.j>
-@import <Foundation/Foundation.j>
+//@import <AppKit/AppKit.j>
+//@import <Foundation/Foundation.j>
 
 @import "../ServerConnection.j"
 @import "../TNLocalizationCenter.j"

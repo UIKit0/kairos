@@ -6,7 +6,7 @@
  *  Copyright 2011 Smartmobili. All rights reserved.
  */
 
-@import <Foundation/Foundation.j>
+//@import <Foundation/Foundation.j>
 
 @implementation SMEmailService : CPObject
 {

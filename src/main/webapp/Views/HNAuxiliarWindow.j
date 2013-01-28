@@ -8,7 +8,7 @@
  *  Used with permission of the copyright holders.
  */
 
-@import <Foundation/Foundation.j>
+//@import <Foundation/Foundation.j>
 
 @implementation HNAuxiliarWindow : CPWindow
 {
