@@ -57,8 +57,9 @@ var ContextMenuAddFolderTag = 0,
     headerMailboxes = [MailSourceViewRow headerWithName:@"Mailboxes"];
     headerOthers = [MailSourceViewRow headerWithName:@"Others"];
 
-    var plusImage = [[CPImage alloc] initWithContentsOfFile:[[CPBundle bundleForClass:[CPButtonBar class]] pathForResource:@"Aristo2.blend/Resources/buttonbar-image-plus.png"] size:CGSizeMake(11, 12)],
-        button = [SMSmallButton buttonWithTitle:@""];
+    var plusImage = [[CPImage alloc] initWithContentsOfFile:[[CPBundle bundleForClass:[CPButtonBar class]] pathForResource:@"Aristo2.blend/Resources/buttonbar-image-plus.png"] size:CGSizeMake(11, 12)];
+    
+    var button = [SMSmallButton buttonWithTitle:@""];
     [button setImage:plusImage];
     [button sizeToFit];
     [button setImageDimsWhenDisabled:YES];
