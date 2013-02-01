@@ -7,6 +7,8 @@
  *  Copyright 2011 Smartmobili. All rights reserved.
 */
 
+@import <Foundation/CPDate.j>
+
 @implementation CPDate (Formatting)
 
 /*!
