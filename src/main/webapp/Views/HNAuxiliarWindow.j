@@ -10,6 +10,8 @@
 
 //@import <Foundation/Foundation.j>
 
+@import <AppKit/CPWindow.j>
+
 @implementation HNAuxiliarWindow : CPWindow
 {
     @outlet CPTextField welcomeLabel @accessors;
@@ -22,7 +24,7 @@
 
 - (id)initWithContentRect:(CGRect)aRect styleMask:(unsigned)aMask
 {
-    //Alexander Ljungberg 
+    //Alexander Ljungberg
     //Text fields can't accept input if your window is not the key window, and you've created a window which cannot become the key window.
     //Either create a CPPanel, a platform window, a window with CPTitledWindowMask or a custom window.
     if (self = [super initWithContentRect:aRect styleMask:CPTitledWindowMask])
