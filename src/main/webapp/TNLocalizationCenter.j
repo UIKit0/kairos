@@ -16,7 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-@import <AppKit/AppKit.j>
+@import <Foundation/CPString.j>
+@import <Foundation/CPBundle.j>
 
 @global GENERAL_LANGUAGE_REGISTRY
 

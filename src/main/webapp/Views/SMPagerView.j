@@ -7,6 +7,8 @@
  *  Copyright 2011 Smartmobili. All rights reserved.
  */
 
+@import <AppKit/CPSegmentedControl.j>
+
 @implementation SMPagerView : CPView
 {
     CPSegmentedControl  navigationSegmentedControl;

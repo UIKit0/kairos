@@ -9,6 +9,7 @@
 
 APPLICATION_VERSION_NUMBER = 0.1;
 
+
 @import <WKTextView/WKTextView.j>
 
 @import "./Categories/VRCategories.j"
@@ -29,6 +30,7 @@ APPLICATION_VERSION_NUMBER = 0.1;
 
 @import "TNLocalizationCenter.j"
 @import "language_registry.js"
+@import "BrowserDetect.js"
 
 @implementation AppController : CPObject
 {

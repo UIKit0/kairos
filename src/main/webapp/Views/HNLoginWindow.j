@@ -8,11 +8,12 @@
  *  Used with permission of the copyright holders.
  */
 
-@import <Foundation/Foundation.j>
+
+@import <AppKit/CPPopUpButton.j>
 
 @import "../TNLocalizationCenter.j"
 @import "../Views/HNAuxiliarWindow.j"
-//@import "../Controllers/HNAuthController.j"
+
 
 @class HNAuthController;
 

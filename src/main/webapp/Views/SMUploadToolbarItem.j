@@ -7,6 +7,8 @@
  *  Copyright 2012 Smartmobili. All rights reserved.
  */
 
+@import <AppKit/CPToolbarItem.j>
+
 @import "../Components/FileUpload.j" // UploadButton component.
 
 /*!

@@ -7,6 +7,9 @@
  *  Copyright 2011 Smartmobili. All rights reserved.
  */
 
+
+@import <AppKit/CPTextField.j>
+
 var SMBadgeViewBackgroundColor = nil,
     SMBadgeViewHighlightedBackgroundColor = nil;
 

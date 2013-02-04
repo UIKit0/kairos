@@ -11,6 +11,9 @@
     mirroring locally. It can be "new", for objects yet to actually be created on
     the server.
 */
+
+@import <Foundation/CPDate.j>
+
 @implementation SMRemoteObject : CPObject
 {
     CPDate  lastChangedAt @accessors;

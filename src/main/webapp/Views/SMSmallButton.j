@@ -7,10 +7,13 @@
  *  Copyright 2011 Smartmobili. All rights reserved.
  */
 
+@import <AppKit/CPButton.j>
+
 var SMSmallButtonBezelColor = nil,
     SMSmallButtonHighlightedBezelColor = nil,
     SMSmallButtonDisabledBezelColor = nil,
     SMSmallButtonHeight = 21;
+
 
 @implementation SMSmallButton : CPButton
 {

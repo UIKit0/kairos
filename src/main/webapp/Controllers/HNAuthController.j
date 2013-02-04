@@ -8,7 +8,7 @@
  *  Used with permission of the copyright holder.
  */
 
-//@import <Foundation/Foundation.j>
+@import <Foundation/CPUserSessionManager.j>
 
 @import "../Views/HNLoginWindow.j"
 @import "../Controllers/MailController.j"
@@ -17,6 +17,7 @@
 BASE_URL = "http://localhost:3000/"; // TODO: what is this? Is it somewhere used?
 
 var SharedController = nil;
+
 HNUserAuthenticationDidChangeNotification = @"HNUserAuthenticationDidChangeNotification";
 HNUserAuthenticationErrorNotification = @"HNUserAuthenticationErrorNotification";
 

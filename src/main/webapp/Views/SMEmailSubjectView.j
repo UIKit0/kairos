@@ -7,7 +7,6 @@
  *  Copyright 2011 Smartmobili. All rights reserved.
  */
 
-//@import <Foundation/Foundation.j>
 
 @import <AppKit/CPImage.j>
 @import <AppKit/CPImageView.j>

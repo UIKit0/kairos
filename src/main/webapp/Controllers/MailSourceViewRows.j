@@ -11,6 +11,9 @@
     An item in the source view; could be one of the headers or a mail box. If the item
     represents a mailbox, object will be the mailbox.
 */
+
+@import <AppKit/CPButton.j>
+
 @implementation MailSourceViewRow : CPObject
 {
     CPString    name @accessors;

@@ -7,6 +7,8 @@
  *  Copyright 2012 Smartmobili. All rights reserved.
  */
 
+@import <AppKit/CPView.j>
+
 var SMEditorToolbarViewBackgroundColor;
 
 @implementation SMEditorToolbarView : CPView

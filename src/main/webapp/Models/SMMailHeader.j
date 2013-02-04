@@ -6,7 +6,8 @@
  *  Copyright 2011 Smartmobili. All rights reserved.
  */
 
-//@import <Foundation/Foundation.j>
+@import <Foundation/CPDate.j>
+
 @import "../Categories/CPDate+Formatting.j"
 
 @implementation SMMailHeader : CPObject

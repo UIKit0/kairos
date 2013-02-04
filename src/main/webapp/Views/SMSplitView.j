@@ -7,6 +7,8 @@
  *  Copyright 2011 Smartmobili. All rights reserved.
  */
 
+@import <AppKit/CPSplitView.j>
+
 var SMSmallButtonBezelColor = nil,
     SMSmallButtonHighlightedBezelColor = nil,
     SMSmallButtonDisabledBezelColor = nil,
