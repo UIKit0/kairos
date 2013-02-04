@@ -6,11 +6,9 @@
  *  Copyright 2011 Smartmobili. All rights reserved.
  */
 
-
+@import <Foundation/CPDate.j>
 
 /*
-@import <Foundation/Foundation.j>
-
 @implementation SMMailContent : CPObject
 { 
     CPString from @accessors;

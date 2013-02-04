@@ -29,8 +29,11 @@ APPLICATION_VERSION_NUMBER = 0.1;
 @import "./Views/SMEditorToolbarView.j"
 
 @import "TNLocalizationCenter.j"
+
 @import "language_registry.js"
-@import "BrowserDetect.js"
+// I cannot include BrowserDetect because jake deploy crash because
+// of undefined navigator
+//@import "BrowserDetect.js"
 
 @implementation AppController : CPObject
 {

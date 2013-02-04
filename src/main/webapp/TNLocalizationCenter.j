@@ -20,7 +20,7 @@
 @import <Foundation/CPBundle.j>
 
 @global GENERAL_LANGUAGE_REGISTRY
-
+@global navigator
 
 TNLocalizationCenterGeneralLocaleDomain = @"TNLocalizationCenterGeneralLocaleDomain";
 TNLocalizationCenterGoogleTranslatorDomain = @"TNLocalizationCenterGoogleTranslatorDomain";
