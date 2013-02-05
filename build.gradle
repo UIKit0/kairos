@@ -5,7 +5,7 @@ apply plugin: "eclipse"
 
 // Project properties
 version = '1.2'
-//webAppDirName = 'src/main/webapp/Build/Deployment/Mail'
+webAppDirName = 'src/main/webapp/Build/Deployment/Mail'
 
 
 jettyRun.contextPath = "/"
@@ -38,7 +38,7 @@ dependencies {
     compile group: 'net.sf.json-lib', name: 'json-lib', version: '2.4', classifier: 'jdk15'
 }
 
-/*
+
 task jakeDeploy(type:Exec) {
 	workingDir 'src/main/webapp'
    	commandLine 'jake'
@@ -49,9 +49,11 @@ task jakeDeploy(type:Exec) {
 war.dependsOn jakeDeploy
 
 war {
+    from 'src/main/webapp/BrowserDetect.js'
+    webInf { from 'src/main/webapp/WEB-INF' } // adds a file-set to the WEB-INF dir.
     exclude '.xCodeSupport'
 }
-*/
+
 
 
 
