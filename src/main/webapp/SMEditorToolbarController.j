@@ -7,7 +7,7 @@
  *  Copyright 2012 Smartmobili. All rights reserved.
 */
 
-@import "../Views/SMEditorToolbarView.j"
+@import "SMEditorToolbarView.j"
 
 var SMEditorToolbarControllerFontSizes = [10, 13, 16, 18, 24, 32, 48];
 

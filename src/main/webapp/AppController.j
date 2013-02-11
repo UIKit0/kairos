@@ -12,21 +12,21 @@ APPLICATION_VERSION_NUMBER = 0.1;
 
 @import <WKTextView/WKTextView.j>
 
-@import "./Categories/VRCategories.j"
+@import "VRCategories.j"
 
-@import "./Controllers/MailController.j"
-@import "./Controllers/MailSourceViewController.j"
-@import "./Controllers/ComposeController.j"
-@import "./Controllers/HNAuthController.j"
-@import "./Controllers/AboutPanelController.j"
-@import "./Controllers/SMEditorToolbarController.j"
+@import "MailController.j"
+@import "MailSourceViewController.j"
+@import "ComposeController.j"
+@import "HNAuthController.j"
+@import "AboutPanelController.j"
+@import "SMEditorToolbarController.j"
 
-@import "./Views/MailboxColumnView.j"
-@import "./Views/SMSplitView.j"
-@import "./Views/SMAttachmentView.j"
-@import "./Views/SMUploadToolbarItem.j"
-@import "./Views/SMSmallButton.j"
-@import "./Views/SMEditorToolbarView.j"
+@import "MailboxColumnView.j"
+@import "SMSplitView.j"
+@import "SMAttachmentView.j"
+@import "SMUploadToolbarItem.j"
+@import "SMSmallButton.j"
+@import "SMEditorToolbarView.j"
 
 @import "TNLocalizationCenter.j"
 

@@ -10,9 +10,9 @@
 
 @import <Foundation/CPUserSessionManager.j>
 
-@import "../Views/HNLoginWindow.j"
-@import "../Controllers/MailController.j"
-@import "../ServerConnection.j"
+@import "HNLoginWindow.j"
+@import "MailController.j"
+@import "ServerConnection.j"
 
 BASE_URL = "http://localhost:3000/"; // TODO: what is this? Is it somewhere used?
 

@@ -9,19 +9,19 @@
 
 
 @import <AppKit/CPWindowController.j>
-@import "../Models/SMEmail.j"
-@import "../Models/Email.j"
-@import "../Models/SMEmailService.j"
-@import "../Models/SMMailAccount.j"
-@import "../Models/SMMailbox.j"
-@import "../Models/SMMailHeader.j"
-//@import "../Models/SMMailContent.j"
-@import "../Views/SMEmailSubjectView.j"
-@import "../Views/SMPagerView.j"
-@import "../Controllers/HNAuthController.j"
-@import "../Controllers/ComposeController.j"
-@import "../Categories/CPDate+Formatting.j"
-@import "../EventsFromServerReceiver.j"
+@import "SMEmail.j"
+@import "Email.j"
+@import "SMEmailService.j"
+@import "SMMailAccount.j"
+@import "SMMailbox.j"
+@import "SMMailHeader.j"
+//@import "SMMailContent.j"
+@import "SMEmailSubjectView.j"
+@import "SMPagerView.j"
+@import "HNAuthController.j"
+@import "ComposeController.j"
+@import "CPDate+Formatting.j"
+@import "EventsFromServerReceiver.j"
 
 
 var tableTestDragType = "tableTestDragType";

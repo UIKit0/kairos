@@ -8,8 +8,8 @@
 */
 
 @import "MailSourceViewRows.j"
-@import "../Views/MailboxColumnView.j"
-@import "../Views/SMSmallButton.j"
+@import "MailboxColumnView.j"
+@import "SMSmallButton.j"
 
 SMOutlineViewMailPaneMinimumSize = 210;
 SMOutlineViewMailPaneMaximumSize = 400;
@@ -50,15 +50,15 @@ var ContextMenuAddFolderTag = 0,
     {
         SharedMailSourceViewController = self;
     }
-    
+
     _folderEditMode = FolderEditModes.RenameFolder;
-    
+
     mailboxToItemMap = [CPMutableDictionary dictionary];
     headerMailboxes = [MailSourceViewRow headerWithName:@"Mailboxes"];
     headerOthers = [MailSourceViewRow headerWithName:@"Others"];
 
     var plusImage = [[CPImage alloc] initWithContentsOfFile:[[CPBundle bundleForClass:[CPButtonBar class]] pathForResource:@"Aristo2.blend/Resources/buttonbar-image-plus.png"] size:CGSizeMake(11, 12)];
-    
+
     var button = [SMSmallButton buttonWithTitle:@""];
     [button setImage:plusImage];
     [button sizeToFit];
@@ -156,19 +156,19 @@ var ContextMenuAddFolderTag = 0,
 {
     if (![self canAddMailbox])
         return;
-    
+
     var newMailbox = [[mailController mailAccount] createMailbox:self];
     [self reload];
     [self selectMailbox:newMailbox];
- 
+
     var view = [self view],
         rowIndex = [[view selectedRowIndexes] firstIndex];
     if (rowIndex !== nil && rowIndex !== CPNotFound) {
         _folderEditMode = FolderEditModes.CreateFolder;
         _folderCreatingNowName = [newMailbox name];
-       
+
         [view editColumn:0 row:rowIndex withEvent:nil select:YES];
-    }    
+    }
 }
 
 - (BOOL)canAddMailbox
@@ -227,21 +227,21 @@ var ContextMenuAddFolderTag = 0,
 - (void)leftPaneFolderRenamingEnded
 {
     // This is a "fix" for new folder creation, when user click outside of editing field without setting an name.
-    // Usual event of creating folder (setObjectValue) is not triggered in this case, and here we delete 
+    // Usual event of creating folder (setObjectValue) is not triggered in this case, and here we delete
     // not created unnamed folder from screen:
     if (_folderEditMode == FolderEditModes.CreateFolder)
     {
         _folderEditMode = FolderEditModes.RenameFolder; // Reset to default
         var mailboxes = [self mailboxes];
         for (var i=0; i<[mailboxes count]; i++) {
-            
+
             var mailbox = mailboxes[i];
             if ([mailbox name] == _folderCreatingNowName)
             {
                 _folderCreatingNowName = @"_"; // reset
-                
+
                 [mailbox remove];
-                
+
                 return;
             }
         }
@@ -364,14 +364,14 @@ var ContextMenuAddFolderTag = 0,
                  alert("Please set an new name to folder!"); // TODO: add localization
                 var mailboxUnnamed = [anItem object];
                 [mailboxUnnamed remove]; // remove that "new" folder  from screen
-                
+
                 _folderEditMode = FolderEditModes.RenameFolder; // reset to default value "RenameFolder"
                 _folderCreatingNowName = @"_";
             }
             else
             {
                 alert("Folder with name \"" + aValue + "\" is already exists"); // TODO: add localization
-            
+
                 if (_folderEditMode == FolderEditModes.CreateFolder)
                 {
                     var mailboxUnnamed = [anItem object];
@@ -383,7 +383,7 @@ var ContextMenuAddFolderTag = 0,
             return;
         }
     }
-    
+
     var mailbox = [anItem object];
     if (![mailbox isSpecial])
     {

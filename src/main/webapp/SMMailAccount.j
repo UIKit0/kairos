@@ -11,7 +11,7 @@
 */
 
 @import "SMRemoteObject.j"
-@import "../ServerConnection.j"
+@import "ServerConnection.j"
 @import "SMMailbox.j"
 
 @implementation SMMailAccount : SMRemoteObject

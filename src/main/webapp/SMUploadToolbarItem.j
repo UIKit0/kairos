@@ -9,7 +9,7 @@
 
 @import <AppKit/CPToolbarItem.j>
 
-@import "../Components/FileUpload.j" // UploadButton component.
+@import "FileUpload.j" // UploadButton component.
 
 /*!
     A toolbar item which places an upload button on top of itself.

@@ -8,7 +8,7 @@
  */
 
 
-@import "../ServerConnection.j"
+@import "ServerConnection.j"
 
 @implementation SMAttachmentView : CPView
 {

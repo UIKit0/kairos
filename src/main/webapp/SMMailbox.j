@@ -9,8 +9,8 @@
 //@import <Foundation/Foundation.j>
 
 @import "SMRemoteObject.j"
-@import "../ServerConnection.j"
-@import "../Controllers/MailSourceViewController.j" // for FolderEditModes enum.
+@import "ServerConnection.j"
+@import "MailSourceViewController.j" // for FolderEditModes enum.
 @import "SMMailHeader.j"
 
 // The order to display mailboxes. Any mailbox name not in this list goes at the end.
@@ -29,7 +29,7 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     CPString        name @accessors;
     CPNumber        count @accessors;
     CPNumber        unread @accessors;
-    
+
     var             _lastRequestedPageToLoad;
 }
 
@@ -89,7 +89,7 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
 {
     // [self setMailHeaders:[]];
     _lastRequestedPageToLoad = pageToLoad;
-    
+
     var serverConnection = [[ServerConnection alloc] init];
     [serverConnection callRemoteFunction:@"headersForFolder"
            withFunctionParametersAsObject:{ "folder" : [self name], "pageToLoad" : pageToLoad }
@@ -101,15 +101,15 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
 - (void)imapServerHeadersDidLoad:(id)sender withParametersObject:parametersObject
 {
     var listOfMessagesHeaders = parametersObject.listOfHeaders;
-    
+
     var result = [CPArray array]; // Result is an array with SMMailHeader elements
     if (listOfMessagesHeaders)
     {
-        for (var i = 0; i < listOfMessagesHeaders.length; i++) 
+        for (var i = 0; i < listOfMessagesHeaders.length; i++)
         {
             var mailHeader= [[SMMailHeader alloc] init];
             [mailHeader setSubject:listOfMessagesHeaders[i].subject];
-        
+
             var sd = listOfMessagesHeaders[i].sentDate;
             if (sd.length!= 0)
             {
@@ -120,25 +120,25 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
             else
             {
                 mailHeader.dateExists = false;
-            }        
+            }
 
-        
+
             [mailHeader setMessageId:listOfMessagesHeaders[i].messageId];
             [mailHeader setIsSeen:listOfMessagesHeaders[i].isSeen];
-        
+
             [mailHeader setMd5:"undone"]; // TODO: why we need md5, where this field is used?
-        
+
             var from_Array = listOfMessagesHeaders[i].from_Array;
-       
+
             var fromName = @"";
             var fromEmail = @"";
-       
-            for (var j = 0; j < from_Array.length; j++) 
+
+            for (var j = 0; j < from_Array.length; j++)
             {
                 fromName = fromName + ", " + from_Array[j].personal;
                 fromEmail = fromEmail + ", " + from_Array[j].address;
             }
-        
+
             // TODO: if lentgh > 0 remove first 2 chars in fromName,fromEmail
             if (fromName.length > 2)
                 fromName = [fromName substringFromIndex:2];
@@ -148,14 +148,14 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
                 fromEmail = [fromEmail substringFromIndex:2];
             else
                 fromEmail = @"";
-        
+
             [mailHeader setFromName:fromName]; // TODO: wrong model. We should save pairs of name and email. But, where is this info used? To show table and column "from" ?
             [mailHeader setFromEmail:fromEmail];
-        
+
             result = [result arrayByAddingObject:mailHeader];
         }
     }
-    
+
     if (parametersObject.page == _lastRequestedPageToLoad) // if there many times clicked load page, it can load different pages simeltanously , but we need show only last requested page, other is dismissed.
     {
         [self setMailHeaders:result];
@@ -204,7 +204,7 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
                                didEndSelector:@selector(imapServerDidCreateFolder:withParametersObject:)
                                         error:nil];
     }
-    
+
     [self save];
 }
 
@@ -213,23 +213,23 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
     if (parametersObject.result != "")
     {
         // Output error to user
-        
+
         alert(parametersObject.result);
-        
+
         [self setName:parametersObject.oldFolderName]; // (NOT WORKING) // TODO: need to pass event to list of folders (UI) and update it.
         alert("UNDONE: (not yet implemented) folder on screen should return to name " + parametersObject.oldFolderName); // TODO: (see above todo).
-    } 
+    }
 }
 
 - (void)imapServerDidCreateFolder:(id)sender withParametersObject:parametersObject
-{ 
+{
     if (parametersObject.result != "")
     {
         // Output error to user
         alert(parametersObject.result);
         // remove folder from screen
         [self remove];
-    } 
+    }
 }
 
 - (void)remove
@@ -240,9 +240,9 @@ var MailboxSortPriorityList = [@"inbox", @"sent", @"drafts", @"junk", @"trash"];
 - (void)save
 {
     CPLog("SMMailbox Save called");
-    [super save]; 
-    // Obevic comment: no need to call create folder here, this is not good. 
-    // We call "renameOrCreateFolder" each time when renameTo ends. 
+    [super save];
+    // Obevic comment: no need to call create folder here, this is not good.
+    // We call "renameOrCreateFolder" each time when renameTo ends.
     // Old code (was also commented before):
     // [imapServer createFolder:name
     //                delegate:@selector(imapServerDidCreateFolder:)

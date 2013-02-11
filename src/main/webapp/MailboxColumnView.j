@@ -8,7 +8,7 @@
  */
 
 @import "SMBadgeView.j"
-@import "../Categories/LocalizedString.j"
+@import "LocalizedString.j"
 
 var DEBUG_BADGES = NO,
     ExtraWidgetMargin = 3.0,
@@ -174,7 +174,7 @@ var DEBUG_BADGES = NO,
     [self setNeedsLayout];
 }
 
-- (void)selfRemoveButtons	
+- (void)selfRemoveButtons
 {
     [self setSubviews:[imageView, label, unread]];
 }
@@ -191,12 +191,12 @@ var DEBUG_BADGES = NO,
     [self setNeedsLayout];
 }
 
-- (void)controlTextDidBlur:(CPNotification)aNotification	
+- (void)controlTextDidBlur:(CPNotification)aNotification
 {
     // Pretend we were the text field which just blurred.
     if ([delegate respondsToSelector:@selector(controlTextDidBlur:)])
         [delegate controlTextDidBlur:[CPNotification notificationWithName:CPTextFieldDidBlurNotification object:self userInfo:nil]];
-    
+
     [CPApp sendAction:@selector(leftPaneFolderRenamingEnded:) to:nil from:nil];
 }
 
@@ -246,7 +246,7 @@ var DEBUG_BADGES = NO,
         label = [aCoder decodeObjectForKey:@"label"];
         imageView = [aCoder decodeObjectForKey:@"imageView"];
         unread = [aCoder decodeObjectForKey:@"unread"];
-        
+
          [label setDelegate:self];
     }
 

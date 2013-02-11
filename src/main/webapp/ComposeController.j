@@ -7,10 +7,10 @@
  */
 
 
-@import "../ServerConnection.j"
-@import "../TNLocalizationCenter.j"
-@import "../Models/SMEmail.j"
-@import "../Models/SMAttachment.j"
+@import "ServerConnection.j"
+@import "TNLocalizationCenter.j"
+@import "SMEmail.j"
+@import "SMAttachment.j"
 
 
 var MAX_ATTACHMENTS_TO_SHOW = 3; // If there are more attachments than this, a scrollbar will be shown;

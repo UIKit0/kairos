@@ -11,8 +11,8 @@
 
 @import <AppKit/CPPopUpButton.j>
 
-@import "../TNLocalizationCenter.j"
-@import "../Views/HNAuxiliarWindow.j"
+@import "TNLocalizationCenter.j"
+@import "HNAuxiliarWindow.j"
 
 
 @class HNAuthController;

@@ -8,7 +8,7 @@
 
 @import <Foundation/CPDate.j>
 
-@import "../Categories/CPDate+Formatting.j"
+@import "CPDate+Formatting.j"
 
 @implementation SMMailHeader : CPObject
 {
