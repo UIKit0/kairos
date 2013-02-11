@@ -18,6 +18,8 @@
 
 @import <Foundation/CPString.j>
 @import <Foundation/CPBundle.j>
+@import <Foundation/CPURLConnection.j>
+
 
 @global GENERAL_LANGUAGE_REGISTRY
 @global navigator
