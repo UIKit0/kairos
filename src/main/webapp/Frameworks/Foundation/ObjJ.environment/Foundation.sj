@@ -1272,6 +1272,267 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("bundleWithURL:"), func
     return objj_msgSend(CPBundle, "bundleWithPath:", CFBundle.mainBundle().bundleURL());
 }
 ,["CPBundle"])]);
+}p;22;CPByteCountFormatter.jt;12313;@STATIC;1.0;i;19;CPNumberFormatter.ji;10;CPString.jt;12254;objj_executeFile("CPNumberFormatter.j", YES);
+objj_executeFile("CPString.j", YES);
+CPByteCountFormatterUseDefault = 0;
+CPByteCountFormatterUseBytes = 1 << 0;
+CPByteCountFormatterUseKB = 1 << 1;
+CPByteCountFormatterUseMB = 1 << 2;
+CPByteCountFormatterUseGB = 1 << 3;
+CPByteCountFormatterUseTB = 1 << 4;
+CPByteCountFormatterUsePB = 1 << 5;
+CPByteCountFormatterUseAll = 0xFFFF;
+CPByteCountFormatterCountStyleFile = 0;
+CPByteCountFormatterCountStyleMemory = 1;
+CPByteCountFormatterCountStyleDecimal = 2;
+CPByteCountFormatterCountStyleBinary = 3;
+var CPByteCountFormatterUnits = [ "bytes", "KB", "MB", "GB", "TB", "PB" ];
+{var the_class = objj_allocateClassPair(CPFormatter, "CPByteCountFormatter"),
+meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_countStyle"), new objj_ivar("_allowsNonnumericFormatting"), new objj_ivar("_includesActualByteCount"), new objj_ivar("_includesCount"), new objj_ivar("_includesUnit"), new objj_ivar("_adaptive"), new objj_ivar("_zeroPadsFractionDigits"), new objj_ivar("_allowedUnits"), new objj_ivar("_numberFormatter")]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+objj_registerClassPair(the_class);
+class_addMethods(the_class, [new objj_method(sel_getUid("init"), function $CPByteCountFormatter__init(self, _cmd)
+{
+    if (self = objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPByteCountFormatter").super_class }, "init"))
+    {
+        self._adaptive = YES;
+        self._allowedUnits = CPByteCountFormatterUseDefault;
+        self._allowsNonnumericFormatting = YES;
+        self._countStyle = CPByteCountFormatterCountStyleFile;
+        self._includesActualByteCount = NO;
+        self._includesCount = YES;
+        self._includesUnit = YES;
+        self._zeroPadsFractionDigits = NO;
+        self._numberFormatter = objj_msgSend(CPNumberFormatter, "new");
+        objj_msgSend(self._numberFormatter, "setNumberStyle:", CPNumberFormatterDecimalStyle);
+        objj_msgSend(self._numberFormatter, "setMinimumFractionDigits:", 0);
+    }
+    return self;
+}
+,["id"]), new objj_method(sel_getUid("stringFromByteCount:"), function $CPByteCountFormatter__stringFromByteCount_(self, _cmd, byteCount)
+{
+    var divisor,
+        exponent = 0,
+        unitIndex = ((self._allowedUnits === 0) || (self._allowedUnits & CPByteCountFormatterUseBytes)) ? 0 : -1,
+        bytes = byteCount,
+        unitBytes = bytes,
+        unitCount = objj_msgSend(CPByteCountFormatterUnits, "count");
+    if (self._countStyle === CPByteCountFormatterCountStyleFile ||
+        self._countStyle === CPByteCountFormatterCountStyleDecimal)
+        divisor = 1000;
+    else
+        divisor = 1024;
+    while ((bytes >= divisor) && (exponent < unitCount))
+    {
+        bytes /= divisor;
+        ++exponent;
+        if (self._allowedUnits === 0 || (self._allowedUnits & (1 << exponent)))
+        {
+            unitIndex = exponent;
+            unitBytes = bytes;
+        }
+    }
+    if (unitIndex === -1)
+        for (var i = 1; i < unitCount; ++i)
+        {
+            unitBytes /= divisor;
+            if ((self._allowedUnits === 0) || (self._allowedUnits & (1 << i)))
+            {
+                unitIndex = i;
+                break;
+            }
+        }
+    var minDigits = 0,
+        maxDigits = CPDecimalNoScale;
+    if (unitBytes >= 1.0)
+    {
+        if (self._adaptive)
+        {
+            var digits;
+            if (exponent <= 1)
+                digits = 0;
+            else if (exponent == 2)
+                digits = 1;
+            else
+                digits = 2;
+            maxDigits = digits;
+            if (self._zeroPadsFractionDigits)
+                minDigits = digits;
+        }
+        else
+        {
+            if (self._zeroPadsFractionDigits)
+                minDigits = 2;
+            if (bytes >= 1)
+                maxDigits = 2;
+        }
+    }
+    objj_msgSend(self._numberFormatter, "setMinimumFractionDigits:", minDigits);
+    objj_msgSend(self._numberFormatter, "setMaximumFractionDigits:", maxDigits);
+    var parts = [];
+    if (self._includesCount)
+    {
+        if (self._allowsNonnumericFormatting && bytes === 0)
+            objj_msgSend(parts, "addObject:", "Zero");
+        else
+            objj_msgSend(parts, "addObject:", objj_msgSend(self._numberFormatter, "stringFromNumber:", unitBytes));
+    }
+    if (self._includesUnit)
+        objj_msgSend(parts, "addObject:", CPByteCountFormatterUnits[unitIndex]);
+    if ((unitIndex > 0) && self._includesCount && self._includesUnit && self._includesActualByteCount)
+    {
+        objj_msgSend(self._numberFormatter, "setMaximumFractionDigits:", 0);
+        objj_msgSend(parts, "addObject:", objj_msgSend(CPString, "stringWithFormat:", "(%s bytes)", objj_msgSend(self._numberFormatter, "stringFromNumber:", byteCount)));
+    }
+    var result = objj_msgSend(parts, "componentsJoinedByString:", " ");
+    if (byteCount === 1)
+        return objj_msgSend(result, "stringByReplacingOccurrencesOfString:withString:", "bytes", "byte");
+    else
+        return result;
+}
+,["CPString","int"]), new objj_method(sel_getUid("stringForObjectValue:"), function $CPByteCountFormatter__stringForObjectValue_(self, _cmd, anObject)
+{
+    if (objj_msgSend(anObject, "isKindOfClass:", CPNumber))
+        return objj_msgSend(self, "stringFromByteCount:", anObject);
+    else
+        return nil;
+}
+,["CPString","id"]), new objj_method(sel_getUid("getObjectValue:forString:errorDescription:"), function $CPByteCountFormatter__getObjectValue_forString_errorDescription_(self, _cmd, anObject, aString, anError)
+{
+    return NO;
+}
+,["BOOL","id","CPString","CPString"]), new objj_method(sel_getUid("countStyle"), function $CPByteCountFormatter__countStyle(self, _cmd)
+{
+    return self._countStyle;
+}
+,["int"]), new objj_method(sel_getUid("setCountStyle:"), function $CPByteCountFormatter__setCountStyle_(self, _cmd, style)
+{
+    self._countStyle = style;
+}
+,["void","int"]), new objj_method(sel_getUid("allowsNonnumericFormatting"), function $CPByteCountFormatter__allowsNonnumericFormatting(self, _cmd)
+{
+    return self._allowsNonnumericFormatting;
+}
+,["BOOL"]), new objj_method(sel_getUid("setAllowsNonnumericFormatting:"), function $CPByteCountFormatter__setAllowsNonnumericFormatting_(self, _cmd, shouldAllowNonnumericFormatting)
+{
+    self._allowsNonnumericFormatting = shouldAllowNonnumericFormatting;
+}
+,["void","BOOL"]), new objj_method(sel_getUid("includesActualByteCount"), function $CPByteCountFormatter__includesActualByteCount(self, _cmd)
+{
+    return self._includesActualByteCount;
+}
+,["BOOL"]), new objj_method(sel_getUid("setIncludesActualByteCount:"), function $CPByteCountFormatter__setIncludesActualByteCount_(self, _cmd, shouldIncludeActualByteCount)
+{
+    self._includesActualByteCount = shouldIncludeActualByteCount;
+}
+,["void","BOOL"]), new objj_method(sel_getUid("isAdaptive"), function $CPByteCountFormatter__isAdaptive(self, _cmd)
+{
+    return self._adaptive;
+}
+,["BOOL"]), new objj_method(sel_getUid("setAdaptive:"), function $CPByteCountFormatter__setAdaptive_(self, _cmd, shouldBeAdaptive)
+{
+    self._adaptive = shouldBeAdaptive;
+}
+,["void","BOOL"]), new objj_method(sel_getUid("allowedUnits"), function $CPByteCountFormatter__allowedUnits(self, _cmd)
+{
+    return self._allowedUnits;
+}
+,["int"]), new objj_method(sel_getUid("setAllowedUnits:"), function $CPByteCountFormatter__setAllowedUnits_(self, _cmd, allowed)
+{
+    self._allowedUnits = allowed;
+}
+,["void","int"]), new objj_method(sel_getUid("includesCount"), function $CPByteCountFormatter__includesCount(self, _cmd)
+{
+    return self._includesCount;
+}
+,["BOOL"]), new objj_method(sel_getUid("setIncludesCount:"), function $CPByteCountFormatter__setIncludesCount_(self, _cmd, shouldIncludeCount)
+{
+    self._includesCount = shouldIncludeCount;
+}
+,["void","BOOL"]), new objj_method(sel_getUid("includesUnit"), function $CPByteCountFormatter__includesUnit(self, _cmd)
+{
+    return self._includesUnit;
+}
+,["BOOL"]), new objj_method(sel_getUid("setIncludesUnit:"), function $CPByteCountFormatter__setIncludesUnit_(self, _cmd, shouldIncludeUnit)
+{
+    self._includesUnit = shouldIncludeUnit;
+}
+,["void","BOOL"]), new objj_method(sel_getUid("zeroPadsFractionDigits"), function $CPByteCountFormatter__zeroPadsFractionDigits(self, _cmd)
+{
+    return self._zeroPadsFractionDigits;
+}
+,["BOOL"]), new objj_method(sel_getUid("setZeroPadsFractionDigits:"), function $CPByteCountFormatter__setZeroPadsFractionDigits_(self, _cmd, shouldZeroPad)
+{
+    self._zeroPadsFractionDigits = shouldZeroPad;
+}
+,["void","BOOL"])]);
+class_addMethods(meta_class, [new objj_method(sel_getUid("stringFromByteCount:countStyle:"), function $CPByteCountFormatter__stringFromByteCount_countStyle_(self, _cmd, byteCount, countStyle)
+{
+    var formatter = objj_msgSend(CPByteCountFormatter, "new");
+    objj_msgSend(formatter, "setCountStyle:", countStyle);
+    return objj_msgSend(formatter, "stringFromByteCount:", byteCount);
+}
+,["CPString","int","int"])]);
+}
+var CPByteCountFormatterCountStyleKey = "CPByteCountFormatterCountStyleKey",
+    CPByteCountFormatterAllowsNonnumericFormattingKey = "CPByteCountFormatterAllowsNonnumericFormattingKey",
+    CPByteCountFormatterIncludesActualByteCountKey = "CPByteCountFormatterIncludesActualByteCountKey",
+    CPByteCountFormatterIncludesCountKey = "CPByteCountFormatterIncludesCountKey",
+    CPByteCountFormatterIncludesUnitKey = "CPByteCountFormatterIncludesUnitKey",
+    CPByteCountFormatterAdaptiveKey = "CPByteCountFormatterAdaptiveKey",
+    CPByteCountFormatterZeroPadsFractionDigitsKey = "CPByteCountFormatterZeroPadsFractionDigitsKey",
+    CPByteCountFormatterAllowedUnitsKey = "CPByteCountFormatterAllowedUnitsKey";
+{
+var the_class = objj_getClass("CPByteCountFormatter")
+if(!the_class) throw new SyntaxError("*** Could not find definition for class \"CPByteCountFormatter\"");
+var meta_class = the_class.isa;
+class_addMethods(the_class, [new objj_method(sel_getUid("initWithCoder:"), function $CPByteCountFormatter__initWithCoder_(self, _cmd, aCoder)
+{
+    self = objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPByteCountFormatter").super_class }, "initWithCoder:", aCoder);
+    if (self)
+    {
+        self._countStyle = objj_msgSend(aCoder, "decodeIntForKey:", CPByteCountFormatterCountStyleKey);
+        self._allowsNonnumericFormatting = objj_msgSend(aCoder, "decodeBoolForKey:", CPByteCountFormatterAllowsNonnumericFormattingKey);
+        self._includesActualByteCount = objj_msgSend(aCoder, "decodeBoolForKey:", CPByteCountFormatterIncludesActualByteCountKey);
+        self._includesCount = objj_msgSend(aCoder, "decodeBoolForKey:", CPByteCountFormatterIncludesCountKey);
+        self._includesUnit = objj_msgSend(aCoder, "decodeBoolForKey:", CPByteCountFormatterIncludesUnitKey);
+        self._adaptive = objj_msgSend(aCoder, "decodeBoolForKey:", CPByteCountFormatterAdaptiveKey);
+        self._zeroPadsFractionDigits = objj_msgSend(aCoder, "decodeBoolForKey:", CPByteCountFormatterZeroPadsFractionDigitsKey);
+        self._allowedUnits = objj_msgSend(aCoder, "decodeIntForKey:", CPByteCountFormatterAllowedUnitsKey);
+    }
+    return self;
+}
+,["id","CPCoder"]), new objj_method(sel_getUid("encodeWithCoder:"), function $CPByteCountFormatter__encodeWithCoder_(self, _cmd, aCoder)
+{
+    objj_msgSendSuper({ receiver:self, super_class:objj_getClass("CPByteCountFormatter").super_class }, "encodeWithCoder:", aCoder);
+    objj_msgSend(aCoder, "encodeInt:forKey:", self._countStyle, CPByteCountFormatterCountStyleKey);
+    objj_msgSend(aCoder, "encodeBool:forKey:", self._allowsNonnumericFormatting, CPByteCountFormatterAllowsNonnumericFormattingKey);
+    objj_msgSend(aCoder, "encodeBool:forKey:", self._includesActualByteCount, CPByteCountFormatterIncludesActualByteCountKey);
+    objj_msgSend(aCoder, "encodeBool:forKey:", self._includesCount, CPByteCountFormatterIncludesCountKey);
+    objj_msgSend(aCoder, "encodeBool:forKey:", self._includesUnit, CPByteCountFormatterIncludesUnitKey);
+    objj_msgSend(aCoder, "encodeBool:forKey:", self._adaptive, CPByteCountFormatterAdaptiveKey);
+    objj_msgSend(aCoder, "encodeBool:forKey:", self._zeroPadsFractionDigits, CPByteCountFormatterZeroPadsFractionDigitsKey);
+    objj_msgSend(aCoder, "encodeInt:forKey:", self._allowedUnits, CPByteCountFormatterAllowedUnitsKey);
+}
+,["void","CPCoder"])]);
 }p;16;CPCharacterSet.jt;37038;@STATIC;1.0;i;9;CPArray.ji;13;CPException.ji;10;CPObject.ji;10;CPString.ji;7;CPURL.jt;36946;objj_executeFile("CPArray.j", YES);
 objj_executeFile("CPException.j", YES);
 objj_executeFile("CPObject.j", YES);
@@ -4786,7 +5047,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithCoder:"), funct
     objj_msgSend(aCoder, "encodeInt:forKey:", self._dateStyle, CPDateFormatterStyleKey);
 }
 ,["void","CPCoder"])]);
-}p;11;CPDecimal.jt;28514;@STATIC;1.0;i;9;CPArray.ji;10;CPNumber.jt;28466;objj_executeFile("CPArray.j", YES);
+}p;11;CPDecimal.jt;28717;@STATIC;1.0;i;9;CPArray.ji;10;CPNumber.jt;28669;objj_executeFile("CPArray.j", YES);
 objj_executeFile("CPNumber.j", YES);
 CPDecimalMaxDigits = 38;
 CPDecimalMaxExponent = 127;
@@ -4931,7 +5192,7 @@ CPDecimalIsOne = function(dcm)
     }
     return NO;
 }
-_CPDecimalSet = function(t,s)
+_CPDecimalSet = function(t, s)
 {
     t._exponent = s._exponent;
     t._isNegative = s._isNegative;
@@ -4983,16 +5244,18 @@ CPDecimalCompare = function(leftOperand, rightOperand)
         rightIsZero = (rightOperand._mantissa.length == 1 && rightOperand._mantissa[0] == 0),
         s1 = leftOperand._exponent + leftOperand._mantissa.length,
         s2 = rightOperand._exponent + rightOperand._mantissa.length;
-    if (leftIsZero || s1 < s2)
+    if (leftIsZero && rightIsZero)
+        return CPOrderedSame;
+    if (leftIsZero || (s1 < s2 && !rightIsZero))
     {
         if (rightOperand._isNegative)
             return CPOrderedDescending;
         else
             return CPOrderedAscending;
     }
-    if (rightIsZero || s1 > s2)
+    if (rightIsZero || (s1 > s2 && !leftIsZero))
     {
-        if (rightOperand._isNegative)
+        if (leftOperand._isNegative)
             return CPOrderedAscending;
         else
             return CPOrderedDescending;
@@ -5101,8 +5364,8 @@ CPDecimalAdd = function(result, leftOperand, rightOperand, roundingMode, longMod
         _CPDecimalSet(result, leftOperand);
         return CPCalculationNoError;
     }
-     var n1 = CPDecimalCopy(leftOperand),
-         n2 = CPDecimalCopy(rightOperand);
+    var n1 = CPDecimalCopy(leftOperand),
+        n2 = CPDecimalCopy(rightOperand);
     if (leftOperand._isNegative != rightOperand._isNegative)
     {
         if (leftOperand._isNegative)
@@ -5217,9 +5480,9 @@ CPDecimalSubtract = function(result, leftOperand, rightOperand, roundingMode)
         _CPDecimalSet(result, leftOperand);
         return CPCalculationNoError;
     }
-     var n1 = CPDecimalCopy(leftOperand),
-         n2 = CPDecimalCopy(rightOperand),
-         error1 = CPCalculationNoError;
+    var n1 = CPDecimalCopy(leftOperand),
+        n2 = CPDecimalCopy(rightOperand),
+        error1 = CPCalculationNoError;
     if (leftOperand._isNegative != rightOperand._isNegative)
     {
         if (leftOperand._isNegative)
@@ -5403,8 +5666,7 @@ _SimpleMultiply = function(result, leftOperand, rightOperand, roundingMode, powe
         exp = 0,
         n = CPDecimalMakeZero();
     _CPDecimalSetZero(result);
-    var i = 0;
-    for (; i < rightOperand._mantissa.length; i++)
+    for (var i = 0; i < rightOperand._mantissa.length; i++)
     {
         _CPDecimalSetZero(n);
         n._exponent = rightOperand._mantissa.length - i - 1;
@@ -5412,8 +5674,7 @@ _SimpleMultiply = function(result, leftOperand, rightOperand, roundingMode, powe
         d = rightOperand._mantissa[i];
         if (d == 0)
             continue;
-        var j = 0;
-        for (j = leftOperand._mantissa.length - 1; j >= 0; j--)
+        for (var j = leftOperand._mantissa.length - 1; j >= 0; j--)
         {
             e = leftOperand._mantissa[j] * d + carry;
             if (e >= 10)
@@ -5557,7 +5818,7 @@ CPDecimalPower = function(result, dcm, power, roundingMode)
 }
 CPDecimalNormalize = function(dcm1, dcm2, roundingMode, longMode)
 {
-    var factor = (longMode)?2:1;
+    var factor = (longMode) ? 2 : 1;
     if (dcm1._isNaN || dcm2._isNaN)
         return CPCalculationNoError;
     if (!dcm1._isCompact)
@@ -5646,15 +5907,15 @@ CPDecimalNormalize = function(dcm1, dcm2, roundingMode, longMode)
     }
     return CPCalculationNoError;
 }
-CPDecimalRound = function(result, dcm, scale ,roundingMode)
+CPDecimalRound = function(result, dcm, scale, roundingMode)
 {
+    _CPDecimalSet(result, dcm);
     if (dcm._isNaN)
         return;
     if (!dcm._isCompact)
         CPDecimalCompact(dcm);
     if (scale == CPDecimalNoScale)
         return;
-    _CPDecimalSet(result,dcm);
     var mc = result._mantissa.length,
         l = mc + scale + result._exponent;
     if (mc <= l)
@@ -5663,45 +5924,47 @@ CPDecimalRound = function(result, dcm, scale ,roundingMode)
     {
         _CPDecimalSetZero(result);
         return;
-    } else {
+    }
+    else
+    {
         var c = 0,
             n = 0,
             up = 0;
         result._exponent += mc - l;
         switch (roundingMode)
         {
-        case CPRoundDown:
-            up = result._isNegative;
-            break;
-        case CPRoundUp:
-            up = !result._isNegative;
-            break;
-        case CPRoundPlain:
-            n = result._mantissa[l];
-            up = (n >= 5);
-            break;
-        case _CPRoundHalfDown:
-            n = result._mantissa[l];
-            up = (n > 5);
-            break;
-        case CPRoundBankers:
-            n = result._mantissa[l];
-            if (n > 5)
-                up = YES;
-            else if (n < 5)
-                up = NO;
-            else
-            {
-                if (l == 0)
-                    c = 0;
+            case CPRoundDown:
+                up = result._isNegative;
+                break;
+            case CPRoundUp:
+                up = !result._isNegative;
+                break;
+            case CPRoundPlain:
+                n = result._mantissa[l];
+                up = (n >= 5);
+                break;
+            case _CPRoundHalfDown:
+                n = result._mantissa[l];
+                up = (n > 5);
+                break;
+            case CPRoundBankers:
+                n = result._mantissa[l];
+                if (n > 5)
+                    up = YES;
+                else if (n < 5)
+                    up = NO;
                 else
-                    c = result._mantissa[l - 1];
-                up = ((c % 2) != 0);
-            }
-            break;
-        default:
-            up = NO;
-            break;
+                {
+                    if (l == 0)
+                        c = 0;
+                    else
+                        c = result._mantissa[l - 1];
+                    up = ((c % 2) != 0);
+                }
+                break;
+            default:
+                up = NO;
+                break;
         }
         result._mantissa = Array.prototype.slice.call(result._mantissa, 0, l);
         if (up)
@@ -5739,9 +6002,7 @@ CPDecimalCompact = function(dcm)
         return;
     }
     while (dcm._mantissa[0] === 0)
-    {
         Array.prototype.shift.call(dcm._mantissa);
-    }
     while (dcm._mantissa[dcm._mantissa.length - 1] === 0)
     {
         Array.prototype.pop.call(dcm._mantissa);
@@ -5793,7 +6054,7 @@ CPDecimalString = function(dcm, locale)
         string += "0";
     }
     return string;
-}p;17;CPDecimalNumber.jt;31931;@STATIC;1.0;i;11;CPDecimal.ji;13;CPException.ji;10;CPNumber.ji;10;CPObject.ji;10;CPString.jt;31832;objj_executeFile("CPDecimal.j", YES);
+}p;17;CPDecimalNumber.jt;31555;@STATIC;1.0;i;11;CPDecimal.ji;13;CPException.ji;10;CPNumber.ji;10;CPObject.ji;10;CPString.jt;31456;objj_executeFile("CPDecimal.j", YES);
 objj_executeFile("CPException.j", YES);
 objj_executeFile("CPNumber.j", YES);
 objj_executeFile("CPObject.j", YES);
@@ -5851,26 +6112,32 @@ class_addMethods(the_class, [new objj_method(sel_getUid("roundingMode"), functio
 {
     switch (error)
     {
-        case CPCalculationNoError: break;
-        case CPCalculationOverflow: if (self._raiseOnOverflow)
-                                                objj_msgSend(CPException, "raise:reason:", CPDecimalNumberOverflowException, ("A CPDecimalNumber overflow has occurred. (Left operand= '" + objj_msgSend(leftOperand, "descriptionWithLocale:", nil) + "' Right operand= '" + objj_msgSend(rightOperand, "descriptionWithLocale:", nil) + "' Selector= '" + operation + "')"));
-                                            else
-                                                return objj_msgSend(CPDecimalNumber, "notANumber");
-                                            break;
-        case CPCalculationUnderflow: if (self._raiseOnUnderflow)
-                                                objj_msgSend(CPException, "raise:reason:", CPDecimalNumberUnderflowException, ("A CPDecimalNumber underflow has occurred. (Left operand= '" + objj_msgSend(leftOperand, "descriptionWithLocale:", nil) + "' Right operand= '" + objj_msgSend(rightOperand, "descriptionWithLocale:", nil) + "' Selector= '" + operation + "')"));
-                                            else
-                                                return objj_msgSend(CPDecimalNumber, "notANumber");
-                                            break;
-        case CPCalculationLossOfPrecision: if (self._raiseOnExactness)
-                                                objj_msgSend(CPException, "raise:reason:", CPDecimalNumberExactnessException, ("A CPDecimalNumber has been rounded off during a calculation. (Left operand= '" + objj_msgSend(leftOperand, "descriptionWithLocale:", nil) + "' Right operand= '" + objj_msgSend(rightOperand, "descriptionWithLocale:", nil) + "' Selector= '" + operation + "')"));
-                                            break;
-        case CPCalculationDivideByZero: if (self._raiseOnDivideByZero)
-                                                objj_msgSend(CPException, "raise:reason:", CPDecimalNumberDivideByZeroException, ("A CPDecimalNumber divide by zero has occurred. (Left operand= '" + objj_msgSend(leftOperand, "descriptionWithLocale:", nil) + "' Right operand= '" + objj_msgSend(rightOperand, "descriptionWithLocale:", nil) + "' Selector= '" + operation + "')"));
-                                            else
-                                                return objj_msgSend(CPDecimalNumber, "notANumber");
-                                            break;
-        default: objj_msgSend(CPException, "raise:reason:", CPInvalidArgumentException, ("An unknown CPDecimalNumber error has occurred. (Left operand= '" + objj_msgSend(leftOperand, "descriptionWithLocale:", nil) + "' Right operand= '" + objj_msgSend(rightOperand, "descriptionWithLocale:", nil) + "' Selector= '" + operation + "')"));
+        case CPCalculationNoError:
+            break;
+        case CPCalculationOverflow:
+            if (self._raiseOnOverflow)
+                objj_msgSend(CPException, "raise:reason:", CPDecimalNumberOverflowException, ("A CPDecimalNumber overflow has occurred. (Left operand= '" + objj_msgSend(leftOperand, "descriptionWithLocale:", nil) + "' Right operand= '" + objj_msgSend(rightOperand, "descriptionWithLocale:", nil) + "' Selector= '" + operation + "')"));
+            else
+                return objj_msgSend(CPDecimalNumber, "notANumber");
+            break;
+        case CPCalculationUnderflow:
+            if (self._raiseOnUnderflow)
+                objj_msgSend(CPException, "raise:reason:", CPDecimalNumberUnderflowException, ("A CPDecimalNumber underflow has occurred. (Left operand= '" + objj_msgSend(leftOperand, "descriptionWithLocale:", nil) + "' Right operand= '" + objj_msgSend(rightOperand, "descriptionWithLocale:", nil) + "' Selector= '" + operation + "')"));
+            else
+                return objj_msgSend(CPDecimalNumber, "notANumber");
+            break;
+        case CPCalculationLossOfPrecision:
+            if (self._raiseOnExactness)
+                objj_msgSend(CPException, "raise:reason:", CPDecimalNumberExactnessException, ("A CPDecimalNumber has been rounded off during a calculation. (Left operand= '" + objj_msgSend(leftOperand, "descriptionWithLocale:", nil) + "' Right operand= '" + objj_msgSend(rightOperand, "descriptionWithLocale:", nil) + "' Selector= '" + operation + "')"));
+            break;
+        case CPCalculationDivideByZero:
+            if (self._raiseOnDivideByZero)
+                objj_msgSend(CPException, "raise:reason:", CPDecimalNumberDivideByZeroException, ("A CPDecimalNumber divide by zero has occurred. (Left operand= '" + objj_msgSend(leftOperand, "descriptionWithLocale:", nil) + "' Right operand= '" + objj_msgSend(rightOperand, "descriptionWithLocale:", nil) + "' Selector= '" + operation + "')"));
+            else
+                return objj_msgSend(CPDecimalNumber, "notANumber");
+            break;
+        default:
+            objj_msgSend(CPException, "raise:reason:", CPInvalidArgumentException, ("An unknown CPDecimalNumber error has occurred. (Left operand= '" + objj_msgSend(leftOperand, "descriptionWithLocale:", nil) + "' Right operand= '" + objj_msgSend(rightOperand, "descriptionWithLocale:", nil) + "' Selector= '" + operation + "')"));
     }
     return nil;
 }
@@ -8934,7 +9201,7 @@ var _CPKeyedUnarchiverDecodeObjectAtIndex = function(self, anIndex)
     if ((object != nil) && (object.isa === _CPKeyedArchiverValueClass))
         object = objj_msgSend(object, "JSObject");
     return object;
-};p;18;CPKeyValueCoding.jt;15684;@STATIC;1.0;i;9;CPArray.ji;14;CPDictionary.ji;13;CPException.ji;12;CPIndexSet.ji;8;CPNull.ji;10;CPObject.ji;7;CPSet.ji;21;CPKeyValueObserving.jt;15533;objj_executeFile("CPArray.j", YES);
+};p;18;CPKeyValueCoding.jt;15724;@STATIC;1.0;i;9;CPArray.ji;14;CPDictionary.ji;13;CPException.ji;12;CPIndexSet.ji;8;CPNull.ji;10;CPObject.ji;7;CPSet.ji;21;CPKeyValueObserving.jt;15573;objj_executeFile("CPArray.j", YES);
 objj_executeFile("CPDictionary.j", YES);
 objj_executeFile("CPException.j", YES);
 objj_executeFile("CPIndexSet.j", YES);
@@ -9002,11 +9269,15 @@ class_addMethods(the_class, [new objj_method(sel_getUid("valueForKey:"), functio
     }
     switch (accessor[0])
     {
-        case 0: return objj_msgSend(self, accessor[1]);
-        case 1: return objj_msgSend(objj_msgSend(_CPKeyValueCodingArray, "alloc"), "initWithTarget:key:", self, aKey);
-        case 2: return objj_msgSend(objj_msgSend(_CPKeyValueCodingSet, "alloc"), "initWithTarget:key:", self, aKey);
-        case 3: if (objj_msgSend(theClass, "accessInstanceVariablesDirectly"))
-                        return self[accessor[1]];
+        case 0:
+            return objj_msgSend(self, accessor[1]);
+        case 1:
+            return objj_msgSend(objj_msgSend(_CPKeyValueCodingArray, "alloc"), "initWithTarget:key:", self, aKey);
+        case 2:
+            return objj_msgSend(objj_msgSend(_CPKeyValueCodingSet, "alloc"), "initWithTarget:key:", self, aKey);
+        case 3:
+            if (objj_msgSend(theClass, "accessInstanceVariablesDirectly"))
+                return self[accessor[1]];
     }
     return objj_msgSend(self, "valueForUndefinedKey:", aKey);
 }
@@ -10690,7 +10961,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithCoder:"), funct
 }
 Number.prototype.isa = CPNumber;
 Boolean.prototype.isa = CPNumber;
-objj_msgSend(CPNumber, "initialize");p;19;CPNumberFormatter.jt;13466;@STATIC;1.0;i;10;CPString.ji;13;CPFormatter.ji;17;CPDecimalNumber.jt;13391;objj_executeFile("CPString.j", YES);
+objj_msgSend(CPNumber, "initialize");p;19;CPNumberFormatter.jt;13693;@STATIC;1.0;i;10;CPString.ji;13;CPFormatter.ji;17;CPDecimalNumber.jt;13618;objj_executeFile("CPString.j", YES);
 objj_executeFile("CPFormatter.j", YES);
 objj_executeFile("CPDecimalNumber.j", YES);
 CPNumberFormatterNoStyle = 0;
@@ -10717,6 +10988,8 @@ meta_class = the_class.isa;class_addIvars(the_class, [new objj_ivar("_numberStyl
 
 
 
+
+       
 objj_registerClassPair(the_class);
 class_addMethods(the_class, [new objj_method(sel_getUid("numberStyle"), function $CPNumberFormatter__numberStyle(self, _cmd)
 {
@@ -10816,7 +11089,7 @@ self._generatesDecimalNumbers = newValue;
         case CPNumberFormatterCurrencyStyle:
         case CPNumberFormatterDecimalStyle:
         case CPNumberFormatterPercentStyle:
-            if (!self._numberHandler) self._numberHandler = objj_msgSend(CPDecimalNumberHandler, "decimalNumberHandlerWithRoundingMode:scale:raiseOnExactness:raiseOnOverflow:raiseOnUnderflow:raiseOnDivideByZero:", self._roundingMode, self._maximumFractionDigits, NO, NO, NO, YES);;
+            objj_msgSend(self, "_updateNumberHandlerIfNecessary");
             dcmn = objj_msgSend(dcmn, "decimalNumberByRoundingAccordingToBehavior:", self._numberHandler);
             var output = objj_msgSend(dcmn, "descriptionWithLocale:", nil),
                 parts = output.match(NumberRegex) || ["", undefined, "", undefined, undefined],
@@ -10910,7 +11183,12 @@ self._generatesDecimalNumbers = newValue;
     self._maximumFractionDigits = aNumber;
     self._numberHandler = nil;;
 }
-,["void","CPUInteger"])]);
+,["void","CPUInteger"]), new objj_method(sel_getUid("_updateNumberHandlerIfNecessary"), function $CPNumberFormatter___updateNumberHandlerIfNecessary(self, _cmd)
+{
+    if (!self._numberHandler)
+        self._numberHandler = objj_msgSend(CPDecimalNumberHandler, "decimalNumberHandlerWithRoundingMode:scale:raiseOnExactness:raiseOnOverflow:raiseOnUnderflow:raiseOnDivideByZero:", self._roundingMode, self._maximumFractionDigits, NO, NO, NO, YES);
+}
+,["void"])]);
 }
 var CPNumberFormatterStyleKey = "CPNumberFormatterStyleKey",
     CPNumberFormatterMinimumFractionDigitsKey = "CPNumberFormatterMinimumFractionDigitsKey",
@@ -15412,9 +15690,10 @@ var parsePROPFINDResponse = function(anXMLString)
 };
 var mapURLsAndProperties = function( properties, ignoredURL)
 {
-};p;12;Foundation.jt;3337;@STATIC;1.0;i;13;_CGGeometry.ji;9;CPArray.ji;10;CPBundle.ji;16;CPCharacterSet.ji;9;CPCoder.ji;23;CPComparisonPredicate.ji;21;CPCompoundPredicate.ji;8;CPData.ji;8;CPDate.ji;17;CPDateFormatter.ji;11;CPDecimal.ji;17;CPDecimalNumber.ji;14;CPDictionary.ji;14;CPEnumerator.ji;9;CPError.ji;13;CPException.ji;14;CPExpression.ji;13;CPFormatter.ji;12;CPIndexSet.ji;13;CPIndexPath.ji;14;CPInvocation.ji;19;CPJSONPConnection.ji;17;CPKeyedArchiver.ji;19;CPKeyedUnarchiver.ji;18;CPKeyValueCoding.ji;21;CPKeyValueObserving.ji;16;CPMutableArray.ji;14;CPMutableSet.ji;16;CPNotification.ji;22;CPNotificationCenter.ji;8;CPNull.ji;10;CPNumber.ji;19;CPNumberFormatter.ji;10;CPObject.ji;15;CPObjJRuntime.ji;13;CPOperation.ji;18;CPOperationQueue.ji;13;CPPredicate.ji;29;CPPropertyListSerialization.ji;9;CPRange.ji;11;CPRunLoop.ji;11;CPScanner.ji;7;CPSet.ji;18;CPSortDescriptor.ji;10;CPString.ji;9;CPTimer.ji;15;CPUndoManager.ji;7;CPURL.ji;17;CPURLConnection.ji;14;CPURLRequest.ji;15;CPURLResponse.ji;16;CPUserDefaults.ji;22;CPUserSessionManager.ji;9;CPValue.ji;20;CPValueTransformer.jt;2269;objj_executeFile("_CGGeometry.j", YES);
+};p;12;Foundation.jt;3413;@STATIC;1.0;i;13;_CGGeometry.ji;9;CPArray.ji;10;CPBundle.ji;22;CPByteCountFormatter.ji;16;CPCharacterSet.ji;9;CPCoder.ji;23;CPComparisonPredicate.ji;21;CPCompoundPredicate.ji;8;CPData.ji;8;CPDate.ji;17;CPDateFormatter.ji;11;CPDecimal.ji;17;CPDecimalNumber.ji;14;CPDictionary.ji;14;CPEnumerator.ji;9;CPError.ji;13;CPException.ji;14;CPExpression.ji;13;CPFormatter.ji;12;CPIndexSet.ji;13;CPIndexPath.ji;14;CPInvocation.ji;19;CPJSONPConnection.ji;17;CPKeyedArchiver.ji;19;CPKeyedUnarchiver.ji;18;CPKeyValueCoding.ji;21;CPKeyValueObserving.ji;16;CPMutableArray.ji;14;CPMutableSet.ji;16;CPNotification.ji;22;CPNotificationCenter.ji;8;CPNull.ji;10;CPNumber.ji;19;CPNumberFormatter.ji;10;CPObject.ji;15;CPObjJRuntime.ji;13;CPOperation.ji;18;CPOperationQueue.ji;13;CPPredicate.ji;29;CPPropertyListSerialization.ji;9;CPRange.ji;11;CPRunLoop.ji;11;CPScanner.ji;7;CPSet.ji;18;CPSortDescriptor.ji;10;CPString.ji;9;CPTimer.ji;15;CPUndoManager.ji;7;CPURL.ji;17;CPURLConnection.ji;14;CPURLRequest.ji;15;CPURLResponse.ji;16;CPUserDefaults.ji;22;CPUserSessionManager.ji;9;CPValue.ji;20;CPValueTransformer.jt;2318;objj_executeFile("_CGGeometry.j", YES);
 objj_executeFile("CPArray.j", YES);
 objj_executeFile("CPBundle.j", YES);
+objj_executeFile("CPByteCountFormatter.j", YES);
 objj_executeFile("CPCharacterSet.j", YES);
 objj_executeFile("CPCoder.j", YES);
 objj_executeFile("CPComparisonPredicate.j", YES);
