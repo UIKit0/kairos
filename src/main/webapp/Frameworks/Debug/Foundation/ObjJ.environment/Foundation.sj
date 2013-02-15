@@ -173,15 +173,21 @@ CGAlignStroke = function(coord, strokeWidth)
 CGAlignCoordinate = function(coord)
 {
     return FLOOR(coord);
-}p;27;_CPCollectionKVCOperators.jt;3880;@STATIC;1.0;i;10;CPObject.jt;3846;objj_executeFile("CPObject.j", YES);
+}p;27;_CPCollectionKVCOperators.jt;4188;@STATIC;1.0;i;10;CPObject.jt;4154;objj_executeFile("CPObject.j", YES);
+var _CPCollectionKVCOperatorSimpleRE = /^@(avg|count|m(ax|in)|sum)(\.|$)/;
 {var the_class = objj_allocateClassPair(CPObject, "_CPCollectionKVCOperator"),
 meta_class = the_class.isa;
 
 
 
 
+
 objj_registerClassPair(the_class);
-class_addMethods(meta_class, [new objj_method(sel_getUid("performOperation:withCollection:propertyPath:"), function $_CPCollectionKVCOperator__performOperation_withCollection_propertyPath_(self, _cmd, operator, aCollection, propertyPath)
+class_addMethods(meta_class, [new objj_method(sel_getUid("isSimpleCollectionOperator:"), function $_CPCollectionKVCOperator__isSimpleCollectionOperator_(self, _cmd, operator)
+{
+    return _CPCollectionKVCOperatorSimpleRE.test(operator);
+}
+,["BOOL","CPString"]), new objj_method(sel_getUid("performOperation:withCollection:propertyPath:"), function $_CPCollectionKVCOperator__performOperation_withCollection_propertyPath_(self, _cmd, operator, aCollection, propertyPath)
 {
     var selector = CPSelectorFromString(operator + "ForCollection:propertyPath:");
     if (!objj_msgSend(self, "respondsToSelector:", selector))
@@ -251,7 +257,7 @@ class_addMethods(meta_class, [new objj_method(sel_getUid("performOperation:withC
     return objj_msgSend(aCollection, "count");
 }
 ,["int","id","CPString"])]);
-}p;13;CPArray+KVO.jt;21364;@STATIC;1.0;i;9;CPArray.ji;8;CPNull.ji;27;_CPCollectionKVCOperators.jt;21287;objj_executeFile("CPArray.j", YES);
+}p;13;CPArray+KVO.jt;21363;@STATIC;1.0;i;9;CPArray.ji;8;CPNull.ji;27;_CPCollectionKVCOperators.jt;21286;objj_executeFile("CPArray.j", YES);
 objj_executeFile("CPNull.j", YES);
 objj_executeFile("_CPCollectionKVCOperators.j", YES);
 //@class CPIndexSet
@@ -580,7 +586,7 @@ var meta_class = the_class.isa;
 
 class_addMethods(the_class, [new objj_method(sel_getUid("valueForKey:"), function $CPArray__valueForKey_(self, _cmd, aKey)
 {
-    if (aKey.indexOf("@") === 0)
+    if (aKey.charAt(0) === "@")
     {
         if (aKey.indexOf(".") !== -1)
             objj_msgSend(CPException, "raise:reason:", CPInvalidArgumentException, "called valueForKey: on an array with a complex key (" + aKey + "). use valueForKeyPath:");
@@ -6658,7 +6664,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithCoder:"), funct
     objj_msgSend(aCoder, "encodeObject:forKey:", self._data._mantissa, CPDecimalNumberDecimalMantissa);
 }
 ,["void","CPCoder"])]);
-}p;14;CPDictionary.jt;16093;@STATIC;1.0;i;9;CPArray.ji;14;CPEnumerator.ji;13;CPException.ji;8;CPNull.ji;10;CPObject.jt;15996;objj_executeFile("CPArray.j", YES);
+}p;14;CPDictionary.jt;16096;@STATIC;1.0;i;9;CPArray.ji;14;CPEnumerator.ji;13;CPException.ji;8;CPNull.ji;10;CPObject.jt;15999;objj_executeFile("CPArray.j", YES);
 objj_executeFile("CPEnumerator.j", YES);
 objj_executeFile("CPException.j", YES);
 objj_executeFile("CPNull.j", YES);
@@ -6754,7 +6760,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithDictionary:"), 
         {
             var value = arguments[index];
             if (value === nil)
-                break;
+                continue;
             objj_msgSend(self, "setObject:forKey:", value, arguments[index + 1]);
         }
     }
@@ -9514,7 +9520,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithObjects:count:"
 }
 ,["id"])]);
 }
-objj_executeFile("CPKeyValueObserving.j", YES);p;21;CPKeyValueObserving.jt;47395;@STATIC;1.0;i;9;CPArray.ji;14;CPDictionary.ji;13;CPException.ji;12;CPIndexSet.ji;8;CPNull.ji;10;CPObject.ji;7;CPSet.ji;13;CPArray+KVO.ji;11;CPSet+KVO.jt;47236;objj_executeFile("CPArray.j", YES);
+objj_executeFile("CPKeyValueObserving.j", YES);p;21;CPKeyValueObserving.jt;47445;@STATIC;1.0;i;9;CPArray.ji;14;CPDictionary.ji;13;CPException.ji;12;CPIndexSet.ji;8;CPNull.ji;10;CPObject.ji;7;CPSet.ji;13;CPArray+KVO.ji;11;CPSet+KVO.jt;47286;objj_executeFile("CPArray.j", YES);
 objj_executeFile("CPDictionary.j", YES);
 objj_executeFile("CPException.j", YES);
 objj_executeFile("CPIndexSet.j", YES);
@@ -10042,7 +10048,8 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithTarget:"), func
     }
     if (aPath.indexOf('.') != CPNotFound)
     {
-        var forwarder = objj_msgSend(observers, "objectForKey:", objj_msgSend(anObserver, "UID")).forwarder;
+        var observer = objj_msgSend(observers, "objectForKey:", objj_msgSend(anObserver, "UID")),
+            forwarder = observer ? observer.forwarder : nil;
         objj_msgSend(forwarder, "finalize");
     }
     objj_msgSend(observers, "removeObjectForKey:", objj_msgSend(anObserver, "UID"));
@@ -10961,7 +10968,7 @@ class_addMethods(the_class, [new objj_method(sel_getUid("initWithCoder:"), funct
 }
 Number.prototype.isa = CPNumber;
 Boolean.prototype.isa = CPNumber;
-objj_msgSend(CPNumber, "initialize");p;19;CPNumberFormatter.jt;13693;@STATIC;1.0;i;10;CPString.ji;13;CPFormatter.ji;17;CPDecimalNumber.jt;13618;objj_executeFile("CPString.j", YES);
+objj_msgSend(CPNumber, "initialize");p;19;CPNumberFormatter.jt;13688;@STATIC;1.0;i;10;CPString.ji;13;CPFormatter.ji;17;CPDecimalNumber.jt;13613;objj_executeFile("CPString.j", YES);
 objj_executeFile("CPFormatter.j", YES);
 objj_executeFile("CPDecimalNumber.j", YES);
 CPNumberFormatterNoStyle = 0;
@@ -11159,29 +11166,29 @@ self._generatesDecimalNumbers = newValue;
         case CPNumberFormatterDecimalStyle:
             self._minimumFractionDigits = 0;
             self._maximumFractionDigits = 3;
-            self._numberHandler = nil;;
+            self._numberHandler = nil;
             break;
         case CPNumberFormatterCurrencyStyle:
             self._minimumFractionDigits = 2;
             self._maximumFractionDigits = 2;
-            self._numberHandler = nil;;
+            self._numberHandler = nil;
             break;
     }
 }
 ,["void","CPNumberFormatterStyle"]), new objj_method(sel_getUid("setRoundingMode:"), function $CPNumberFormatter__setRoundingMode_(self, _cmd, aRoundingMode)
 {
     self._roundingMode = aRoundingMode;
-    self._numberHandler = nil;;
+    self._numberHandler = nil;
 }
 ,["void","CPNumberFormatterRoundingMode"]), new objj_method(sel_getUid("setMinimumFractionDigits:"), function $CPNumberFormatter__setMinimumFractionDigits_(self, _cmd, aNumber)
 {
     self._minimumFractionDigits = aNumber;
-    self._numberHandler = nil;;
+    self._numberHandler = nil;
 }
 ,["void","CPUInteger"]), new objj_method(sel_getUid("setMaximumFractionDigits:"), function $CPNumberFormatter__setMaximumFractionDigits_(self, _cmd, aNumber)
 {
     self._maximumFractionDigits = aNumber;
-    self._numberHandler = nil;;
+    self._numberHandler = nil;
 }
 ,["void","CPUInteger"]), new objj_method(sel_getUid("_updateNumberHandlerIfNecessary"), function $CPNumberFormatter___updateNumberHandlerIfNecessary(self, _cmd)
 {
