@@ -222,7 +222,11 @@ public class ImapServiceServlet extends HttpServlet {
 				{
 					unreadMsgCount = f.getUnreadMessageCount();
 				}
-				catch(Exception ex){}
+				catch(Exception ex)
+				{ 
+					
+				}
+				
 				folderAsJson.put("unread", unreadMsgCount);
 				jsonArrayOfFolders.add(folderAsJson);
 			}
