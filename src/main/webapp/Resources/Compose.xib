@@ -273,7 +273,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="127">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
+                                <font key="font" metaFont="menu"/>
                                 <menu key="menu" title="OtherViews" id="128"/>
                             </popUpButtonCell>
                             <connections>
@@ -285,7 +285,7 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="133">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
+                                <font key="font" metaFont="menu"/>
                                 <menu key="menu" title="OtherViews" id="134"/>
                             </popUpButtonCell>
                             <connections>
