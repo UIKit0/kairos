@@ -83,7 +83,7 @@ var _EditorEvents = [
     return "wktextview";
 }
 
-+ (id)themeAttributes
++ (CPDictionary)themeAttributes
 {
     return [CPDictionary dictionaryWithObjects:[CGInsetMake(4.0, 4.0, 4.0, 4.0)]
                                        forKeys:[@"content-inset"]];

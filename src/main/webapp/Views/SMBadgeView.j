@@ -55,16 +55,18 @@ var SMBadgeViewBackgroundColor = nil,
     [self setValue:CGInsetMake(2.0, 7.0, 1.0, 7.0) forThemeAttribute:"content-inset"];
 }
 
-- (void)setThemeState:(CPThemeState)aState
+- (BOOL)setThemeState:(ThemeState)aState
 {
-    [super setThemeState:aState];
+    var bRet = [super setThemeState:aState];
     [self updateBackground];
+    return bRet;
 }
 
-- (void)unsetThemeState:(CPThemeState)aState
+- (BOOL)unsetThemeState:(ThemeState)aState
 {
-    [super unsetThemeState:aState];
+    var bRet = [super unsetThemeState:aState];
     [self updateBackground];
+    return bRet;
 }
 
 - (void)updateBackground

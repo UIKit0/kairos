@@ -51,7 +51,7 @@ var SMSmallButtonBezelColor = nil,
     [self setValue:CGSizeMake(-1.0, SMSmallButtonHeight) forThemeAttribute:@"max-size"];
 }
 
-- (void)initWithCoder:(CPCoder)aCoder
+- (id)initWithCoder:(CPCoder)aCoder
 {
     if (self = [super initWithCoder:aCoder])
     {
